@@ -30,7 +30,7 @@
     - Deployment On Heroku
 
 
-09.04.2017
+- 09.04.2017
     - npm install mongoose, express, etc.
     - install mongodb
     - check package.json

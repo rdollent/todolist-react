@@ -1,0 +1,18 @@
+<% include ../partials/header.ejs %>
+
+<h1>Todo</h1>
+
+<a href="/">Home</a>
+
+<a href="/todo/new">Add New Todo</a>
+
+<% console.log("==========================================") %>
+<% todos.forEach(function(todo) { %>
+        <a href="/todo/<%= todo._id %>">
+            <div><%= todo.title %></div>
+        </a>
+<% console.log(todo) %>
+
+<% }); %>
+
+<% include ../partials/footer.ejs %>

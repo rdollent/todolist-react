@@ -1,0 +1,76 @@
+<% include ../partials/header.ejs %>
+
+<h1> Edit <%= todo.title %></h1>
+
+
+<!-- Update route -->
+
+<!--Functions-->
+
+<% function timeLength(x) { %>
+    <% if(x.toString().length < 2) { %>
+        <% return "0" + x %>
+    <% } else { %>
+        <% return x %>
+    <% } %>  
+<% } %>
+
+
+
+<form action="/todo/<%= todo._id %>/?_method=PUT" method="POST">
+    <input type="text" name="todo[title]" value="<%= todo.title %>" required="required">
+    <input type="text" name="todo[description]" value="<%= todo.description %>" required="required">
+    <p>From
+        <select name="todo[frmHr]">
+            <option selected disabled hidden>
+                <%= timeLength(todo.frmHr) %>
+            </option>
+            <% for(i=0; i <= 23; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+        <select name="todo[frmMin]">
+            <option selected disabled hidden>
+                <%= timeLength(todo.frmMin) %>
+            </option>
+            <% for(i=0; i <= 59; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    
+
+    <p>To
+        <select name="todo[toHr]">
+            <option selected disabled hidden>
+                <%= timeLength(todo.toHr) %>
+            </option>
+            <% for(i=0; i <= 23; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+        <select name="todo[toMin]">
+            <option selected disabled hidden>
+                <%= timeLength(todo.toMin) %>
+            </option>
+            <% for(i=0; i <= 59; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    <button id="submitForm">Submit</button>
+    <a href="/todo/<%= todo._id %>">Go back</a>
+</form>
+
+<!-- default folder is public-->
+<script src="/index.js"></script>
+
+<% include ../partials/footer.ejs %>

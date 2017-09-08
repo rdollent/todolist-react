@@ -1,0 +1,16 @@
+<% include ../partials/header.ejs %>
+
+<div>
+    <div><%= todo.title %></div>
+    <div><%= todo.description %></div>
+
+    <div><%= todo.frmHr + ":" + todo.frmMin %></div>
+    <div><%= todo.toHr + ":" + todo.toMin %></div>
+    <form action="/todo/<%= todo._id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+    <a href="/todo/<%= todo._id %>/edit"><button>Edit</button></a>
+    <a href="/todo">Go back</a>
+</div>
+
+<% include ../partials/footer.ejs %>

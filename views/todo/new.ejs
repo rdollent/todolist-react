@@ -1,0 +1,61 @@
+<% include ../partials/header.ejs %>
+
+<h1>New Todo</h1>
+
+<% function timeLength(x) { %>
+    <% if(x.toString().length < 2) { %>
+        <% return "0" + x %>
+    <% } else { %>
+        <% return x %>
+    <% } %>  
+<% } %>
+
+<form action="/todo" method="POST">
+    <input type="text" name="title" placeholder="Title" required="required">
+    <input type="text" name="description" placeholder="Description" required="required">
+
+
+    <p>From
+        <select name="frmHr">
+            <% for(i=0; i <= 23; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+        <select name="frmMin">
+            <% for(i=0; i <= 59; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+
+    <p>To
+        <select name="toHr">
+            <% for(i=0; i <= 23; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+        <select name="toMin">
+            <% for(i=0; i <= 59; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+
+    <button>Submit</button>
+    <p>
+        <a href="/todo">Go back</a>
+    </p>
+</form>
+
+<!-- default folder is public-->
+<script src="/index.js"></script>
+
+<% include ../partials/footer.ejs %>

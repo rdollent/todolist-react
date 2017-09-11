@@ -25,6 +25,19 @@ router.get("/", middleware.isLoggedIn,function(req,res) {
             res.render("todo/index", {todos: allTodos});
         }
     });
+    
+    Todo.find({}, "frmHr toHr", function(err, foundHours) {
+        if(err) return console.log(err);
+        var storedHours = [];
+        var toFrmHrs = [];
+        for(var i=0; i < foundHours.length;i++) {
+           toFrmHrs.push(parseInt(foundHours[i].frmHr));
+           toFrmHrs.push(parseInt(foundHours[i].toHr));
+           storedHours.push(toFrmHrs);
+           toFrmHrs = [];
+        }
+        console.log(storedHours);
+    });
 });
 
 // create route
@@ -41,7 +54,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
     var author = {
         id: req.user._id,
         username: req.user.username
-    }
+    };
     
     // create new todo using title,description from body
     var newTodo = {
@@ -53,6 +66,21 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
         toMin: toMin,
         author: author
         };
+    
+    // create range for times
+    var frmHrInt = parseInt(frmHr);
+    var toHrInt = parseInt(toHr);
+    var timeRange = [];
+    
+    for(var i = frmHrInt; i < toHrInt; i++) {
+        timeRange.push(i);
+    }
+    
+    
+    // Todo.find({}, "frmHr toHr", function(err, foundHours) {
+    //     if(err) return console.log(err);
+    //     console.log(foundHours);
+    // });
     
     Todo.create(newTodo, function(err, newlyCreated) {
         if(err) {

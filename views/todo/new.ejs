@@ -14,7 +14,37 @@
     <input type="text" name="title" placeholder="Title" required="required">
     <input type="text" name="description" placeholder="Description" required="required">
 
-
+    <p>Year
+        <select name="year" id="year">
+            <% for(i= new Date().getFullYear(); i <= new Date().getFullYear() + 10; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    <p>Month
+        <select name="month" id="month">
+            <option selected disabled hidden>
+                01
+            </option>
+            <% for(i=1; i <= 12; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    <p>Date
+        <select name="date" id="date">
+            <% for(i=1; i <= 31; i++) { %>
+                <option class="dateOptions">
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    
     <p>From
         <select name="frmHr">
             <% for(i=0; i <= 23; i++) { %>
@@ -49,13 +79,13 @@
         </select>
     </p>
 
-    <button>Submit</button>
+    <button id="submitForm">Submit</button>
     <p>
         <a href="/todo">Go back</a>
     </p>
 </form>
 
 <!-- default folder is public-->
-<script src="/index.js"></script>
+<script src="/todoNew.js"></script>
 
 <% include ../partials/footer.ejs %>

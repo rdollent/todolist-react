@@ -9,7 +9,13 @@
     - edit.ejs default values using "selected disabled hidden" attributes in option
     - make sure that To time is less than From time
     - change format from req.body.todo update route to number format in stored todo object
-
+    - Use Date Object
+    - Date(year, month, 0) will give number of dates in any given month
+        - month is zero-based, days is 1-31. 0 means last day of last month.
+        - new Date(2017,9,0) while 9 = august, is actually 2017/08/31.
+    - use script to populate date selection using year and month
+    - disable month option before picking year, and disable date option until after user chooses month
+    - 
 
 - Time
     - drop down?

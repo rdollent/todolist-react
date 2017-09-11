@@ -2,12 +2,18 @@ var mongoose = require("mongoose");
 
 // Schema setup
 var todoSchema = new mongoose.Schema({
-    title: String,
+    title: {
+        type: String,
+        required: [true, "Title is required"]
+    },
     description: String,
-    frmHr: String, 
-    frmMin: String,
-    toHr: String, 
-    toMin: String,
+    year: Number,
+    month: Number,
+    date: Number,
+    frmHr: Number, 
+    frmMin: Number,
+    toHr: Number, 
+    toMin: Number,
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

@@ -1,21 +1,25 @@
 - Current task
-    - give time on todo - done
-    - user authentication! - done
-    - associate every todo with a user - done
-    - close gateways if user is already logged in.
+    - give time on todo - Y
+    - user authentication! - Y
+    - associate every todo with a user - Y
+    - close gateways if user is already logged in. - Y
     - heroku and git
-    - add currentUser to todo routes so header can access them (for navbar logged in as.., logout, show/hide register and login links)
-    - made changes to edit.ejs to propery update todo and display current todo to be edited
-    - edit.ejs default values using "selected disabled hidden" attributes in option
+    - add currentUser to todo routes so header can access them (for navbar logged in as.., logout, show/hide register and login links) - Y
+    - made changes to edit.ejs to propery update todo and display current todo to be edited - Y
+    - edit.ejs default values using "selected disabled hidden" attributes in option - Y
     - make sure that To time is less than From time
-    - change format from req.body.todo update route to number format in stored todo object
-    - Use Date Object
+    - change format from req.body.todo update route to number format in stored todo object - Y
+    - Use Date Object - Y
     - Date(year, month, 0) will give number of dates in any given month
         - month is zero-based, days is 1-31. 0 means last day of last month.
         - new Date(2017,9,0) while 9 = august, is actually 2017/08/31.
     - use script to populate date selection using year and month
     - disable month option before picking year, and disable date option until after user chooses month
-    - 
+    - make changes in edit.ejs, schemas/models and routes to accommodate month, year, date
+    - overlapping times!!! (and dates, years, months)!!!
+    - make changes to new and edit, where default month is current month for new
+        - build it so date will always dynamically populate given month
+    
 
 - Time
     - drop down?

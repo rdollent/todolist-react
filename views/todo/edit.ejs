@@ -20,6 +20,44 @@
 <form action="/todo/<%= todo._id %>/?_method=PUT" method="POST">
     <input type="text" name="todo[title]" value="<%= todo.title %>" required="required">
     <input type="text" name="todo[description]" value="<%= todo.description %>" required="required">
+    
+    <p>Year
+        <select name="todo[year]" id="year">
+            <option selected disabled hidden>
+                <%= timeLength(todo.year) %>
+            </option>
+            <% for(i= new Date().getFullYear(); i <= new Date().getFullYear() + 10; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    <p>Month
+        <select name="todo[month]" id="month">
+            <option selected disabled hidden>
+                <%= timeLength(todo.month) %>
+            </option>
+            <% for(i=1; i <= 12; i++) { %>
+                <option>
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    <p>Date
+        <select name="todo[date]" id="date">
+            <option selected disabled hidden>
+                <%= timeLength(todo.date) %>
+            </option>
+            <% for(i=1; i <= 31; i++) { %>
+                <option class="dateOptions">
+                    <%= timeLength(i) %>
+                </option>
+            <% } %>
+        </select>
+    </p>
+    
     <p>From
         <select name="todo[frmHr]">
             <option selected disabled hidden>
@@ -43,7 +81,6 @@
         </select>
     </p>
     
-
     <p>To
         <select name="todo[toHr]">
             <option selected disabled hidden>
@@ -72,5 +109,6 @@
 
 <!-- default folder is public-->
 <script src="/todoEdit.js"></script>
+<script src="/todoNew.js"></script>
 
 <% include ../partials/footer.ejs %>

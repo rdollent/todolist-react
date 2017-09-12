@@ -26,24 +26,27 @@ router.get("/", middleware.isLoggedIn,function(req,res) {
         }
     });
     
-    Todo.find({}, "frmHr toHr", function(err, foundHours) {
-        if(err) return console.log(err);
-        var storedHours = [];
-        var toFrmHrs = [];
-        for(var i=0; i < foundHours.length;i++) {
-           toFrmHrs.push(parseInt(foundHours[i].frmHr));
-           toFrmHrs.push(parseInt(foundHours[i].toHr));
-           storedHours.push(toFrmHrs);
-           toFrmHrs = [];
-        }
-        console.log(storedHours);
-    });
+    // for overlapping hours
+    // Todo.find({}, "frmHr toHr", function(err, foundHours) {
+    //     if(err) return console.log(err);
+    //     var storedHours = [];
+    //     var toFrmHrs = [];
+    //     for(var i=0; i < foundHours.length;i++) {
+    //       toFrmHrs.push(parseInt(foundHours[i].frmHr));
+    //       toFrmHrs.push(parseInt(foundHours[i].toHr));
+    //       storedHours.push(toFrmHrs);
+    //       toFrmHrs = [];
+    //     }
+    // });
 });
 
 // create route
 router.post("/", middleware.isLoggedIn, function(req, res) {
     // console.log(req.body);
     // store values in vars
+    var year = req.body.year;
+    var month = req.body.month;
+    var date = req.body.date;
     var title = req.body.title;
     var description = req.body.description;
     var frmHr = req.body.frmHr;
@@ -58,6 +61,9 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
     
     // create new todo using title,description from body
     var newTodo = {
+        year: year,
+        month: month,
+        date: date,
         title: title, 
         description: description, 
         frmHr: frmHr,
@@ -68,13 +74,13 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
         };
     
     // create range for times
-    var frmHrInt = parseInt(frmHr);
-    var toHrInt = parseInt(toHr);
-    var timeRange = [];
+    // var frmHrInt = parseInt(frmHr);
+    // var toHrInt = parseInt(toHr);
+    // var timeRange = [];
     
-    for(var i = frmHrInt; i < toHrInt; i++) {
-        timeRange.push(i);
-    }
+    // for(var i = frmHrInt; i < toHrInt; i++) {
+    //     timeRange.push(i);
+    // }
     
     
     // Todo.find({}, "frmHr toHr", function(err, foundHours) {
@@ -124,7 +130,6 @@ router.get("/:id/edit", middleware.isLoggedIn, function(req,res) {
 
 // Update route
 router.put("/:id", middleware.isLoggedIn, function(req, res) {
-    console.log(req.body);
     Todo.findByIdAndUpdate(req.params.id, req.body.todo, function(err, updatedTodo) {
         if(err) {
             console.log(err);
@@ -147,6 +152,8 @@ router.delete("/:id", middleware.isLoggedIn, function(req, res) {
 
     });
 });
+
+// NOTE: since variables are type: Number in todoModel.js, "01" automatically becomes 1 when saved.
 
 // export this whole file to app.js
 module.exports = router;

@@ -25,28 +25,28 @@
     </p>
     <p>Month
         <select name="month" id="month">
-            <option selected disabled hidden>
-                01
-            </option>
             <% for(i=1; i <= 12; i++) { %>
-                <option>
-                    <%= timeLength(i) %>
-                </option>
+                <% if(i === new Date().getMonth() + 1) { %>
+                    <option selected>
+                        <%= timeLength(i) %>
+                    </option>
+                <% } else { %>
+                    <option>
+                        <%= timeLength(i) %>
+                    </option>
+                <% } %>
             <% } %>
         </select>
     </p>
     <p>Date
         <select name="date" id="date">
-            <% for(i=1; i <= 31; i++) { %>
-                <option class="dateOptions">
-                    <%= timeLength(i) %>
-                </option>
-            <% } %>
+            <option class="dateOptions"></option>
         </select>
     </p>
     
     <p>From
         <select name="frmHr">
+            <!--default option is time right now. see script-->
             <% for(i=0; i <= 23; i++) { %>
                 <option>
                     <%= timeLength(i) %>

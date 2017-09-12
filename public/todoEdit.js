@@ -30,6 +30,11 @@ function validateForm() {
     });
 });
 
+// populate date list given stored month and year
+var savedMonth = document.getElementById("month").value;
+var savedYear = document.getElementById("month").value;
+
+
 
 
 

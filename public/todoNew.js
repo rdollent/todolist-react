@@ -29,6 +29,12 @@ function populateDate() {
 	var dates = new Date(year, month,0).getDate();
 	for (var i=1;i <= dates;i++) {
 		var elem = document.createElement("option");
+		
+		// date.name is "date" in new.ejs, todo[date] in edit.ejs
+		// we only need this for new.ejs. default selected option in edit should be stored date value
+		if(i === new Date().getDate() && date.name === "date") {
+		    elem.setAttribute("selected", "selected");
+		}
 		if(i < 10) {
 		    elem.textContent = "0" + i;
 		} else {
@@ -40,6 +46,7 @@ function populateDate() {
 }
 
 
-
+// populate date dropdown with current month dates
+window.onload = populateDate();
 
 

@@ -5,6 +5,7 @@ var mongoose = require("mongoose");
 var methodOverride = require("method-override");
 var expressSession = require("express-session");
 var User = require("./models/userModel.js");
+var flash = require("connect-flash");
 
 // Auth
 var passport = require("passport");
@@ -28,6 +29,9 @@ app.use(express.static(__dirname + "/public"));
 // NOTE MUST PLACE IN app.js BEFORE ROUTES
 app.use(methodOverride("_method"));
 
+//use connect-flash for flash messages, need to come BEFORE Passport configuration
+app.use(flash());
+
 // Passport Configuration
 app.use(expressSession({
     secret: "Hi hello what is up? Ceiling",
@@ -50,7 +54,10 @@ passport.deserializeUser(User.deserializeUser());
 // to include currentUser variable into every route/template
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user; // accessible by home.ejs
-    next(); // don't forget to put next()!!!
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    
+    next(); // don't forget to put next()!!! Always comes last
 });
 
 // require route js files

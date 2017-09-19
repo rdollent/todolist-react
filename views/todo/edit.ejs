@@ -26,7 +26,7 @@
             <option selected disabled hidden>
                 <%= timeLength(todo.year) %>
             </option>
-            <% for(i= new Date().getFullYear(); i <= new Date().getFullYear() + 10; i++) { %>
+            <% for(i= new Date().getFullYear(); i <= new Date().getFullYear() + 5; i++) { %>
                 <option>
                     <%= timeLength(i) %>
                 </option>
@@ -108,7 +108,7 @@
 </form>
 
 <!-- default folder is public-->
-<script src="/todoEdit.js"></script>
-<script src="/todoNew.js"></script>
+<script src="/scripts/todoEdit.js"></script>
+<script src="/scripts/todoNew.js"></script>
 
 <% include ../partials/footer.ejs %>

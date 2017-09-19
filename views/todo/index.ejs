@@ -1,18 +1,27 @@
 <% include ../partials/header.ejs %>
 
-<h1>Todo</h1>
+<div class="container">
+    
 
-<a href="/">Home</a>
+    
+    <h1>Todo</h1>
+    
+    <a href="/todo/new">Add New Todo</a>
+    
+    <!--<% //console.log("==========================================") %>-->
+    <!--passed variable todos from GET route-->
+    <!--<% todos.forEach(function(todo) { %>-->
+    <!--        <a href="/todo/<%= todo._id %>">-->
+    <!--            <div><%= todo.title %></div>-->
+    <!--        </a>-->
+    
+    <!--<% }); %>-->
+    
+    <div class="calendar"></div>
+    
+    <script src="/scripts/todoCalendar.js"></script>
+    <link rel="stylesheet" href="/stylesheets/index.css">
 
-<a href="/todo/new">Add New Todo</a>
-
-<% console.log("==========================================") %>
-<% todos.forEach(function(todo) { %>
-        <a href="/todo/<%= todo._id %>">
-            <div><%= todo.title %></div>
-        </a>
-    <!--<% //console.log(todo); %>-->
-
-<% }); %>
+</div>
 
 <% include ../partials/footer.ejs %>

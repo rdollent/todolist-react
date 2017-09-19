@@ -22,7 +22,11 @@ router.get("/", function(req, res) {
 
 // register form
 router.get("/register", function(req, res) {
-    res.render("register");
+    if(req.user) {
+        res.redirect("/todo");
+    } else {
+        res.render("register");
+    }
 });
 
 // handle signup logic
@@ -32,9 +36,13 @@ router.post("/register", function(req, res) {
     // we don't save passwords in database. Hash the password
     User.register(newUser, req.body.password, function(err, user) {
         if(err) {
-            return res.render("register");
+            console.log(err);
+            // the normal flash does not work (for some reason)
+            // req.flash("error", err.message);
+            return res.render("register", {"error": err.message});
         } else {
             passport.authenticate("local")(req, res, function() {
+                req.flash("success", "Welcome to the To-Do App, " + user.username + "!");
                 res.redirect("/todo");
             });
         }
@@ -43,17 +51,47 @@ router.post("/register", function(req, res) {
 
 // login form
 router.get("/login", function(req, res) {
-    res.render("login");
+    if(req.user) {
+        res.redirect("/todo");
+    } else {
+        res.render("login");
+    }
 });
 
 // handle login logic
 // "/login", middleware, callback
-router.post("/login", passport.authenticate("local",
-    {
-        successRedirect: "/todo",
-        failureRedirect: "/login"
-    }), function(req, res) {
-    // callback does not do anything. can remove if want to.
+// router.post("/login", passport.authenticate("local",
+//     {
+//         successRedirect: "/todo",
+//         failureRedirect: "/login",
+//         failureFlash: true
+//     }), function(req, res) {
+//     // callback does not do anything. can remove if want to.
+// });
+
+
+//login logic from udemy
+router.post("/login", function(req, res, next){
+    passport.authenticate("local", function(err, user, info){
+        // console.log(user);
+        // console.log("======================");
+        // console.log(info);
+        if(err){
+            return next(err);
+        } if(!user) {
+            req.flash("error", "Username or password is incorrect.");
+            return res.redirect("/login");
+        }
+        req.logIn(user, function(err){
+            if(err){
+                return next(err);
+            }
+            // var redirectTo = req.session.redirectTo ? req.session.redirectTo: "/todo";
+            // delete req.session.redirectTo;
+            req.flash("success", "Welcome back!");
+            res.redirect("/todo");
+        });
+    })(req,res,next);
 });
 
 // logout

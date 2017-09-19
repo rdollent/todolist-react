@@ -10,13 +10,15 @@
     <% } %>  
 <% } %>
 
+
+
 <form action="/todo" method="POST">
     <input type="text" name="title" placeholder="Title" required="required">
     <input type="text" name="description" placeholder="Description" required="required">
 
     <p>Year
         <select name="year" id="year">
-            <% for(i= new Date().getFullYear(); i <= new Date().getFullYear() + 10; i++) { %>
+            <% for(i= new Date().getFullYear(); i <= new Date().getFullYear() + 5; i++) { %>
                 <option>
                     <%= timeLength(i) %>
                 </option>
@@ -86,6 +88,6 @@
 </form>
 
 <!-- default folder is public-->
-<script src="/todoNew.js"></script>
+<script src="/scripts/todoNew.js"></script>
 
 <% include ../partials/footer.ejs %>

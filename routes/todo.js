@@ -22,23 +22,27 @@ router.get("/", middleware.isLoggedIn,function(req,res) {
         if(err) {
             console.log(err);
         } else {
-            res.render("todo/index", {todos: allTodos});
+            res.render("todo/index", {todos: JSON.stringify(allTodos)});
         }
     });
     
-    // for overlapping hours
-    // Todo.find({}, "frmHr toHr", function(err, foundHours) {
-    //     if(err) return console.log(err);
-    //     var storedHours = [];
-    //     var toFrmHrs = [];
-    //     for(var i=0; i < foundHours.length;i++) {
-    //       toFrmHrs.push(parseInt(foundHours[i].frmHr));
-    //       toFrmHrs.push(parseInt(foundHours[i].toHr));
-    //       storedHours.push(toFrmHrs);
-    //       toFrmHrs = [];
-    //     }
-    // });
 });
+
+// for overlapping hours
+// Todo.find({}, "frmHr toHr", function(err, foundHours) {
+//     if(err) return console.log(err);
+//     var storedHours = [];
+//     var toFrmHrs = [];
+//     for(var i=0; i < foundHours.length;i++) {
+//       toFrmHrs.push(parseInt(foundHours[i].frmHr));
+//       toFrmHrs.push(parseInt(foundHours[i].toHr));
+//       storedHours.push(toFrmHrs);
+//       toFrmHrs = [];
+//     }
+// });
+
+// get route for specific date
+
 
 // create route
 router.post("/", middleware.isLoggedIn, function(req, res) {

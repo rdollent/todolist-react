@@ -1,11 +1,10 @@
 (function() {
-    
+    "use strict";
     var calendar = document.getElementsByClassName("calendar")[0];
     var completeDate = {};
-
     var yearObj = {};
     yearObj.list = [];
-    for(var i = new Date().getFullYear(); i <= new Date().getFullYear() + 5; i++) {
+    for(var i = new Date().getFullYear(); i <= 2099; i++) {
         yearObj.list.push(i);
     }
     yearObj.createYears = function() {
@@ -71,49 +70,54 @@
         
         var title = document.createElement("p");
         title.innerHTML = "<h2>" + months[completeDate.month] + " " + completeDate.year + "</h2>";
+        title.id = "title";
         
         
         var tbl = document.createElement("table");
+        tbl.id = "tbl";
         var colgrp = document.createElement("colgroup");
         colgrp.span = 7;
         tbl.appendChild(colgrp);
         
         // populate table with day headers
-        var tr = document.createElement("tr");
+        var trDays = document.createElement("tr");
         for(var i = 0; i <= 6; i++) {
             var th = document.createElement("th");
             th.textContent = dateObj.days[i];
-            tr.appendChild(th);
+            trDays.appendChild(th);
         }
-        tbl.appendChild(tr);
+        tbl.appendChild(trDays);
         
 
         // populate table with dates
         var j = 1;
         while(j  <= completeDate.maxDates) {
-            var tr = document.createElement("tr");
+            var trDates = document.createElement("tr");
             var k = 0;
             while(k <= 6) {
                 // console.log(j, dateObj.days[k] + ": " + k);
                 var td = document.createElement("td");
+                var a = document.createElement("a");
+                a.addEventListener("click", showTodos);
                 if(j === 1) {
                     if(k !== completeDate.firstDay) {
-                        td.textContent = "empty";
+                        a.textContent = "empty";
                     } else {
-                        td.textContent = j;
+                        a.textContent = j;
                         j++;
                     }
                 } else if(j > completeDate.maxDates) {
-                    td.textContent = "empty";
+                    a.textContent = "empty";
                     j++;
                 } else {
-                    td.textContent = j;
+                    a.textContent = j;
                     j++;
                 }
                 k++;
-                tr.appendChild(td);
+                td.appendChild(a);
+                trDates.appendChild(td);
             }
-            tbl.appendChild(tr);
+            tbl.appendChild(trDates);
         }
         
         var container = document.createElement("div");
@@ -125,7 +129,6 @@
         if(!document.getElementsByClassName("btns")[0]) {
             createBtns();
         }
-        
         
 
     }
@@ -168,8 +171,26 @@
         calendar.prepend(btns);
     }
     
-    function deleteCalendar() {
+    function showTodos() {
+        // console.log(this.textContent);
+        completeDate.date = parseInt(this.textContent);
+        var tbl = document.getElementById("tbl");
+        tbl.classList.add("noDisplay");
+        var title = document.getElementById("title");
+        title.innerHTML = "<h2>" + months[completeDate.month] + " " + completeDate.date + ", " + completeDate.year + "</h2>";
         
+        // var xhttp = new XMLHttpRequest();
+        // var url = "https://to-do-list-rdollent.c9users.io/todo/" + completeDate.year + "-" + completeDate.month + "-" + completeDate.date;
+        // xhttp.open("GET", url, true);
+        
+        // todos is passed on through ejs
+        for(var i = 0; i <= todos.length - 1; i++) {
+            if(todos[i].year === completeDate.year && todos[i].month === completeDate.month && todos[i].date === completeDate.date) {
+                var todoList = document.createElement("div");
+                todoList.textContent = todos[i].title + " - " + todos[i].description;
+                calendar.appendChild(todoList);
+            }
+        }
     }
     
     

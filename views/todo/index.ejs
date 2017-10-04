@@ -7,18 +7,12 @@
     <h1>Todo</h1>
     
     <a href="/todo/new">Add New Todo</a>
-    
-    <!--<% //console.log("==========================================") %>-->
-    <!--passed variable todos from GET route-->
-    <!--<% todos.forEach(function(todo) { %>-->
-    <!--        <a href="/todo/<%= todo._id %>">-->
-    <!--            <div><%= todo.title %></div>-->
-    <!--        </a>-->
-    
-    <!--<% }); %>-->
+
     
     <div class="calendar"></div>
-    
+    <script type="text/javascript">
+        var todos =  <%- todos %>
+    </script>
     <script src="/scripts/todoCalendar.js"></script>
     <link rel="stylesheet" href="/stylesheets/index.css">
 

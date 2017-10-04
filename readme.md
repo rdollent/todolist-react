@@ -30,6 +30,7 @@
         - "/" dynamically create calendar using JS?
         - REBUILD NEW AND EDIT EJS!!! Tie-in to index.ejs. That way, users only need to pick from and to hours. select year, month, date in index! total overhaul. :(
         - REBUILD INDEX.EJS!
+        - click on date and it shows todo-list (show ejs) for that date. Must pass on completeDate to backend.
 
 - Time
     - drop down?

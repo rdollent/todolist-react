@@ -1,7 +1,7 @@
 (function() {
     "use strict";
     // todos variable is passed on from index.ejs
-    var calendar = document.getElementsByClassName("calendar")[0];
+    var calendar = document.getElementById("calendar");
     var completeDate = {};
     var yearObj = {};
     yearObj.list = [];
@@ -59,13 +59,13 @@
         
         var dateObj = {};
         dateObj.days = {
-            0: "Sunday",
-            1: "Monday",
-            2: "Tuesday",
-            3: "Wednesday",
-            4: "Thursday",
-            5: "Friday",
-            6: "Saturday"
+            0: "Sun",
+            1: "Mon",
+            2: "Tue",
+            3: "Wed",
+            4: "Thu",
+            5: "Fri",
+            6: "Sat"
         };
         completeDate.firstDay = new Date(completeDate.year, completeDate.month, 1).getDay();
         
@@ -76,14 +76,17 @@
         
         var tbl = document.createElement("table");
         tbl.id = "tbl";
+        tbl.classList.add("container-fluid");
         var colgrp = document.createElement("colgroup");
         colgrp.span = 7;
         tbl.appendChild(colgrp);
         
         // populate table with day headers
         var trDays = document.createElement("tr");
+        trDays.classList.add("row");
         for(var i = 0; i <= 6; i++) {
             var th = document.createElement("th");
+            th.classList.add("col");
             th.textContent = dateObj.days[i];
             trDays.appendChild(th);
         }
@@ -94,11 +97,13 @@
         var j = 1;
         while(j  <= completeDate.maxDates) {
             var trDates = document.createElement("tr");
+            trDates.classList.add("row");
             // k represents days of the week
             var k = 0;
             while(k <= 6) {
                 // console.log(j, dateObj.days[k] + ": " + k);
                 var td = document.createElement("td");
+                td.classList.add("col");
                 var a = document.createElement("a");
                 a.addEventListener("click", showTodos);
                 if(j === 1 && k !== completeDate.firstDay) {

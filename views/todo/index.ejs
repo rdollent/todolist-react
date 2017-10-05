@@ -9,12 +9,12 @@
     <a href="/todo/new">Add New Todo</a>
 
     
-    <div class="calendar"></div>
+    <div id="calendar" class="container-fluid"></div>
     <script>
         var todos = <%- todos %>;
         console.log(typeof todos, todos);
     </script>
-    <script src="/scripts/todoCalendar.js"></script>
+    <script src="/scripts/todoCalendar.js" async></script>
     <link rel="stylesheet" href="/stylesheets/index.css">
 
 </div>

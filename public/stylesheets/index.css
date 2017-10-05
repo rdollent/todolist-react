@@ -1,3 +1,8 @@
+* {
+  /*border: 1px solid black !important; /*to display borders of elements, helps with CSS position and resize*/
+  box-sizing:border-box;
+}
+
 .noDisplay {
     display: none;
 }

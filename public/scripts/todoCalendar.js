@@ -94,26 +94,26 @@
         var j = 1;
         while(j  <= completeDate.maxDates) {
             var trDates = document.createElement("tr");
+            // k represents days of the week
             var k = 0;
             while(k <= 6) {
                 // console.log(j, dateObj.days[k] + ": " + k);
                 var td = document.createElement("td");
                 var a = document.createElement("a");
                 a.addEventListener("click", showTodos);
-                if(j === 1) {
-                    if(k !== completeDate.firstDay) {
-                        a.textContent = "empty";
-                    } else {
-                        a.textContent = j;
-                        j++;
-                    }
-                } else if(j > completeDate.maxDates) {
-                    a.textContent = "empty";
-                    j++;
-                } else {
-                    a.textContent = j;
-                    j++;
+                if(j === 1 && k !== completeDate.firstDay) {
+                    j--;
                 }
+                if(j > 0 && j <= completeDate.maxDates) {
+                    a.textContent = j;
+                }
+                // populate dates with todo titles
+                for(var i=0; i <= todos.length -1; i++) {
+                    if(todos[i].year === completeDate.year && todos[i].month === completeDate.month && todos[i].date === j) {
+                        a.textContent += todos[i].title;
+                    }
+                }
+                j++;
                 k++;
                 td.appendChild(a);
                 trDates.appendChild(td);
@@ -193,7 +193,6 @@
                 a.textContent = todos[i].title + " - " + todos[i].description;
                 div.appendChild(a);
                 calendar.appendChild(div);
-                console.log(todos);
             }
         }
     }

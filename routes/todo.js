@@ -18,7 +18,9 @@ var middleware = require("../middleware/index.js");
 router.get("/", middleware.isLoggedIn,function(req,res) {
     // Get all todos from db
     // get only author's unique todos! :)
-    Todo.find({ "author.id" : req.user._id}, function(err, allTodos) {
+    Todo.find({ "author.id" : req.user._id},
+        "date description frmHr frmMin month title toHr toMin year _id",
+        function(err, allTodos) {
         if(err) {
             console.log(err);
         } else {
@@ -49,7 +51,10 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
     // console.log(req.body);
     // store values in vars
     var year = req.body.year;
-    var month = req.body.month;
+    var monthArr = ["January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"];
+    var month = monthArr.indexOf(req.body.month);
     var date = req.body.date;
     var title = req.body.title;
     var description = req.body.description;

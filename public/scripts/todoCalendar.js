@@ -1,5 +1,6 @@
 (function() {
     "use strict";
+    // todos variable is passed on from index.ejs
     var calendar = document.getElementsByClassName("calendar")[0];
     var completeDate = {};
     var yearObj = {};
@@ -25,18 +26,18 @@
     
     var monthObj = {};
     monthObj.list = {};
-    var months = ["January", "February", "March", "April",
+    var monthArr = ["January", "February", "March", "April",
                 "May", "June", "July", "August",
                 "September", "October", "November", "December"];
     monthObj.createList = function() {
         var main = document.createElement("div");
         for(var i = 0; i <= 11; i++) {
-            this.list[i] = months[i];
+            this.list[i] = monthArr[i];
             var elem = document.createElement("div");
             elem.textContent = this.list[i];
             elem.addEventListener("click", function() {
                 main.classList.add("noDisplay");
-                completeDate.month = months.indexOf(this.textContent);
+                completeDate.month = monthArr.indexOf(this.textContent);
                 console.log(completeDate);
                 // dateObj.createList();
                 // var maxDates = new Date(completeDate.year, completeDate.month + 1, 0).getDate();
@@ -69,7 +70,7 @@
         completeDate.firstDay = new Date(completeDate.year, completeDate.month, 1).getDay();
         
         var title = document.createElement("p");
-        title.innerHTML = "<h2>" + months[completeDate.month] + " " + completeDate.year + "</h2>";
+        title.innerHTML = "<h2>" + monthArr[completeDate.month] + " " + completeDate.year + "</h2>";
         title.id = "title";
         
         
@@ -177,18 +178,22 @@
         var tbl = document.getElementById("tbl");
         tbl.classList.add("noDisplay");
         var title = document.getElementById("title");
-        title.innerHTML = "<h2>" + months[completeDate.month] + " " + completeDate.date + ", " + completeDate.year + "</h2>";
+        title.innerHTML = "<h2>" + monthArr[completeDate.month] + " " + completeDate.date + ", " + completeDate.year + "</h2>";
         
         // var xhttp = new XMLHttpRequest();
         // var url = "https://to-do-list-rdollent.c9users.io/todo/" + completeDate.year + "-" + completeDate.month + "-" + completeDate.date;
         // xhttp.open("GET", url, true);
         
-        // todos is passed on through ejs
+        // todos variable is passed on through index.ejs
         for(var i = 0; i <= todos.length - 1; i++) {
             if(todos[i].year === completeDate.year && todos[i].month === completeDate.month && todos[i].date === completeDate.date) {
-                var todoList = document.createElement("div");
-                todoList.textContent = todos[i].title + " - " + todos[i].description;
-                calendar.appendChild(todoList);
+                var div = document.createElement("div");
+                var a = document.createElement("a");
+                a.setAttribute("href", "/todo/" + todos[i]._id);
+                a.textContent = todos[i].title + " - " + todos[i].description;
+                div.appendChild(a);
+                calendar.appendChild(div);
+                console.log(todos);
             }
         }
     }

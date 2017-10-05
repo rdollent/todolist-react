@@ -10,8 +10,9 @@
 
     
     <div class="calendar"></div>
-    <script type="text/javascript">
-        var todos =  <%- todos %>
+    <script>
+        var todos = <%- todos %>;
+        console.log(typeof todos, todos);
     </script>
     <script src="/scripts/todoCalendar.js"></script>
     <link rel="stylesheet" href="/stylesheets/index.css">

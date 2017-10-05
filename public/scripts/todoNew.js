@@ -21,7 +21,10 @@ function populateDate() {
     
     // get year and date values each time
 	var year = document.getElementById("year").value;
-	var month = document.getElementById("month").value;
+	var monthArr = ["January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"];
+	var month = document.getElementById("month").value.indexOf(monthArr);
 	
     // get number of dates
     // i.e. (2017, 5, 0) is last day of previous month

@@ -31,7 +31,10 @@ function validateForm() {
 });
 
 // populate date list given stored month and year
-var savedMonth = document.getElementById("month").value;
+var monthArr = ["January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"];
+var savedMonth = document.getElementById("month").value.indexOf(monthArr);
 var savedYear = document.getElementById("month").value;
 
 

@@ -110,7 +110,9 @@
                 // populate dates with todo titles
                 for(var i=0; i <= todos.length -1; i++) {
                     if(todos[i].year === completeDate.year && todos[i].month === completeDate.month && todos[i].date === j) {
-                        a.textContent += todos[i].title;
+                        var p = document.createElement("p");
+                        p.textContent = todos[i].title;
+                        a.appendChild(p);
                     }
                 }
                 j++;
@@ -174,7 +176,7 @@
     
     function showTodos() {
         // console.log(this.textContent);
-        completeDate.date = parseInt(this.textContent);
+        completeDate.date = parseInt(this.childNodes[0].nodeValue);
         var tbl = document.getElementById("tbl");
         tbl.classList.add("noDisplay");
         var title = document.getElementById("title");

@@ -31,6 +31,11 @@
         - REBUILD NEW AND EDIT EJS!!! Tie-in to index.ejs. That way, users only need to pick from and to hours. select year, month, date in index! total overhaul. :(
         - REBUILD INDEX.EJS!
         - click on date and it shows todo-list (show ejs) for that date. Must pass on completeDate to backend.
+        - add a back button when showing specific todos in a single date to last known calendar screen!
+        - passed todos ejs variable to todoCalendar.js for use with displaying titles and creating links to show todos in a given date
+        - make dates in calendar a certain height. display only first 2-3 items
+        - move Add New Todo link only when showing todos in a single date
+    
 
 - Time
     - drop down?

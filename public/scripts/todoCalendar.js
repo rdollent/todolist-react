@@ -16,7 +16,16 @@
             elem.textContent = year;
             elem.addEventListener("click", function() {
                 main.classList.add("noDisplay");
-                monthObj.createList();
+                var monthList = document.getElementById("monthList")
+                if(monthList) {
+                    monthList.classList.remove("noDisplay");
+                }
+                var periodSelect = document.getElementById("periodSelect");
+                if(periodSelect) {
+                    periodSelect.classList.remove("noDisplay");
+                    periodSelect.textContent = "year";
+                }
+                // monthObj.createList();
                 completeDate.year = parseInt(this.textContent);
             });
             main.appendChild(elem);
@@ -239,16 +248,20 @@
         btn.addEventListener("click", function() {
             if(this.textContent === "year") {
                 document.getElementById("monthList").classList.add("noDisplay");
-                yearObj.createList();
+                if(document.getElementById("yearList")) {
+                    document.getElementById("yearList").classList.remove("noDisplay");
+                } else {
+                    yearObj.createList();
+                }
                 this.classList.add("noDisplay");
-                this.textContent = "month";
             }
             if(this.textContent === "month") {
-                document.getElementById("container").classList.add("noDisplay");
+                calendar.removeChild(document.getElementById("container"));
                 if(document.getElementById("monthList")) {
-                    document.getElementById("monthList").classList.add("noDisplay");
+                    document.getElementById("monthList").classList.remove("noDisplay");
+                } else {
+                    monthObj.createList();
                 }
-                monthObj.createList();
                 this.textContent = "year";
             }
             if(this.textContent === "date") {

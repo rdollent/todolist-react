@@ -35,6 +35,9 @@
         - passed todos ejs variable to todoCalendar.js for use with displaying titles and creating links to show todos in a given date
         - make dates in calendar a certain height. display only first 2-3 items
         - move Add New Todo link only when showing todos in a single date
+        - default index page should be current month and year - set completeDate obj values in todoCalendar.js
+        - move code out of document-ready function
+        - 
     
 
 - Time

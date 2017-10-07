@@ -8,8 +8,9 @@
     for(var i = new Date().getFullYear(); i <= 2099; i++) {
         yearObj.list.push(i);
     }
-    yearObj.createYears = function() {
+    yearObj.createList = function() {
         var main = document.createElement("div");
+        main.id = "yearList";
         this.list.forEach(function(year) {
             var elem = document.createElement("div");
             elem.textContent = year;
@@ -22,28 +23,39 @@
         });
         calendar.appendChild(main);
     };
-    yearObj.createYears();
     
     var monthObj = {};
-    monthObj.list = {};
-    var monthArr = ["January", "February", "March", "April",
-                "May", "June", "July", "August",
-                "September", "October", "November", "December"];
+    monthObj.list = {
+        0: "January",
+        1: "February",
+        2: "March",
+        3: "April",
+        4: "May",
+        5: "June",
+        6: "July",
+        7: "August",
+        8: "September",
+        9: "October",
+        10: "November",
+        11: "December"
+    };
     monthObj.createList = function() {
         var main = document.createElement("div");
+        main.id = "monthList";
         for(var i = 0; i <= 11; i++) {
-            this.list[i] = monthArr[i];
             var elem = document.createElement("div");
             elem.textContent = this.list[i];
+            elem.setAttribute("data-month", i);
             elem.addEventListener("click", function() {
                 main.classList.add("noDisplay");
-                completeDate.month = monthArr.indexOf(this.textContent);
+                completeDate.month = parseInt(this.getAttribute("data-month"));
                 console.log(completeDate);
                 // dateObj.createList();
                 // var maxDates = new Date(completeDate.year, completeDate.month + 1, 0).getDate();
         
                 completeDate.maxDates = new Date(completeDate.year, completeDate.month + 1, 0).getDate();
                 console.log(completeDate);
+                document.getElementById("periodSelect").textContent = "month";
                 createDayAndDate();
                 
             });
@@ -70,7 +82,7 @@
         completeDate.firstDay = new Date(completeDate.year, completeDate.month, 1).getDay();
         
         var title = document.createElement("p");
-        title.innerHTML = "<h2>" + monthArr[completeDate.month] + " " + completeDate.year + "</h2>";
+        title.innerHTML = "<h2>" + monthObj.list[completeDate.month] + " " + completeDate.year + "</h2>";
         title.id = "title";
         
         
@@ -180,12 +192,15 @@
     }
     
     function showTodos() {
+        var periodSelect = document.getElementById("periodSelect");
+        periodSelect.classList.remove("noDisplay");
+        periodSelect.textContent = "date";
         // console.log(this.textContent);
         completeDate.date = parseInt(this.childNodes[0].nodeValue);
         var tbl = document.getElementById("tbl");
         tbl.classList.add("noDisplay");
         var title = document.getElementById("title");
-        title.innerHTML = "<h2>" + monthArr[completeDate.month] + " " + completeDate.date + ", " + completeDate.year + "</h2>";
+        title.innerHTML = "<h2>" + monthObj.list[completeDate.month] + " " + completeDate.date + ", " + completeDate.year + "</h2>";
         
         // var xhttp = new XMLHttpRequest();
         // var url = "https://to-do-list-rdollent.c9users.io/todo/" + completeDate.year + "-" + completeDate.month + "-" + completeDate.date;
@@ -199,32 +214,51 @@
                 a.setAttribute("href", "/todo/" + todos[i]._id);
                 a.textContent = todos[i].title + " - " + todos[i].description;
                 div.appendChild(a);
-                calendar.appendChild(div);
+                document.getElementById("container").appendChild(div);
             }
         }
+        calendar.appendChild(document.getElementById("container"));
     }
     
     
-    // generate how many days
-    // month is 0-based
-    // generate table for days
+    if(!completeDate) {
+        yearObj.createList();
+    } else {
+        completeDate.year = new Date().getFullYear();
+        completeDate.month = new Date().getMonth();
+        completeDate.date = new Date().getDate();
+        completeDate.maxDates = new Date(completeDate.year, completeDate.month + 1, 0).getDate();
+        createMonthYearButtons();
+        createDayAndDate();
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    function createMonthYearButtons() {
+        var btn = document.createElement("button");
+        btn.id = "periodSelect";
+        btn.textContent = "month";
+        btn.addEventListener("click", function() {
+            if(this.textContent === "year") {
+                document.getElementById("monthList").classList.add("noDisplay");
+                yearObj.createList();
+                this.classList.add("noDisplay");
+                this.textContent = "month";
+            }
+            if(this.textContent === "month") {
+                document.getElementById("container").classList.add("noDisplay");
+                if(document.getElementById("monthList")) {
+                    document.getElementById("monthList").classList.add("noDisplay");
+                }
+                monthObj.createList();
+                this.textContent = "year";
+            }
+            if(this.textContent === "date") {
+                this.textContent = "month";
+                createDayAndDate();
+            }
 
-    
-  
-    
-    
-    
-    
+        });
+        calendar.appendChild(btn);
+    }
+
 })();
+

@@ -112,7 +112,7 @@
             trDays.appendChild(th);
         }
         tbl.appendChild(trDays);
-        
+
 
         // populate table with dates
         var j = 1;
@@ -120,8 +120,8 @@
             var trDates = document.createElement("tr");
             trDates.classList.add("row");
             // k represents days of the week
-            var k = 0;
-            while(k <= 6) {
+            // var k = 0;
+            for(let k=0;k <= 6;) {
                 // console.log(j, dateObj.days[k] + ": " + k);
                 var td = document.createElement("td");
                 td.classList.add("col");
@@ -148,6 +148,7 @@
             }
             tbl.appendChild(trDates);
         }
+
         
         var container = document.createElement("div");
         container.id = "container";
@@ -202,7 +203,7 @@
     
     function showTodos() {
         var periodSelect = document.getElementById("periodSelect");
-        periodSelect.classList.remove("noDisplay");
+        // periodSelect.classList.remove("noDisplay");
         periodSelect.textContent = "date";
         // console.log(this.textContent);
         completeDate.date = parseInt(this.childNodes[0].nodeValue);

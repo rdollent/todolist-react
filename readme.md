@@ -37,7 +37,7 @@
         - move Add New Todo link only when showing todos in a single date
         - default index page should be current month and year - set completeDate obj values in todoCalendar.js
         - move code out of document-ready function
-        - 
+        - combine functional, oop, and make code more readable (how???)
     
 
 - Time

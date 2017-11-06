@@ -38,6 +38,8 @@
         - default index page should be current month and year - set completeDate obj values in todoCalendar.js
         - move code out of document-ready function
         - combine functional, oop, and make code more readable (how???)
+        - remove arrows for monthlist and year; show year in monthlist.
+        - make prev and next button usable with dates, not just month
     
 
 - Time

@@ -1,7 +1,7 @@
 "use strict";
 
 (function() {
-    const mainDate = {},
+    const fullDate = {},
         monthList = { 
             0: "January",
             1: "February",
@@ -20,12 +20,12 @@
         
     function runOnPageLoad() {
         const calendar = getId("calendar");
-        mainDate.year = new Date().getFullYear();
-        mainDate.month = new Date().getMonth();
-        mainDate.date = new Date().getDate();
-        mainDate.maxDates = new Date(mainDate.year, mainDate.month + 1, 0).getDate();
-        createPeriodSelectBtns(calendar);
-        createDayAndDate(calendar);
+        fullDate.year = new Date().getFullYear();
+        fullDate.month = new Date().getMonth();
+        fullDate.date = new Date().getDate();
+        fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+        makePeriodSelectBtns(calendar);
+        makeDayAndDate(calendar);
     }
     
     function getId(input) {
@@ -35,9 +35,9 @@
     function makeElem(input) {
         return document.createElement(input);
     }
-    // year functions
-    // need to start populateTimes when pressing button to allow functions to run!
-    function populateTimes(input) {
+    // populate Year OR Month list
+    // need to start createList when pressing button to allow functions to run!
+    function createList(input) {
         const main = makeElem("div"),
             calendar = getId("calendar"), //async
             frag = document.createDocumentFragment(); //append generated elems here then to main
@@ -72,27 +72,29 @@
             periodSelect.classList.remove("noDisplay");
             periodSelect.textContent = "year";
         }
-        mainDate.year = parseInt(this.textContent);
+        fullDate.year = parseInt(this.textContent);
     }
     
     function monthClicked() {
-        const main = getId("monthList"),
-            calendar = getId("calendar");
-        main.classList.add("noDisplay");
-        mainDate.month = parseInt(this.getAttribute("data-month"));
-        mainDate.maxDates = new Date(mainDate.year, mainDate.month + 1, 0).getDate();
+        const monthList = getId("monthList"),
+            calendar = getId("calendar"),
+            btns = getId("btns");
+        monthList.classList.add("noDisplay");
+        btns.classList.remove("noDisplay");
+        fullDate.month = parseInt(this.getAttribute("data-month"));
+        fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").textContent = "month";
-        createDayAndDate(calendar);
+        makeDayAndDate(calendar);
     }
     
-    function createTitleHeader() {
+    function makeTitleHeader() {
         const p = makeElem("p");
-        p.innerHTML = "<h2>" + monthList[mainDate.month] + " " + mainDate.year + "</h2>";
+        p.innerHTML = "<h2>" + monthList[fullDate.month] + " " + fullDate.year + "</h2>";
         p.id = "title";
         return p;
     }
     
-    function createDayHeader() {
+    function makeDayHeader() {
         const trDays = makeElem("tr");
         trDays.classList.add("row");
         // populate table with day headers
@@ -106,51 +108,43 @@
         return trDays;
     }
     
-    function createTbl() {
+    function makeTbl() {
         const tbl = makeElem("table"),
             colgrp = makeElem("colgroup"),
-            trDays = createDayHeader();
-
+            trDays = makeDayHeader();
         tbl.id = "tbl";
         tbl.classList.add("container-fluid");
         colgrp.span = 7;
         tbl.appendChild(colgrp);
         tbl.appendChild(trDays);
-
         return tbl;
     }
     
+    // get todos variable pass on from ejs
     function getTodos(todosArr) {
-        // const arr = [];
-        // for(let i=0; i <= todosArr.length - 1; i++) {
-        //     if(todosArr[i].year === mainDate.year && todosArr[i].month === mainDate.month) {
-        //         arr.push(todos[i]);
-        //     }
-        // }
-        // return arr;
         return todosArr.filter(function(todo) {
-            return (todo.year === mainDate.year && todo.month === mainDate.month);
+            return (todo.year === fullDate.year && todo.month === fullDate.month);
         });
     }
 
-    function createDayAndDate(calendar) {
+    function makeDayAndDate(calendar) {
         if(getId("container")) {
             calendar.removeChild(getId("container"));
         }
-        if(!document.getElementsByClassName("btns")[0]) {
+        if(!getId("btns")) {
             createBtns(calendar);
         }
         const todosNow = getTodos(todos),
-            title = createTitleHeader(),
-            tbl = createTbl(),
+            title = makeTitleHeader(),
+            tbl = makeTbl(),
             container = makeElem("div");
 
         container.id = "container";
-        mainDate.firstDay = new Date(mainDate.year, mainDate.month, 1).getDay();
+        fullDate.firstDay = new Date(fullDate.year, fullDate.month, 1).getDay();
 
         // populate table with dates
         let dates = 1;
-        while(dates  <= mainDate.maxDates) {
+        while(dates  <= fullDate.maxDates) {
             let tr = makeElem("tr");
             tr.classList.add("row");
             let days = 0; //represents days of the week
@@ -159,12 +153,13 @@
                 let td = makeElem("td"),
                 a = makeElem("a");
                 td.classList.add("col");
-                a.addEventListener("click", showTodos);
-                if(dates === 1 && days !== mainDate.firstDay) {
+                a.addEventListener("click", function() { showTodos("fromMonth", this) });
+                if(dates === 1 && days !== fullDate.firstDay) {
                     dates--; // cancels out dates++ at bottom
                 }
-                if(dates > 0 && dates <= mainDate.maxDates) {
+                if(dates > 0 && dates <= fullDate.maxDates) {
                     a.textContent = dates;
+                    a.setAttribute("data-date", dates);
                 }
                 // populate dates with todo titles
                 let todosToday = todosNow.filter(function(todo) {
@@ -193,41 +188,103 @@
             btns = makeElem("div");
         prev.textContent = "<-";
         nxt.textContent = "->";
-        btns.classList.add("btns");
+        prev.id = "prevBtn";
+        nxt.id = "nxtBtn";
+        btns.id = "btns";
         btns.appendChild(prev);
         btns.appendChild(nxt);
-        calendar.append(btns);
-        prev.addEventListener("click", prevBtn);
-        nxt.addEventListener("click", nextBtn);
+        calendar.appendChild(btns);
+        prev.addEventListener("click", prevMonth);
+        nxt.addEventListener("click", nxtMonth);
     }
     
-    function prevBtn() {
+    function prevMonth() {
         const calendar = getId("calendar");
-        if(mainDate.month === 0) {
-            mainDate.year = mainDate.year - 1;
-            mainDate.month = 11;
-            mainDate.maxDates = new Date(mainDate.year, 0, 0).getDate();
+        if(fullDate.month === 0) {
+            fullDate.year = fullDate.year - 1;
+            fullDate.month = 11;
+            fullDate.maxDates = new Date(fullDate.year, 0, 0).getDate();
         } else {
-            mainDate.month = mainDate.month - 1;
-            mainDate.maxDates = new Date(mainDate.year, mainDate.month + 1, 0).getDate();
+            fullDate.month = fullDate.month - 1;
+            fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         }
-        createDayAndDate(calendar);
+        makeDayAndDate(calendar);
     }
     
-    function nextBtn() {
+    function nxtMonth() {
         const calendar = getId("calendar");
-        if(mainDate.month === 11) {
-            mainDate.year = mainDate.year + 1;
-            mainDate.month = 0;
-            mainDate.maxDates = new Date(mainDate.year, 1, 0).getDate();
+        if(fullDate.month === 11) {
+            fullDate.year = fullDate.year + 1;
+            fullDate.month = 0;
+            fullDate.maxDates = new Date(fullDate.year, 1, 0).getDate();
         } else {
-            mainDate.month = mainDate.month + 1;
-            mainDate.maxDates = new Date(mainDate.year, mainDate.month + 1, 0).getDate();
+            fullDate.month = fullDate.month + 1;
+            fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         }
-        createDayAndDate(calendar);
+        makeDayAndDate(calendar);
     }
     
-    function showTodos() {
+    function prevDate() {
+        showTodos("prevDate");
+    }
+    function nxtDate() {
+        showTodos("nxtDate");
+    }
+    
+    function switchBtnEvent(input, elemClicked) {
+        const prevBtn = getId("prevBtn"),
+            nxtBtn = getId("nxtBtn");
+        if(input === "fromMonth") {
+            // console.log(elemClicked);
+            fullDate.date = parseInt(elemClicked.getAttribute("data-date"));
+            // fullDate.date = parseInt(elemClicked.childNodes[0].nodeValue); // get date of clicked element
+            prevBtn.removeEventListener("click", prevMonth);
+            nxtBtn.removeEventListener("click", nxtMonth);
+            prevBtn.addEventListener("click", prevDate);
+            nxtBtn.addEventListener("click", nxtDate);
+        }
+        if(input === "prevDate" || "nxtDate") {
+            let entries = getId("container").getElementsByTagName("div");
+            for(let i = entries.length - 1; i >= 0; i--) {
+                entries[i].parentNode.removeChild(entries[i]);
+            }
+        }
+        if(input === "prevDate") {
+            if(fullDate.date === 1) {
+                if(fullDate.month === 0) {
+                    fullDate.year = fullDate.year - 1;
+                    fullDate.month = 11;
+                    fullDate.maxDates = new Date(fullDate.year, 0, 0).getDate();
+                } else {
+                    fullDate.month = fullDate.month - 1;
+                    fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+                }
+                fullDate.date = fullDate.maxDates;
+            } else {
+                fullDate.date = fullDate.date - 1;
+            }
+            
+        }
+        if(input === "nxtDate") {
+            if(fullDate.date === fullDate.maxDates) {
+                if(fullDate.month === 11) {
+                    fullDate.year = fullDate.year + 1;
+                    fullDate.month = 0;
+                    fullDate.maxDates = new Date(fullDate.year, 1, 0).getDate();
+                } else {
+                    fullDate.month = fullDate.month + 1;
+                    fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+                }
+                fullDate.date = 1;
+            } else {
+                fullDate.date = fullDate.date + 1;
+            }
+
+        }
+    }
+    
+    
+    function showTodos(input, clickedElem) {
         const periodSelect = getId("periodSelect"),
             tbl = getId("tbl"),
             title = getId("title"),
@@ -236,13 +293,14 @@
             calendar = getId("calendar"),
             todosNow = getTodos(todos);
         // console.log(this.textContent);
-        mainDate.date = parseInt(this.childNodes[0].nodeValue); // get date of clicked element
+        switchBtnEvent(input, clickedElem);
+
         periodSelect.textContent = "date";
         tbl.classList.add("noDisplay");
-        title.innerHTML = "<h2>" + monthList[mainDate.month] + " " + mainDate.date + ", " + mainDate.year + "</h2>";
+        title.innerHTML = "<h2>" + monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year + "</h2>";
         // todosNow is from todos variable is passed on through index.ejs
         let todosToday = todosNow.filter(function(todo) {
-            return todo.date === mainDate.date;
+            return todo.date === fullDate.date;
         });
         for(let i = 0; i <= todosToday.length - 1; i++) {
             const div = makeElem("div"),
@@ -254,9 +312,10 @@
         }
         container.appendChild(frag);
         calendar.appendChild(container);
+        
     }
     
-    function createPeriodSelectBtns(calendar) {
+    function makePeriodSelectBtns(calendar) {
         const btn = makeElem("button");
         btn.id = "periodSelect";
         btn.textContent = "month";
@@ -267,14 +326,17 @@
     function changePeriod() {
         const monthList = getId("monthList"),
             yearList = getId("yearList"),
-            calendar = getId("calendar");
+            calendar = getId("calendar"),
+            btns = getId("btns"),
+            prevBtn = getId("prevBtn"),
+            nxtBtn = getId("nxtBtn");
 
         if(this.textContent === "year") {
             monthList.classList.add("noDisplay");
             if(yearList) {
                 yearList.classList.remove("noDisplay");
             } else {
-                populateTimes("year");
+                createList("year");
             }
             this.classList.add("noDisplay");
         }
@@ -285,13 +347,18 @@
             if(monthList) {
                 monthList.classList.remove("noDisplay");
             } else {
-                populateTimes("month");
+                createList("month");
             }
+            btns.classList.add("noDisplay");
             this.textContent = "year";
         }
         if(this.textContent === "date") {
             this.textContent = "month";
-            createDayAndDate(calendar);
+            prevBtn.removeEventListener("click", prevDate);
+            prevBtn.addEventListener("click", prevMonth);
+            nxtBtn.removeEventListener("click", nxtDate);
+            nxtBtn.addEventListener("click", nxtMonth);
+            makeDayAndDate(calendar);
         }
     }
 

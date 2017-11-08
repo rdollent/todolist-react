@@ -60,26 +60,43 @@
         calendar.appendChild(main);
     }
     
+    function makeYearHeader() {
+        const yearTitle = makeElem("div"),
+            calendar = getId("calendar"),
+            h2 = makeElem("h2");
+        yearTitle.id = "yearTitle";
+        h2.textContent = fullDate.year;
+        yearTitle.appendChild(h2);
+        calendar.appendChild(yearTitle);
+    }
+    
     function yearClicked() {
         const yearList = getId("yearList"),
             monthList = getId("monthList"),
-            periodSelect = getId("periodSelect");
+            periodSelect = getId("periodSelect"),
+            yearTitle = getId("yearTitle");
+        fullDate.year = parseInt(this.textContent);
         yearList.classList.add("noDisplay");
-        if(monthList) {
+        if(monthList && yearTitle) {
             monthList.classList.remove("noDisplay");
+            yearTitle.classList.remove("noDisplay");
+            console.log(yearTitle.firstChild.textContent);
+            yearTitle.firstChild.textContent = fullDate.year;
         }
         if(periodSelect) {
             periodSelect.classList.remove("noDisplay");
             periodSelect.textContent = "year";
         }
-        fullDate.year = parseInt(this.textContent);
+        
     }
     
     function monthClicked() {
         const monthList = getId("monthList"),
             calendar = getId("calendar"),
-            btns = getId("btns");
+            btns = getId("btns"),
+            yearTitle = getId("yearTitle");
         monthList.classList.add("noDisplay");
+        yearTitle.classList.add("noDisplay");
         btns.classList.remove("noDisplay");
         fullDate.month = parseInt(this.getAttribute("data-month"));
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
@@ -88,8 +105,10 @@
     }
     
     function makeTitleHeader() {
-        const p = makeElem("p");
-        p.innerHTML = "<h2>" + monthList[fullDate.month] + " " + fullDate.year + "</h2>";
+        const p = makeElem("p"),
+            h2 = makeElem("h2");
+        h2.textContent = monthList[fullDate.month] + " " + fullDate.year;
+        p.appendChild(h2);
         p.id = "title";
         return p;
     }
@@ -184,18 +203,18 @@
 
     function createBtns(calendar) {
         const prev = makeElem("button"),
-            nxt = makeElem("button"),
+            next = makeElem("button"),
             btns = makeElem("div");
         prev.textContent = "<-";
-        nxt.textContent = "->";
+        next.textContent = "->";
         prev.id = "prevBtn";
-        nxt.id = "nxtBtn";
+        next.id = "nextBtn";
         btns.id = "btns";
         btns.appendChild(prev);
-        btns.appendChild(nxt);
+        btns.appendChild(next);
         calendar.appendChild(btns);
         prev.addEventListener("click", prevMonth);
-        nxt.addEventListener("click", nxtMonth);
+        next.addEventListener("click", nextMonth);
     }
     
     function prevMonth() {
@@ -211,7 +230,7 @@
         makeDayAndDate(calendar);
     }
     
-    function nxtMonth() {
+    function nextMonth() {
         const calendar = getId("calendar");
         if(fullDate.month === 11) {
             fullDate.year = fullDate.year + 1;
@@ -227,23 +246,23 @@
     function prevDate() {
         showTodos("prevDate");
     }
-    function nxtDate() {
-        showTodos("nxtDate");
+    function nextDate() {
+        showTodos("nextDate");
     }
     
     function switchBtnEvent(input, elemClicked) {
         const prevBtn = getId("prevBtn"),
-            nxtBtn = getId("nxtBtn");
+            nextBtn = getId("nextBtn");
         if(input === "fromMonth") {
             // console.log(elemClicked);
             fullDate.date = parseInt(elemClicked.getAttribute("data-date"));
             // fullDate.date = parseInt(elemClicked.childNodes[0].nodeValue); // get date of clicked element
             prevBtn.removeEventListener("click", prevMonth);
-            nxtBtn.removeEventListener("click", nxtMonth);
+            nextBtn.removeEventListener("click", nextMonth);
             prevBtn.addEventListener("click", prevDate);
-            nxtBtn.addEventListener("click", nxtDate);
+            nextBtn.addEventListener("click", nextDate);
         }
-        if(input === "prevDate" || "nxtDate") {
+        if(input === "prevDate" || "nextDate") {
             let entries = getId("container").getElementsByTagName("div");
             for(let i = entries.length - 1; i >= 0; i--) {
                 entries[i].parentNode.removeChild(entries[i]);
@@ -265,7 +284,7 @@
             }
             
         }
-        if(input === "nxtDate") {
+        if(input === "nextDate") {
             if(fullDate.date === fullDate.maxDates) {
                 if(fullDate.month === 11) {
                     fullDate.year = fullDate.year + 1;
@@ -297,7 +316,7 @@
 
         periodSelect.textContent = "date";
         tbl.classList.add("noDisplay");
-        title.innerHTML = "<h2>" + monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year + "</h2>";
+        title.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year;
         // todosNow is from todos variable is passed on through index.ejs
         let todosToday = todosNow.filter(function(todo) {
             return todo.date === fullDate.date;
@@ -329,10 +348,12 @@
             calendar = getId("calendar"),
             btns = getId("btns"),
             prevBtn = getId("prevBtn"),
-            nxtBtn = getId("nxtBtn");
+            nextBtn = getId("nextBtn"),
+            yearTitle = getId("yearTitle");
 
         if(this.textContent === "year") {
             monthList.classList.add("noDisplay");
+            yearTitle.classList.add("noDisplay");
             if(yearList) {
                 yearList.classList.remove("noDisplay");
             } else {
@@ -344,9 +365,12 @@
             // note: if I try to put container in variable, it won't work.
             // see https://stackoverflow.com/questions/42956884/failed-to-execute-removechild-on-node
             calendar.removeChild(getId("container"));
-            if(monthList) {
+            if(monthList && yearTitle) {
                 monthList.classList.remove("noDisplay");
+                yearTitle.classList.remove("noDisplay");
+                yearTitle.firstChild.textContent = fullDate.year;
             } else {
+                makeYearHeader();
                 createList("month");
             }
             btns.classList.add("noDisplay");
@@ -356,8 +380,8 @@
             this.textContent = "month";
             prevBtn.removeEventListener("click", prevDate);
             prevBtn.addEventListener("click", prevMonth);
-            nxtBtn.removeEventListener("click", nxtDate);
-            nxtBtn.addEventListener("click", nxtMonth);
+            nextBtn.removeEventListener("click", nextDate);
+            nextBtn.addEventListener("click", nextMonth);
             makeDayAndDate(calendar);
         }
     }

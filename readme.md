@@ -40,6 +40,7 @@
         - combine functional, oop, and make code more readable (how???)
         - remove arrows for monthlist and year; show year in monthlist.
         - make prev and next button usable with dates, not just month
+        - work on add new todo page! remove add new todo and make it appear only in date? month?
     
 
 - Time

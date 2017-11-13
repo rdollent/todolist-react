@@ -27,7 +27,13 @@
         fullDate.date = new Date().getDate();
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         makePeriodSelectBtns(calendar);
+        makeBtns(calendar);
         makeDayAndDate(calendar);
+        // added mouseup event listener on whole document when scrolling through dates
+        // and months, hovering mouse outside prev and next buttons while holding mousedown
+        // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
+        // to detect mouseup.
+        document.addEventListener("mouseup", letGo);
     }
     
     function getId(input) {
@@ -152,9 +158,9 @@
         if(getId("container")) {
             calendar.removeChild(getId("container"));
         }
-        if(!getId("btns")) {
-            makeBtns(calendar);
-        }
+        // if(!getId("btns")) {
+        //     makeBtns(calendar);
+        // }
         const todosNow = getTodos(todos),
             title = makeTitleHeader(),
             tbl = makeTbl(),
@@ -212,8 +218,8 @@
         const prevBtn = makeElem("button"),
             nextBtn = makeElem("button"),
             btns = makeElem("div"),
-            btnsArr = [prevBtn, nextBtn],
-            events = ["mouseup", "mousedown"];
+            btnsArr = [prevBtn, nextBtn];
+            
         prevBtn.textContent = "<-";
         nextBtn.textContent = "->";
         prevBtn.id = "prevBtn";
@@ -229,57 +235,48 @@
         btns.dataset.status = "toMonth";
         
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
-        btnsArr.forEach(function(b) {
-            events.forEach(function(e) {
-                b.addEventListener(e, holdThis);
-            });
+        btnsArr.forEach(function(btn) {
+            btn.addEventListener("mousedown", holdThis);
         });
     }
     
     // hold prev and next buttons to scroll through months/dates
-    function holdThis(e) {
+    function holdThis() {
         const btns = getId("btns");
 
-        if(e.type === "mousedown") {
-            if(this.id ==="nextBtn") {
-                holdNext();
-            }
-            if(this.id === "prevBtn") {
-                holdPrev();
-            }
+        if(this.id ==="nextBtn") {
+            holdNext();
         }
-        if(e.type === "mouseup") {
-            letGo();
+        if(this.id === "prevBtn") {
+            holdPrev();
         }
-        
+
         function holdNext() {
-          prevNextInterval = setInterval(function() {
-            if(btns.dataset.status === "toMonth") {
-                return nextMonth();
-            }
-            if(btns.dataset.status === "toDate") {
-                return nextDate();
-            }
-            // return addTime(elem);
+            prevNextInterval = setInterval(function() {
+                if(btns.dataset.status === "toMonth") {
+                    return nextMonth();
+                }
+                if(btns.dataset.status === "toDate") {
+                    return nextDate();
+                }
             }, 300);
         }
         
         function holdPrev() {
-          prevNextInterval = setInterval(function() {
-            if(btns.dataset.status === "toMonth") {
-                return prevMonth();
-            }
-            if(btns.dataset.status === "toDate") {
-                return prevDate();
-            }
-            // return subtractTime(elem);
+            prevNextInterval = setInterval(function() {
+                if(btns.dataset.status === "toMonth") {
+                    return prevMonth();
+                }
+                if(btns.dataset.status === "toDate") {
+                    return prevDate();
+                }
             }, 300);
         }
-        
-        function letGo() {
-          clearInterval(prevNextInterval);
-          prevNextInterval = null;
-        }
+    }
+    
+    function letGo() {
+        clearInterval(prevNextInterval);
+        prevNextInterval = null;
     }
     
     function prevMonth() {

@@ -82,7 +82,7 @@
         if(monthList && yearTitle) {
             monthList.classList.remove("noDisplay");
             yearTitle.classList.remove("noDisplay");
-            console.log(yearTitle.firstChild.textContent);
+            // change the displayed year in the Year Header
             yearTitle.firstChild.textContent = fullDate.year;
         }
         if(periodSelect) {
@@ -100,7 +100,7 @@
         monthList.classList.add("noDisplay");
         yearTitle.classList.add("noDisplay");
         btns.classList.remove("noDisplay");
-        fullDate.month = parseInt(this.getAttribute("data-month"));
+        fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").textContent = "month";
         makeDayAndDate(calendar);
@@ -158,7 +158,8 @@
         const todosNow = getTodos(todos),
             title = makeTitleHeader(),
             tbl = makeTbl(),
-            container = makeElem("div");
+            container = makeElem("div"),
+            btns = getId("btns");
 
         container.id = "container";
         fullDate.firstDay = new Date(fullDate.year, fullDate.month, 1).getDay();
@@ -177,13 +178,14 @@
                 a.addEventListener("click", function() { 
                     showTodos(this);
                     switchBtnEvent("toDate");
+                    btns.dataset.status = "toDate";
                 });
                 if(dates === 1 && days !== fullDate.firstDay) {
                     dates--; // cancels out dates++ at bottom
                 }
                 if(dates > 0 && dates <= fullDate.maxDates) {
                     a.textContent = dates;
-                    a.setAttribute("data-date", dates);
+                    a.dataset.date = dates;
                 }
                 // populate dates with todo titles
                 let todosToday = todosNow.filter(function(todo) {
@@ -220,15 +222,64 @@
         btns.appendChild(prevBtn);
         btns.appendChild(nextBtn);
         calendar.appendChild(btns);
+        
+        // initial values
         prevBtn.addEventListener("mousedown", prevMonth);
         nextBtn.addEventListener("mousedown", nextMonth);
+        btns.dataset.status = "toMonth";
         
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
-        // btnsArr.forEach(function(b) {
-        //     events.forEach(function(e) {
-        //         b.addEventListener(e, holdThis);
-        //     });
-        // });
+        btnsArr.forEach(function(b) {
+            events.forEach(function(e) {
+                b.addEventListener(e, holdThis);
+            });
+        });
+    }
+    
+    // hold prev and next buttons to scroll through months/dates
+    function holdThis(e) {
+        const btns = getId("btns");
+
+        if(e.type === "mousedown") {
+            if(this.id ==="nextBtn") {
+                holdNext();
+            }
+            if(this.id === "prevBtn") {
+                holdPrev();
+            }
+        }
+        if(e.type === "mouseup") {
+            letGo();
+        }
+        
+        function holdNext() {
+          prevNextInterval = setInterval(function() {
+            if(btns.dataset.status === "toMonth") {
+                return nextMonth();
+            }
+            if(btns.dataset.status === "toDate") {
+                return nextDate();
+            }
+            // return addTime(elem);
+            }, 300);
+        }
+        
+        function holdPrev() {
+          prevNextInterval = setInterval(function() {
+            if(btns.dataset.status === "toMonth") {
+                return prevMonth();
+            }
+            if(btns.dataset.status === "toDate") {
+                return prevDate();
+            }
+            // return subtractTime(elem);
+            }, 300);
+        }
+        
+        function letGo() {
+          clearInterval(prevNextInterval);
+          prevNextInterval = null;
+        }
     }
     
     function prevMonth() {
@@ -293,15 +344,6 @@
         showTodos();
     }
     
-    function scrollDates(input) {
-        if(input === "prevDate") {
-            prevDate();
-        }
-        if(input === "nextDate") {
-            nextDate();
-        }
-    }
-    
     function switchBtnEvent(input) {
         const prevBtn = getId("prevBtn"),
             nextBtn = getId("nextBtn");
@@ -318,7 +360,6 @@
             prevBtn.addEventListener("mousedown", prevMonth);
             nextBtn.addEventListener("mousedown", nextMonth);
         }
-        
     }
     // clear todo entries on date Level
     function clearEntries() {
@@ -327,40 +368,6 @@
             entries[i].parentNode.removeChild(entries[i]);
         }
     }
-    
-        
-    // hold prev and next buttons to scroll through months/dates
-    // function holdThis(e) {
-    //     if(e.type === "mousedown") {
-    //         if(this.id ==="nextBtn") {
-    //             holdAdd(this)
-    //         }
-    //         if(this.id === "prevBtn") {
-    //             holdSubtract(this)
-    //         };
-    //     }
-    //     if(e.type === "mouseup") {
-    //         letGo();
-    //     }
-        
-    //     function holdAdd(elem) {
-    //       prevNextInterval = setInterval(function() {
-    //         return addTime(elem);
-    //         }, 300);
-    //     }
-        
-    //     function holdSubtract(elem) {
-    //       intervalID = setInterval(function() {
-    //         return subtractTime(elem);
-    //         }, 300);
-    //     }
-        
-    //     function letGo() {
-    //       clearInterval(intervalID);
-    //       intervalID = null;
-    //     }
-    // }
-    
     
     function showTodos(clickedElem) {
         const periodSelect = getId("periodSelect"),
@@ -371,8 +378,10 @@
             calendar = getId("calendar"),
             todosNow = getTodos(todos);
         // console.log(this.textContent);
+        // clicking date on calendar, get date for fullDate.date,
+        // otherwise, fullDate.date is taken using prevDate and nextDate functions.
         if(clickedElem) {
-            fullDate.date = parseInt(clickedElem.getAttribute("data-date"));
+            fullDate.date = parseInt(clickedElem.dataset.date);
         }
         // fullDate.date = parseInt(elemClicked.childNodes[0].nodeValue); // get date of clicked element
         // switchBtnEvent(input, clickedElem);
@@ -441,6 +450,7 @@
         }
         if(this.textContent === "date") {
             this.textContent = "month";
+            btns.dataset.status = "toMonth";
             switchBtnEvent("toMonth");
             makeDayAndDate(calendar);
         }

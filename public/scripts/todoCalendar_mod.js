@@ -18,9 +18,13 @@
         },
         dayList = {0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat"};
         
-    let prevNextInterval = null;
-        
+    // use this as counter for holding prev/next buttons.
+    let prevNextInterval = null,
+    // todos for xmlhttprequest ajax call
+    todos = undefined;
+
     function runOnPageLoad() {
+        makeRequest();
         const calendar = getId("calendar");
         fullDate.year = new Date().getFullYear();
         fullDate.month = new Date().getMonth();
@@ -34,6 +38,7 @@
         // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
         // to detect mouseup.
         document.addEventListener("mouseup", letGo);
+        document.addEventListener("touchend", letGo);
     }
     
     function getId(input) {
@@ -42,6 +47,22 @@
     
     function makeElem(input) {
         return document.createElement(input);
+    }
+    
+    function makeRequest() {
+        const myReq = new XMLHttpRequest();
+        // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
+        // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
+        let url = "/todo/user/" + user;
+        myReq.onreadystatechange = function() {
+            if(myReq.readyState === 4 && myReq.status === 200) {
+                // console.log(myReq);
+                todos = JSON.parse(myReq.responseText); 
+            }
+        };
+        // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
+        myReq.open("GET", url, false);
+        myReq.send();
     }
     // populate Year OR Month list
     // need to start makeList when pressing button to allow functions to run!
@@ -158,9 +179,7 @@
         if(getId("container")) {
             calendar.removeChild(getId("container"));
         }
-        // if(!getId("btns")) {
-        //     makeBtns(calendar);
-        // }
+        // console.log("this is todos - " + todos);
         const todosNow = getTodos(todos),
             title = makeTitleHeader(),
             tbl = makeTbl(),
@@ -183,8 +202,8 @@
                 td.classList.add("col");
                 a.addEventListener("click", function() { 
                     showTodos(this);
-                    switchBtnEvent("toDate");
                     btns.dataset.status = "toDate";
+                    switchBtnEvent();
                 });
                 if(dates === 1 && days !== fullDate.firstDay) {
                     dates--; // cancels out dates++ at bottom
@@ -237,12 +256,13 @@
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
         btnsArr.forEach(function(btn) {
             btn.addEventListener("mousedown", holdThis);
+            btn.addEventListener("touchstart", holdThis);
         });
     }
     
     // hold prev and next buttons to scroll through months/dates
     function holdThis() {
-        const btns = getId("btns");
+        const btnsStatus = getId("btns").dataset.status;
 
         if(this.id ==="nextBtn") {
             holdNext();
@@ -253,10 +273,10 @@
 
         function holdNext() {
             prevNextInterval = setInterval(function() {
-                if(btns.dataset.status === "toMonth") {
+                if(btnsStatus === "toMonth") {
                     return nextMonth();
                 }
-                if(btns.dataset.status === "toDate") {
+                if(btnsStatus === "toDate") {
                     return nextDate();
                 }
             }, 300);
@@ -264,10 +284,10 @@
         
         function holdPrev() {
             prevNextInterval = setInterval(function() {
-                if(btns.dataset.status === "toMonth") {
+                if(btnsStatus === "toMonth") {
                     return prevMonth();
                 }
-                if(btns.dataset.status === "toDate") {
+                if(btnsStatus === "toDate") {
                     return prevDate();
                 }
             }, 300);
@@ -341,17 +361,18 @@
         showTodos();
     }
     
-    function switchBtnEvent(input) {
+    function switchBtnEvent() {
         const prevBtn = getId("prevBtn"),
-            nextBtn = getId("nextBtn");
-        if(input === "toDate") {
+            nextBtn = getId("nextBtn"),
+            btnsStatus = getId("btns").dataset.status;
+        if(btnsStatus === "toDate") {
             prevBtn.removeEventListener("mousedown", prevMonth);
             nextBtn.removeEventListener("mousedown", nextMonth);
             prevBtn.addEventListener("mousedown", prevDate);
             nextBtn.addEventListener("mousedown", nextDate);
         }
         
-        if(input === "toMonth") {
+        if(btnsStatus === "toMonth") {
             prevBtn.removeEventListener("mousedown", prevDate);
             nextBtn.removeEventListener("mousedown", nextDate);
             prevBtn.addEventListener("mousedown", prevMonth);
@@ -448,7 +469,7 @@
         if(this.textContent === "date") {
             this.textContent = "month";
             btns.dataset.status = "toMonth";
-            switchBtnEvent("toMonth");
+            switchBtnEvent();
             makeDayAndDate(calendar);
         }
     }

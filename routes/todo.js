@@ -18,17 +18,35 @@ var middleware = require("../middleware/index.js");
 router.get("/", middleware.isLoggedIn,function(req,res) {
     // Get all todos from db
     // get only author's unique todos! :)
-    Todo.find({ "author.id" : req.user._id},
+
+    // Todo.find({ "author.id" : req.user._id},
+    //     "date description frmHr frmMin month title toHr toMin year _id",
+    //     function(err, allTodos) {
+    //     if(err) {
+    //         console.log(err);
+    //     } else {
+    //         res.render("todo/index", {todos: JSON.stringify(allTodos)});
+    //     }
+    // });
+    
+    // start of xmlhttp request
+    // console.log(req.user._id);
+    res.render("todo/index", {user: JSON.stringify(req.user._id)});
+});
+
+// xmlhttprequest get todos given userid
+router.get("/user/:userid", middleware.isLoggedIn, function(req,res) {
+    Todo.find({"author.id" : req.params.userid},
         "date description frmHr frmMin month title toHr toMin year _id",
         function(err, allTodos) {
-        if(err) {
-            console.log(err);
-        } else {
-            res.render("todo/index", {todos: JSON.stringify(allTodos)});
-        }
+            if(err) {
+                console.log(err);
+            } else {
+                res.send(allTodos);
+            }
     });
-    
 });
+
 
 // for overlapping hours
 // Todo.find({}, "frmHr toHr", function(err, foundHours) {

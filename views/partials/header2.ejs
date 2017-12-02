@@ -1,0 +1,37 @@
+    </head>
+    <body>
+
+<nav class="nav">
+    <a href="/" class="nav-title">
+        <p><strong>To-Do App</strong></p>
+    </a>
+    <button class="nav-hamburger">
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+    </button>
+    <div class="nav-menu noDisplay">
+        <% if(currentUser) { %>
+            <a href="/todo" class="nav-viewAll">View All To-dos</a>
+            <a class="nav-signedIn">Signed in as <%= currentUser.username %></a>
+            <a href="/logout" class="nav-logout">Logout</a>
+        <% } else { %>
+            <a href="/register" class="nav-register">Register</a>
+            <a href="/login" class="nav-logIn">Log In</a>
+        <% } %>
+
+    </div>
+</nav>
+
+<div>
+    <% if(error && error.length > 0) { %> <!-- error.length because error array can be empty -->
+        <div role="alert" class="flash flash-error">
+            <%= error %>
+        </div>
+    <% } %>
+    <% if(success && success.length > 0) { %>
+        <div role="alert" class="flash flash-success">
+            <%= success %>
+        </div>
+    <% } %>       
+</div>

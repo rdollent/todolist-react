@@ -1,12 +1,14 @@
-<% include ./partials/header.ejs %>
+<% include ./partials/header1.ejs %>
+<% include ./partials/header2.ejs %>
 
-<div class="container-fluid">
-    <h1>Login</h1>
+<div class="form-form">
+    <h2>Login</h2>
     
     <form action="/login" method="POST">
-        <input type="text" name="username" placeholder="username">
-        <input type="password" name="password" placeholder="password">
-        <button>Login</button>
+        <input type="text" name="username" placeholder="username" class="form-text">
+        <input type="password" name="password" placeholder="password" class="form-text">
+        <wbr>
+        <button class="form-button">Login</button>
     </form>
 
 </div>

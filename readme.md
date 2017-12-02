@@ -44,6 +44,7 @@
         - hold prev and next buttons to go through months. See your Pomodoro javascript on github! https://github.com/rdollent/FCC_Pomodoro/blob/master/index.js
         - tackle xmlhttprequest javascript!
         - make year selection dropdown.
+        - change designs, bootstrap (or foundation???), overall look and feel for ALL pages.
 
 - Time
     - drop down?

@@ -161,7 +161,7 @@
             colgrp = makeElem("colgroup"),
             trDays = makeDayHeader();
         tbl.id = "tbl";
-        tbl.classList.add("container-fluid");
+        tbl.classList.add("container");
         colgrp.span = 7;
         tbl.appendChild(colgrp);
         tbl.appendChild(trDays);

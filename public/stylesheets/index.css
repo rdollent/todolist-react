@@ -1,7 +1,110 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+}
+
 * {
   /*border: 1px solid black !important; /*to display borders of elements, helps with CSS position and resize*/
   box-sizing:border-box;
+  color: #1a1a1a;
+  font-family: 'Roboto', sans-serif;
+  appearance: none;
 }
+
+
+.nav {
+  width: 100%;
+  background-color: #e6e6e6;
+  height: 5.5rem;
+  padding: 0;
+
+}
+
+.nav-height {
+  height: auto;
+}
+
+.nav-title {
+  display: inline-block;
+  text-decoration: none;
+  max-height: 100%;
+  margin-left: 1rem;
+  font-size:2rem;
+}
+
+
+
+.hamburger {
+  width: 2rem;
+  height: 0.3rem;
+  background-color: black;
+  margin: 0.4rem 0;
+  border-radius: 8rem;
+}
+
+.nav-hamburger {
+  border: 0;
+  float: right;
+  margin: 0.5rem;
+  background-color: inherit;
+}
+.nav-hamburger:focus {
+  outline: none;
+}
+
+.nav-menu a {
+  display: block;
+  width: 100%;
+  text-decoration: inherit;
+  padding-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+.form-form {
+  padding: 1rem;
+}
+.form-text {
+  border: 0;
+  border-bottom: 1px solid #1a1a1a;
+  margin-top: 2rem;
+}
+.form-text:focus {
+  outline: none;
+}
+.form-button {
+  border: 0;
+  display:block;
+  margin-top: 2rem;
+}
+
+.flash {
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  margin: 0.25rem auto;
+  text-align:center;
+  width: 50%;
+}
+.flash-success {
+  color: #3c763d;
+  background-color:#dff0d8;
+  border: 0.25rem solid #d6e9c6;
+}
+
+.flash-error {
+  color: #a94442;
+  background-color: #f2dede;
+  border: 0.25rem solid #ebccd1;
+}
+
+.index-container {
+  padding: 1rem;
+}
+
+
+
 
 .noDisplay {
     display: none;

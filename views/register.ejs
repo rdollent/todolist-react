@@ -1,9 +1,13 @@
-<% include ./partials/header.ejs %>
+<% include ./partials/header1.ejs %>
+<% include ./partials/header2.ejs %>
 
-<h1>Sign Up</h1>
+<div class="form-form">
+    <h2>Sign Up</h2>
+    
+    <form action="/register" method="POST">
+        <input type="text" name="username" placeholder="username" class="form-text">
+        <input type="password" name="password" placeholder="password" class="form-text">
+        <button class="form-button">Sign Up</button>
+    </form>
 
-<form action="/register" method="POST">
-    <input type="text" name="username" placeholder="username">
-    <input type="password" name="password" placeholder="password">
-    <button>Sign Up</button>
-</form>
+</div>

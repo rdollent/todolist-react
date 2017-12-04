@@ -45,7 +45,10 @@
         - tackle xmlhttprequest javascript!
         - make year selection dropdown.
         - change designs, bootstrap (or foundation???), overall look and feel for ALL pages.
-
+        - remove entries in calendar. instead, put a marker on to which dates have a todo.
+        - remove change when clicking on a date and removing calendar. instead. click on date and reveal a div wihch contains all entries?
+        - change previous and next innerText into icons
+        - put indicator as to which date is selected.
 - Time
     - drop down?
     - interval? Must be to the minute

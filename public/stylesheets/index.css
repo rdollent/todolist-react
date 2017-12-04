@@ -103,10 +103,15 @@ body {
   padding: 1rem;
 }
 
-
+.add-todo {
+  float:right;
+}
 
 
 .noDisplay {
-    display: none;
+  display: none;
 }
 
+.selectedDate {
+  background-color: #e6e6e6;
+}

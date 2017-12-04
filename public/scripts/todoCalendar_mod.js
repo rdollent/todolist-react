@@ -180,7 +180,7 @@
             calendar.removeChild(getId("container"));
         }
         // console.log("this is todos - " + todos);
-        const todosNow = getTodos(todos),
+        const todosMonth = getTodos(todos),
             title = makeTitleHeader(),
             tbl = makeTbl(),
             container = makeElem("div"),
@@ -199,9 +199,12 @@
                 // console.log(dates, dayList[days] + ": " + days);
                 let td = makeElem("td"),
                 a = makeElem("a");
+                a.classList.add("calendarDates");
                 td.classList.add("col");
                 a.addEventListener("click", function() { 
                     showTodos(this);
+                    removeColour();
+                    putColour(this);
                     btns.dataset.status = "toDate";
                     switchBtnEvent();
                 });
@@ -213,14 +216,14 @@
                     a.dataset.date = dates;
                 }
                 // populate dates with todo titles
-                let todosToday = todosNow.filter(function(todo) {
+                let todosToday = todosMonth.filter(function(todo) {
                     return todo.date === dates;
                 });
-                for(let i=0; i <= todosToday.length - 1; i++) {
-                    const p = makeElem("p");
-                    p.textContent = todosToday[i].title;
-                    a.appendChild(p);
-                }
+                // for(let i=0; i <= todosToday.length - 1; i++) {
+                //     const p = makeElem("p");
+                //     p.textContent = todosToday[i].title;
+                //     a.appendChild(p);
+                // }
                 dates++;
                 days++;
                 td.appendChild(a);
@@ -232,15 +235,23 @@
         container.appendChild(tbl);
         calendar.appendChild(container);
     }
-
+    
     function makeBtns(calendar) {
-        const prevBtn = makeElem("button"),
-            nextBtn = makeElem("button"),
+        const prevBtn = makeElem("a"),
+            nextBtn = makeElem("a"),
             btns = makeElem("div"),
-            btnsArr = [prevBtn, nextBtn];
-            
-        prevBtn.textContent = "<-";
-        nextBtn.textContent = "->";
+            btnsArr = [prevBtn, nextBtn],
+            prevImg = makeElem("i"),
+            nextImg = makeElem("i");
+        
+        prevImg.classList.add("medium");
+        nextImg.classList.add("medium");
+        prevImg.classList.add("material-icons");
+        nextImg.classList.add("material-icons");
+        prevImg.textContent = "navigate_before";
+        nextImg.textContent = "navigate_next";
+        prevBtn.appendChild(prevImg);
+        nextBtn.appendChild(nextImg);
         prevBtn.id = "prevBtn";
         nextBtn.id = "nextBtn";
         btns.id = "btns";
@@ -381,7 +392,7 @@
     }
     // clear todo entries on date Level
     function clearEntries() {
-        let entries = getId("container").getElementsByTagName("div");
+        let entries = getId("todosDates").getElementsByTagName("div");
         for(let i = entries.length - 1; i >= 0; i--) {
             entries[i].parentNode.removeChild(entries[i]);
         }
@@ -394,10 +405,12 @@
             frag = document.createDocumentFragment(), //append generated elems here first
             container = getId("container"),
             calendar = getId("calendar"),
-            todosNow = getTodos(todos);
+            todosMonth = getTodos(todos),
+            todosDates = getId("todosDates");
         // console.log(this.textContent);
         // clicking date on calendar, get date for fullDate.date,
         // otherwise, fullDate.date is taken using prevDate and nextDate functions.
+        clearEntries();
         if(clickedElem) {
             fullDate.date = parseInt(clickedElem.dataset.date);
         }
@@ -405,10 +418,10 @@
         // switchBtnEvent(input, clickedElem);
 
         periodSelect.textContent = "date";
-        tbl.classList.add("noDisplay");
-        title.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year;
-        // todosNow is from todos variable is passed on through index.ejs
-        let todosToday = todosNow.filter(function(todo) {
+        // tbl.classList.add("noDisplay");
+        // title.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year;
+        // todosMonth is from todos variable is passed on through index.ejs
+        let todosToday = todosMonth.filter(function(todo) {
             return todo.date === fullDate.date;
         });
         for(let i = 0; i <= todosToday.length - 1; i++) {
@@ -419,8 +432,9 @@
             div.appendChild(a);
             frag.appendChild(div);
         }
-        container.appendChild(frag);
-        calendar.appendChild(container);
+        // container.appendChild(frag);
+        // calendar.appendChild(container);
+        todosDates.appendChild(frag);
         
     }
     
@@ -472,6 +486,16 @@
             switchBtnEvent();
             makeDayAndDate(calendar);
         }
+    }
+    function removeColour() {
+        let selectedDate = document.getElementsByClassName("selectedDate")[0];
+        if(selectedDate) {
+            selectedDate.classList.remove("selectedDate");
+        }
+        
+    }   
+    function putColour(elem) {
+        elem.classList.add("selectedDate");
     }
     
     

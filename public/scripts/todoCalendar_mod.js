@@ -161,7 +161,6 @@
             colgrp = makeElem("colgroup"),
             trDays = makeDayHeader();
         tbl.id = "tbl";
-        tbl.classList.add("container");
         colgrp.span = 7;
         tbl.appendChild(colgrp);
         tbl.appendChild(trDays);
@@ -169,7 +168,7 @@
     }
     
     // get todos variable pass on from ejs
-    function getTodos(todosArr) {
+    function getTodosMonth(todosArr) {
         return todosArr.filter(function(todo) {
             return (todo.year === fullDate.year && todo.month === fullDate.month);
         });
@@ -180,12 +179,11 @@
             calendar.removeChild(getId("container"));
         }
         // console.log("this is todos - " + todos);
-        const todosMonth = getTodos(todos),
-            title = makeTitleHeader(),
+        const title = makeTitleHeader(),
             tbl = makeTbl(),
-            container = makeElem("div"),
-            btns = getId("btns");
-
+            container = makeElem("div");
+            // btns = getId("btns");
+        
         container.id = "container";
         fullDate.firstDay = new Date(fullDate.year, fullDate.month, 1).getDay();
 
@@ -205,8 +203,8 @@
                     showTodos(this);
                     removeColour();
                     putColour(this);
-                    btns.dataset.status = "toDate";
-                    switchBtnEvent();
+                    // btns.dataset.status = "toDate";
+                    // switchBtnEvent();
                 });
                 if(dates === 1 && days !== fullDate.firstDay) {
                     dates--; // cancels out dates++ at bottom
@@ -216,9 +214,9 @@
                     a.dataset.date = dates;
                 }
                 // populate dates with todo titles
-                let todosToday = todosMonth.filter(function(todo) {
-                    return todo.date === dates;
-                });
+                // let todosToday = todosMonth.filter(function(todo) {
+                //     return todo.date === dates;
+                // });
                 // for(let i=0; i <= todosToday.length - 1; i++) {
                 //     const p = makeElem("p");
                 //     p.textContent = todosToday[i].title;
@@ -231,10 +229,45 @@
             }
             tbl.appendChild(tr);
         }
-        container.appendChild(title);
-        container.appendChild(tbl);
-        calendar.appendChild(container);
+    
+    container.appendChild(title);
+    container.appendChild(tbl);
+    calendar.appendChild(container);
+    
+    populateCalendarWithDots();
     }
+    
+    function populateCalendarWithDots() {
+        const todosMonth = getTodosMonth(todos),
+            calendarDates = document.getElementsByClassName("calendarDates"),
+            todoIcon = "<i class='icon-tiny material-icons icon-white'>arrow_drop_down</i>";
+        let todosDate = {},
+            todosDateAll = [];
+            
+        // place indicator if date has a todo
+        // todosMonth = getTodosMonth(todos);
+        for(let i = 0; i <= todosMonth.length - 1; i++) {
+            // store dates only from todosMonth
+            todosDateAll.push(todosMonth[i].date);
+        }
+        // get only unique dates. es6 method.
+        todosDate = new Set(todosDateAll);
+        // go through dates, look at where there is a todo
+        // do not use innerHTML as it will remove any event listeners
+        // use insertAdjacentHTML https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
+        for(let i = 0; i <= calendarDates.length - 1; i++) {
+            // dates in calendar are string, dates in todosDate are numbers
+            if(calendarDates[i].textContent) {
+                calendarDates[i].insertAdjacentHTML("afterend", todoIcon);
+            }
+            if(todosDate.has(parseInt(calendarDates[i].textContent))) {
+                calendarDates[i].nextElementSibling.classList.remove("icon-white");
+            }
+        }
+        const calendar = getId("calendar");
+        console.log(window.getComputedStyle(calendar));
+    }
+    
     
     function makeBtns(calendar) {
         const prevBtn = makeElem("a"),
@@ -261,8 +294,10 @@
         
         // initial values
         prevBtn.addEventListener("mousedown", prevMonth);
+        prevBtn.addEventListener("mousedown", clearEntries);
         nextBtn.addEventListener("mousedown", nextMonth);
-        btns.dataset.status = "toMonth";
+        nextBtn.addEventListener("mousedown", clearEntries);
+        // btns.dataset.status = "toMonth";
         
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
         btnsArr.forEach(function(btn) {
@@ -273,7 +308,7 @@
     
     // hold prev and next buttons to scroll through months/dates
     function holdThis() {
-        const btnsStatus = getId("btns").dataset.status;
+        // const btnsStatus = getId("btns").dataset.status;
 
         if(this.id ==="nextBtn") {
             holdNext();
@@ -284,23 +319,23 @@
 
         function holdNext() {
             prevNextInterval = setInterval(function() {
-                if(btnsStatus === "toMonth") {
+                // if(btnsStatus === "toMonth") {
                     return nextMonth();
-                }
-                if(btnsStatus === "toDate") {
-                    return nextDate();
-                }
+                // }
+                // if(btnsStatus === "toDate") {
+                    // return nextDate();
+                // }
             }, 300);
         }
         
         function holdPrev() {
             prevNextInterval = setInterval(function() {
-                if(btnsStatus === "toMonth") {
+                // if(btnsStatus === "toMonth") {
                     return prevMonth();
-                }
-                if(btnsStatus === "toDate") {
-                    return prevDate();
-                }
+                // }
+                // if(btnsStatus === "toDate") {
+                    // return prevDate();
+                // }
             }, 300);
         }
     }
@@ -336,77 +371,78 @@
         makeDayAndDate(calendar);
     }
     
-    function prevDate() {
-        clearEntries();
-        if(fullDate.date === 1) {
-            if(fullDate.month === 0) {
-                fullDate.year = fullDate.year - 1;
-                fullDate.month = 11;
-                fullDate.maxDates = new Date(fullDate.year, 0, 0).getDate();
-            } else {
-                fullDate.month = fullDate.month - 1;
-                fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
-            }
-            fullDate.date = fullDate.maxDates;
-        } else {
-            fullDate.date = fullDate.date - 1;
-        }
-        showTodos();
-    }
+    // function prevDate() {
+    //     clearEntries();
+    //     if(fullDate.date === 1) {
+    //         if(fullDate.month === 0) {
+    //             fullDate.year = fullDate.year - 1;
+    //             fullDate.month = 11;
+    //             fullDate.maxDates = new Date(fullDate.year, 0, 0).getDate();
+    //         } else {
+    //             fullDate.month = fullDate.month - 1;
+    //             fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+    //         }
+    //         fullDate.date = fullDate.maxDates;
+    //     } else {
+    //         fullDate.date = fullDate.date - 1;
+    //     }
+    //     showTodos();
+    // }
     
-    function nextDate() {
-        clearEntries();
-        if(fullDate.date === fullDate.maxDates) {
-            if(fullDate.month === 11) {
-                fullDate.year = fullDate.year + 1;
-                fullDate.month = 0;
-                fullDate.maxDates = new Date(fullDate.year, 1, 0).getDate();
-            } else {
-                fullDate.month = fullDate.month + 1;
-                fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
-            }
-            fullDate.date = 1;
-        } else {
-            fullDate.date = fullDate.date + 1;
-        }
-        showTodos();
-    }
+    // function nextDate() {
+    //     clearEntries();
+    //     if(fullDate.date === fullDate.maxDates) {
+    //         if(fullDate.month === 11) {
+    //             fullDate.year = fullDate.year + 1;
+    //             fullDate.month = 0;
+    //             fullDate.maxDates = new Date(fullDate.year, 1, 0).getDate();
+    //         } else {
+    //             fullDate.month = fullDate.month + 1;
+    //             fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+    //         }
+    //         fullDate.date = 1;
+    //     } else {
+    //         fullDate.date = fullDate.date + 1;
+    //     }
+    //     showTodos();
+    // }
     
-    function switchBtnEvent() {
-        const prevBtn = getId("prevBtn"),
-            nextBtn = getId("nextBtn"),
-            btnsStatus = getId("btns").dataset.status;
-        if(btnsStatus === "toDate") {
-            prevBtn.removeEventListener("mousedown", prevMonth);
-            nextBtn.removeEventListener("mousedown", nextMonth);
-            prevBtn.addEventListener("mousedown", prevDate);
-            nextBtn.addEventListener("mousedown", nextDate);
-        }
+    // function switchBtnEvent() {
+    //     const prevBtn = getId("prevBtn"),
+    //         nextBtn = getId("nextBtn");
+    //         btnsStatus = getId("btns").dataset.status;
+    //     if(btnsStatus === "toDate") {
+    //         prevBtn.removeEventListener("mousedown", prevMonth);
+    //         nextBtn.removeEventListener("mousedown", nextMonth);
+    //         prevBtn.addEventListener("mousedown", prevDate);
+    //         nextBtn.addEventListener("mousedown", nextDate);
+    //     }
         
-        if(btnsStatus === "toMonth") {
-            prevBtn.removeEventListener("mousedown", prevDate);
-            nextBtn.removeEventListener("mousedown", nextDate);
-            prevBtn.addEventListener("mousedown", prevMonth);
-            nextBtn.addEventListener("mousedown", nextMonth);
-        }
-    }
+    //     if(btnsStatus === "toMonth") {
+    //         prevBtn.removeEventListener("mousedown", prevDate);
+    //         nextBtn.removeEventListener("mousedown", nextDate);
+    //         prevBtn.addEventListener("mousedown", prevMonth);
+    //         nextBtn.addEventListener("mousedown", nextMonth);
+    //     }
+    // }
     // clear todo entries on date Level
     function clearEntries() {
-        let entries = getId("todosDates").getElementsByTagName("div");
+        let entries = getId("todosDateList").getElementsByTagName("div");
         for(let i = entries.length - 1; i >= 0; i--) {
             entries[i].parentNode.removeChild(entries[i]);
         }
     }
     
     function showTodos(clickedElem) {
-        const periodSelect = getId("periodSelect"),
-            tbl = getId("tbl"),
-            title = getId("title"),
-            frag = document.createDocumentFragment(), //append generated elems here first
-            container = getId("container"),
-            calendar = getId("calendar"),
-            todosMonth = getTodos(todos),
-            todosDates = getId("todosDates");
+        const frag = document.createDocumentFragment(), //append generated elems here first
+            todosMonth = getTodosMonth(todos),
+            todosDateList = getId("todosDateList");
+            // periodSelect = getId("periodSelect");
+            // tbl = getId("tbl"),
+            // title = getId("title"),
+            // container = getId("container"),
+            // calendar = getId("calendar"),
+            
         // console.log(this.textContent);
         // clicking date on calendar, get date for fullDate.date,
         // otherwise, fullDate.date is taken using prevDate and nextDate functions.
@@ -417,7 +453,7 @@
         // fullDate.date = parseInt(elemClicked.childNodes[0].nodeValue); // get date of clicked element
         // switchBtnEvent(input, clickedElem);
 
-        periodSelect.textContent = "date";
+        // periodSelect.textContent = "date";
         // tbl.classList.add("noDisplay");
         // title.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year;
         // todosMonth is from todos variable is passed on through index.ejs
@@ -434,7 +470,7 @@
         }
         // container.appendChild(frag);
         // calendar.appendChild(container);
-        todosDates.appendChild(frag);
+        todosDateList.appendChild(frag);
         
     }
     
@@ -451,9 +487,9 @@
             yearList = getId("yearList"),
             calendar = getId("calendar"),
             btns = getId("btns"),
-            prevBtn = getId("prevBtn"),
-            nextBtn = getId("nextBtn"),
             yearTitle = getId("yearTitle");
+            // prevBtn = getId("prevBtn"),
+            // nextBtn = getId("nextBtn"),
 
         if(this.textContent === "year") {
             monthList.classList.add("noDisplay");
@@ -480,12 +516,12 @@
             btns.classList.add("noDisplay");
             this.textContent = "year";
         }
-        if(this.textContent === "date") {
-            this.textContent = "month";
-            btns.dataset.status = "toMonth";
-            switchBtnEvent();
-            makeDayAndDate(calendar);
-        }
+        // if(this.textContent === "date") {
+        //     this.textContent = "month";
+        //     btns.dataset.status = "toMonth";
+        //     switchBtnEvent();
+        //     makeDayAndDate(calendar);
+        // }
     }
     function removeColour() {
         let selectedDate = document.getElementsByClassName("selectedDate")[0];
@@ -495,9 +531,8 @@
         
     }   
     function putColour(elem) {
-        elem.classList.add("selectedDate");
+        elem.parentNode.classList.add("selectedDate");
     }
-    
     
     
 

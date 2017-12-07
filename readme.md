@@ -49,6 +49,7 @@
         - remove change when clicking on a date and removing calendar. instead. click on date and reveal a div wihch contains all entries?
         - change previous and next innerText into icons
         - put indicator as to which date is selected.
+        - detect height of calendar, screen height, apply appropriate height to list of todos (showtodos), overflow: hidden
 - Time
     - drop down?
     - interval? Must be to the minute

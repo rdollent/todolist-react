@@ -12,6 +12,7 @@ body {
   color: #1a1a1a;
   font-family: 'Roboto', sans-serif;
   appearance: none;
+  user-select:none;
 }
 
 
@@ -115,3 +116,50 @@ body {
 .selectedDate {
   background-color: #e6e6e6;
 }
+
+a {
+  cursor: pointer;
+}
+
+#todosDateList {
+  padding: 0.5rem;
+  height: 15vh;
+  overflow: scroll;
+}
+
+#tbl {
+  width: 100%;
+  max-width: 100rem;
+}
+
+.col {
+  width: 3rem;
+  max-width: 3rem;
+  padding: 0.5rem;
+}
+
+#title {
+  width: 20rem;
+  margin: 0.25rem auto;
+  text-align: center;
+  display: inline-block;
+}
+
+#title > h2 {
+  margin: 0.5rem auto;
+}
+
+#container {
+  text-align:center;
+}
+
+.icon-tiny {
+  font-size: 1rem;
+  display:block;
+  color: #3D9970;
+}
+
+.icon-white {
+  visibility:hidden;
+}
+

@@ -123,8 +123,8 @@ a {
 
 #todosDateList {
   padding: 0.5rem;
-  height: 15vh;
-  overflow: scroll;
+  /*height: 15vh;*/
+  /*overflow: scroll;*/
 }
 
 #tbl {

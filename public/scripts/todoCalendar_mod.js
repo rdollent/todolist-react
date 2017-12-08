@@ -264,8 +264,6 @@
                 calendarDates[i].nextElementSibling.classList.remove("icon-white");
             }
         }
-        const calendar = getId("calendar");
-        console.log(window.getComputedStyle(calendar));
     }
     
     
@@ -471,6 +469,15 @@
         // container.appendChild(frag);
         // calendar.appendChild(container);
         todosDateList.appendChild(frag);
+        
+        
+        const container = document.getElementsByClassName("index-container")[0],
+            nav = document.getElementsByClassName("nav")[0];
+            
+        let todosDateHeight = window.innerHeight - (parseInt(window.getComputedStyle(container).height) + parseInt(window.getComputedStyle(nav).height));
+        todosDateList.style.setProperty("height", todosDateHeight + "px");
+        todosDateList.style.setProperty("overflow", "scroll");
+        console.log(todosDateList.height, todosDateList.overflow);
         
     }
     

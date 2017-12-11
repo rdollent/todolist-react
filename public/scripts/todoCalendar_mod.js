@@ -31,7 +31,7 @@
         fullDate.date = new Date().getDate();
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         makePeriodSelectBtns(calendar);
-        makeBtns(calendar);
+        makeCalendar();
         makeDayAndDate(calendar);
         // added mouseup event listener on whole document when scrolling through dates
         // and months, hovering mouse outside prev and next buttons while holding mousedown
@@ -122,24 +122,35 @@
     function monthClicked() {
         const monthList = getId("monthList"),
             calendar = getId("calendar"),
-            btns = getId("btns"),
             yearTitle = getId("yearTitle");
         monthList.classList.add("noDisplay");
         yearTitle.classList.add("noDisplay");
-        btns.classList.remove("noDisplay");
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").textContent = "month";
+        makeCalendar();
         makeDayAndDate(calendar);
     }
     
+    function makeCalendar() {
+        const calendar = getId("calendar"),
+            container = makeElem("div"),
+            titleHeader = makeTitleHeader();
+        container.id = "container";
+        calendar.appendChild(container);
+        container.appendChild(titleHeader);
+        makeBtns();
+    }
     function makeTitleHeader() {
         const p = makeElem("p"),
-            h2 = makeElem("h2");
+            h2 = makeElem("h2"),
+            titleHeader = makeElem("div");
+        p.id = "tblHeader";
+        titleHeader.id = "title";
         h2.textContent = monthList[fullDate.month] + " " + fullDate.year;
         p.appendChild(h2);
-        p.id = "title";
-        return p;
+        titleHeader.appendChild(p);
+        return titleHeader;
     }
     
     function makeDayHeader() {
@@ -175,16 +186,22 @@
     }
 
     function makeDayAndDate(calendar) {
-        if(getId("container")) {
-            calendar.removeChild(getId("container"));
-        }
+
         // console.log("this is todos - " + todos);
-        const title = makeTitleHeader(),
-            tbl = makeTbl(),
-            container = makeElem("div");
+        const tbl = makeTbl(),
+            container = getId("container"),
+            tblHeader = getId("tblHeader");
             // btns = getId("btns");
+            
+        if(getId("tbl")) {
+            container.removeChild(getId("tbl"));
+        }
         
-        container.id = "container";
+        // if tblHeader exists, change month and year
+        if(tblHeader) {
+            tblHeader.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.year;
+        }
+
         fullDate.firstDay = new Date(fullDate.year, fullDate.month, 1).getDay();
 
         // populate table with dates
@@ -230,11 +247,9 @@
             tbl.appendChild(tr);
         }
     
-    container.appendChild(title);
     container.appendChild(tbl);
-    calendar.appendChild(container);
-    
     populateCalendarWithDots();
+    
     }
     
     function populateCalendarWithDots() {
@@ -267,16 +282,15 @@
     }
     
     
-    function makeBtns(calendar) {
+    function makeBtns() {
         const prevBtn = makeElem("a"),
             nextBtn = makeElem("a"),
-            btns = makeElem("div"),
+            // btns = makeElem("div"),
             btnsArr = [prevBtn, nextBtn],
             prevImg = makeElem("i"),
-            nextImg = makeElem("i");
+            nextImg = makeElem("i"),
+            title = getId("title");
         
-        prevImg.classList.add("medium");
-        nextImg.classList.add("medium");
         prevImg.classList.add("material-icons");
         nextImg.classList.add("material-icons");
         prevImg.textContent = "navigate_before";
@@ -285,10 +299,13 @@
         nextBtn.appendChild(nextImg);
         prevBtn.id = "prevBtn";
         nextBtn.id = "nextBtn";
-        btns.id = "btns";
-        btns.appendChild(prevBtn);
-        btns.appendChild(nextBtn);
-        calendar.appendChild(btns);
+        // btns.id = "btns";
+        // btns.appendChild(prevBtn);
+        // btns.appendChild(nextBtn);
+        // calendar.appendChild(btns);
+        title.insertBefore(prevBtn, title.children.namedItem("tblHeader"));
+        title.insertBefore(nextBtn, title.children.namedItem("tblHeader").nextSibling);
+        
         
         // initial values
         prevBtn.addEventListener("mousedown", prevMonth);
@@ -300,14 +317,14 @@
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
         btnsArr.forEach(function(btn) {
             btn.addEventListener("mousedown", holdThis);
-            btn.addEventListener("touchstart", holdThis);
+            btn.addEventListener("touchstart", holdThis, {passive: true});
         });
+        
     }
     
     // hold prev and next buttons to scroll through months/dates
     function holdThis() {
         // const btnsStatus = getId("btns").dataset.status;
-
         if(this.id ==="nextBtn") {
             holdNext();
         }
@@ -336,11 +353,13 @@
                 // }
             }, 300);
         }
+
     }
     
     function letGo() {
         clearInterval(prevNextInterval);
         prevNextInterval = null;
+        console.log("letGo");
     }
     
     function prevMonth() {
@@ -477,7 +496,7 @@
         let todosDateHeight = window.innerHeight - (parseInt(window.getComputedStyle(container).height) + parseInt(window.getComputedStyle(nav).height));
         todosDateList.style.setProperty("height", todosDateHeight + "px");
         todosDateList.style.setProperty("overflow", "scroll");
-        console.log(todosDateList.height, todosDateList.overflow);
+        console.log(todosDateList.style.height, todosDateList.style.overflow);
         
     }
     
@@ -493,7 +512,6 @@
         const monthList = getId("monthList"),
             yearList = getId("yearList"),
             calendar = getId("calendar"),
-            btns = getId("btns"),
             yearTitle = getId("yearTitle");
             // prevBtn = getId("prevBtn"),
             // nextBtn = getId("nextBtn"),
@@ -520,7 +538,6 @@
                 makeYearHeader();
                 makeList("month");
             }
-            btns.classList.add("noDisplay");
             this.textContent = "year";
         }
         // if(this.textContent === "date") {

@@ -138,14 +138,18 @@ a {
   padding: 0.5rem;
 }
 
-#title {
+#tblHeader {
   width: 20rem;
-  margin: 0.25rem auto;
+  margin: 0 auto;
   text-align: center;
   display: inline-block;
 }
 
-#title > h2 {
+#title {
+  width:100%;
+}
+
+#tblHeader h2 {
   margin: 0.5rem auto;
 }
 

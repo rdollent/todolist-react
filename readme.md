@@ -50,6 +50,9 @@
         - change previous and next innerText into icons
         - put indicator as to which date is selected.
         - detect height of calendar, screen height, apply appropriate height to list of todos (showtodos), overflow: hidden
+        - move previous and next buttons right by title header (how? write btns id workaround)
+        - separate buttons and title header with the rest of calendar!
+        - tblHeader is redundant
 - Time
     - drop down?
     - interval? Must be to the minute

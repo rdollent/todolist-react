@@ -143,12 +143,10 @@
     }
     function makeTitleHeader() {
         const p = makeElem("p"),
-            h2 = makeElem("h2"),
             titleHeader = makeElem("div");
         p.id = "tblHeader";
         titleHeader.id = "title";
-        h2.textContent = monthList[fullDate.month] + " " + fullDate.year;
-        p.appendChild(h2);
+        p.textContent = monthList[fullDate.month] + " " + fullDate.year;
         titleHeader.appendChild(p);
         return titleHeader;
     }
@@ -291,8 +289,8 @@
             nextImg = makeElem("i"),
             title = getId("title");
         
-        prevImg.classList.add("material-icons");
-        nextImg.classList.add("material-icons");
+        prevImg.classList.add("material-icons", "prevNext-icon");
+        nextImg.classList.add("material-icons", "prevNext-icon");
         prevImg.textContent = "navigate_before";
         nextImg.textContent = "navigate_next";
         prevBtn.appendChild(prevImg);
@@ -359,7 +357,6 @@
     function letGo() {
         clearInterval(prevNextInterval);
         prevNextInterval = null;
-        console.log("letGo");
     }
     
     function prevMonth() {
@@ -453,13 +450,20 @@
     function showTodos(clickedElem) {
         const frag = document.createDocumentFragment(), //append generated elems here first
             todosMonth = getTodosMonth(todos),
-            todosDateList = getId("todosDateList");
+            todosDateList = getId("todosDateList"),
+            container = document.getElementsByClassName("index-container")[0],
+            nav = document.getElementsByClassName("nav")[0],
+            todosDateHeight = window.innerHeight - (parseInt(window.getComputedStyle(container).height) + parseInt(window.getComputedStyle(nav).height));
             // periodSelect = getId("periodSelect");
             // tbl = getId("tbl"),
             // title = getId("title"),
             // container = getId("container"),
             // calendar = getId("calendar"),
-            
+        let todosTodayTemp = [],
+            todosToday = [];
+        
+        // reset todosDateList height
+        todosDateList.style.setProperty("height", "0px");
         // console.log(this.textContent);
         // clicking date on calendar, get date for fullDate.date,
         // otherwise, fullDate.date is taken using prevDate and nextDate functions.
@@ -474,14 +478,19 @@
         // tbl.classList.add("noDisplay");
         // title.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year;
         // todosMonth is from todos variable is passed on through index.ejs
-        let todosToday = todosMonth.filter(function(todo) {
+        todosTodayTemp = todosMonth.filter(function(todo) {
             return todo.date === fullDate.date;
         });
+        
+        todosToday = todosTodayTemp.sort(compareTimes);
+
         for(let i = 0; i <= todosToday.length - 1; i++) {
             const div = makeElem("div"),
                 a = makeElem("a");
             a.setAttribute("href", "/todo/" + todosToday[i]._id);
-            a.textContent = todosToday[i].title + " - " + todosToday[i].description;
+            a.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + "-" +
+                            todosToday[i].toHr + ":" + todosToday[i].toMin + " " +
+                            todosToday[i].title;
             div.appendChild(a);
             frag.appendChild(div);
         }
@@ -489,15 +498,21 @@
         // calendar.appendChild(container);
         todosDateList.appendChild(frag);
         
-        
-        const container = document.getElementsByClassName("index-container")[0],
-            nav = document.getElementsByClassName("nav")[0];
-            
-        let todosDateHeight = window.innerHeight - (parseInt(window.getComputedStyle(container).height) + parseInt(window.getComputedStyle(nav).height));
         todosDateList.style.setProperty("height", todosDateHeight + "px");
-        todosDateList.style.setProperty("overflow", "scroll");
-        console.log(todosDateList.style.height, todosDateList.style.overflow);
+        // todosDateList.style.setProperty("overflow", "scroll");
         
+    }
+    
+    // use to sort todosToday array (of objects)
+    function compareTimes(a,b) {
+        if(parseInt(a.frmHr + a.frmMin) < parseInt(b.frmHr + b.frmMin)) {
+            return - 1;
+        }
+        if(parseInt(a.frmHr + a.frmMin) > parseInt(b.frmHr + b.frmMin)) {
+            return 1;
+        }
+        // if a.frmHr and b.frmHr are equal
+        return 0;
     }
     
     function makePeriodSelectBtns(calendar) {
@@ -530,6 +545,7 @@
             // note: if I try to put container in variable, it won't work.
             // see https://stackoverflow.com/questions/42956884/failed-to-execute-removechild-on-node
             calendar.removeChild(getId("container"));
+            clearEntries();
             if(monthList && yearTitle) {
                 monthList.classList.remove("noDisplay");
                 yearTitle.classList.remove("noDisplay");

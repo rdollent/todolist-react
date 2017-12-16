@@ -19,7 +19,7 @@ body {
 .nav {
   width: 100%;
   background-color: #e6e6e6;
-  height: 5.5rem;
+  height: 4rem;
   padding: 0;
 
 }
@@ -32,7 +32,7 @@ body {
   display: inline-block;
   text-decoration: none;
   max-height: 100%;
-  margin-left: 1rem;
+  margin: 1rem 0 0 1rem;
   font-size:2rem;
 }
 
@@ -60,8 +60,7 @@ body {
   display: block;
   width: 100%;
   text-decoration: inherit;
-  padding-bottom: 1rem;
-  margin-left: 1rem;
+  padding: 0.5rem 0 0.5rem 1rem;
 }
 
 .form-form {
@@ -102,6 +101,7 @@ body {
 
 .index-container {
   padding: 1rem;
+  padding-bottom: 0;
 }
 
 .add-todo {
@@ -124,7 +124,7 @@ a {
 #todosDateList {
   padding: 0.5rem;
   /*height: 15vh;*/
-  /*overflow: scroll;*/
+  overflow: scroll;
 }
 
 #tbl {
@@ -135,7 +135,9 @@ a {
 .col {
   width: 3rem;
   max-width: 3rem;
-  padding: 0.5rem;
+  padding: 0.25rem;
+  font-size: 1.2rem;
+  /*font-style: normal;*/
 }
 
 #tblHeader {
@@ -167,3 +169,15 @@ a {
   visibility:hidden;
 }
 
+td {
+  vertical-align: text-bottom !important;
+}
+
+.prevNext-icon {
+  font-size: 1.6rem;
+}
+
+#title {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}

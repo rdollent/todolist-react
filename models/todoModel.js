@@ -10,10 +10,10 @@ var todoSchema = new mongoose.Schema({
     year: Number,
     month: Number,
     date: Number,
-    frmHr: Number, 
-    frmMin: Number,
-    toHr: Number, 
-    toMin: Number,
+    frmHr: String, 
+    frmMin: String,
+    toHr: String, 
+    toMin: String,
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

@@ -53,6 +53,10 @@
         - move previous and next buttons right by title header (how? write btns id workaround)
         - separate buttons and title header with the rest of calendar!
         - tblHeader is redundant
+        - make calendar fit mobile better
+        - sort showTodos by hour, remove styling on links, limit characters for description, limit characters for desc display to ellipses (...)
+        - do not show hours that are before the From hours on a new todo
+        - remove month and year buttons - click on month header for monthList, click on year header for yearList!
 - Time
     - drop down?
     - interval? Must be to the minute

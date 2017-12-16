@@ -75,7 +75,7 @@ var todoRoutes = require("./routes/todo");
 app.use("/", indexRoutes);
 app.use("/todo", todoRoutes);
 
-// Remove todos
+// Remove todos and users
 var seedDB = require("./seeds.js");
 // seedDB();
 

@@ -122,7 +122,7 @@ a {
 }
 
 #todosDateList {
-  padding: 0.5rem;
+  margin-top: 0.5rem;
   /*height: 15vh;*/
   overflow: scroll;
 }
@@ -136,7 +136,7 @@ a {
   width: 3rem;
   max-width: 3rem;
   padding: 0.25rem;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   /*font-style: normal;*/
 }
 
@@ -180,4 +180,23 @@ td {
 #title {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
+}
+
+
+.col-hours {
+  width: 10rem;
+  display:inline-block;
+  padding-left:1.25rem;
+
+  
+}
+.col-todos {
+  width:20rem;
+  display:inline-block;
+}
+
+.col-hours-span, .col-todos-a {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }

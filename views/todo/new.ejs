@@ -14,8 +14,8 @@
 
 
 <form action="/todo" method="POST">
-    <input type="text" name="title" placeholder="Title" required="required">
-    <input type="text" name="description" placeholder="Description" required="required">
+    <input type="text" name="title" placeholder="Title" required="required" maxlength="15">
+    <input type="text" name="description" placeholder="Description" required="required" maxlength="140">
 
     <p>Year
         <select name="year" id="year">

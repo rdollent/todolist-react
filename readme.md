@@ -57,6 +57,9 @@
         - sort showTodos by hour, remove styling on links, limit characters for description, limit characters for desc display to ellipses (...)
         - do not show hours that are before the From hours on a new todo
         - remove month and year buttons - click on month header for monthList, click on year header for yearList!
+        - separate todos today list and times (how? make separate divs, make them inline-block, all contain in todosDateList)
+        - calculate screen height. if colHours and colTodos height < screenheight, fill it.
+        - make it an SPA. Make routes into xmlhttprequests.
 - Time
     - drop down?
     - interval? Must be to the minute

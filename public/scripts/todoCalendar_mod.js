@@ -448,12 +448,12 @@
     }
     
     function showTodos(clickedElem) {
-        const frag = document.createDocumentFragment(), //append generated elems here first
+        const fragHours = document.createDocumentFragment(), //append generated elems here first
+            fragTodos = document.createDocumentFragment(), //append generated elems here first
             todosMonth = getTodosMonth(todos),
             todosDateList = getId("todosDateList"),
-            container = document.getElementsByClassName("index-container")[0],
-            nav = document.getElementsByClassName("nav")[0],
-            todosDateHeight = window.innerHeight - (parseInt(window.getComputedStyle(container).height) + parseInt(window.getComputedStyle(nav).height));
+            colHours = makeElem("div"),
+            colTodos = makeElem("div");
             // periodSelect = getId("periodSelect");
             // tbl = getId("tbl"),
             // title = getId("title"),
@@ -463,7 +463,7 @@
             todosToday = [];
         
         // reset todosDateList height
-        todosDateList.style.setProperty("height", "0px");
+        resetTodosHeight(todosDateList);
         // console.log(this.textContent);
         // clicking date on calendar, get date for fullDate.date,
         // otherwise, fullDate.date is taken using prevDate and nextDate functions.
@@ -483,24 +483,65 @@
         });
         
         todosToday = todosTodayTemp.sort(compareTimes);
+        
+        colHours.id = "colHours";
+        colTodos.id = "colTodos";
+        colHours.classList.add("col-hours");
+        colTodos.classList.add("col-todos");
+        todosDateList.appendChild(colHours);
+        todosDateList.appendChild(colTodos);
 
         for(let i = 0; i <= todosToday.length - 1; i++) {
-            const div = makeElem("div"),
-                a = makeElem("a");
+            const a = makeElem("a"),
+                span = makeElem("span");
+            a.classList.add("col-todos-a");
+            span.classList.add("col-hours-span");
+            
             a.setAttribute("href", "/todo/" + todosToday[i]._id);
-            a.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + "-" +
-                            todosToday[i].toHr + ":" + todosToday[i].toMin + " " +
-                            todosToday[i].title;
-            div.appendChild(a);
-            frag.appendChild(div);
+            span.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + "-" +
+                            todosToday[i].toHr + ":" + todosToday[i].toMin;
+            a.textContent = todosToday[i].title;
+            fragHours.appendChild(span);
+            fragTodos.appendChild(a);
         }
         // container.appendChild(frag);
         // calendar.appendChild(container);
-        todosDateList.appendChild(frag);
+        colHours.appendChild(fragHours);
+        colTodos.appendChild(fragTodos);
+        todosDateList.appendChild(colHours);
+        todosDateList.appendChild(colTodos);
         
-        todosDateList.style.setProperty("height", todosDateHeight + "px");
         // todosDateList.style.setProperty("overflow", "scroll");
+        if(todosToday.length > 0) {
+            setTodosHeight();
+        }
         
+        
+    }
+    
+    function resetTodosHeight(todosDateList) {
+        todosDateList.style.setProperty("height", "0px");
+        while(todosDateList.lastChild) {
+            todosDateList.removeChild(todosDateList.lastChild);
+        }
+    }
+    
+    function setTodosHeight() {
+        const container = document.getElementsByClassName("index-container")[0],
+            nav = document.getElementsByClassName("nav")[0],
+            containerHeight = window.getComputedStyle(container).height, //string
+            navHeight = window.getComputedStyle(nav).height, //string
+            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight)),
+            todosDateList = getId("todosDateList"),
+            colHours = getId("colHours"),
+            colTodos = getId("colTodos");
+            
+        todosDateList.style.setProperty("height", todosDateHeight + "px");
+        //  - parseInt(window.getComputedStyle(todosDateList).padding)
+        colHours.style.setProperty("height", todosDateList.scrollHeight + "px");
+        colTodos.style.setProperty("height", todosDateList.scrollHeight + "px");
+         
+         
     }
     
     // use to sort todosToday array (of objects)

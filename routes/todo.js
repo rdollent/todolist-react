@@ -14,6 +14,7 @@ var middleware = require("../middleware/index.js");
 // to change where you want views to be
 // app.set('views','./folder1/folder2/views');
 
+// noteL root "/" is actually "todo/"
 // index route - show all todos
 router.get("/", middleware.isLoggedIn,function(req,res) {
     // Get all todos from db
@@ -133,16 +134,16 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 });
 
 // show route
-router.get("/:id", middleware.isLoggedIn, function(req, res) {
-    Todo.findById(req.params.id, function(err, foundTodo) {
-        if(err) {
-            console.log(err);
-            res.redirect("/");
-        } else {
-            res.render("todo/show", {todo: foundTodo});
-        }
-    });
-});
+// router.get("/:id", middleware.isLoggedIn, function(req, res) {
+//     Todo.findById(req.params.id, function(err, foundTodo) {
+//         if(err) {
+//             console.log(err);
+//             res.redirect("/");
+//         } else {
+//             res.render("todo/show", {todo: foundTodo});
+//         }
+//     });
+// });
 
 // Edit route
 router.get("/:id/edit", middleware.isLoggedIn, function(req,res) {

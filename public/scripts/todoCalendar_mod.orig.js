@@ -24,7 +24,7 @@
     todos = undefined;
 
     function runOnPageLoad() {
-        makeRequest("index");
+        makeRequest();
         const calendar = getId("calendar");
         fullDate.year = new Date().getFullYear();
         fullDate.month = new Date().getMonth();
@@ -49,17 +49,14 @@
         return document.createElement(input);
     }
     
-    function makeRequest(route) {
+    function makeRequest() {
         const myReq = new XMLHttpRequest();
-        let url = "";
         // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
         // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
-        if(route === "index") {
-           url = "/todo/user/" + user; 
-        }
-
+        let url = "/todo/user/" + user;
         myReq.onreadystatechange = function() {
             if(myReq.readyState === 4 && myReq.status === 200) {
+                // console.log(myReq);
                 todos = JSON.parse(myReq.responseText); 
             }
         };
@@ -187,10 +184,13 @@
     }
 
     function makeDayAndDate(calendar) {
+
+        // console.log("this is todos - " + todos);
         const tbl = makeTbl(),
             container = getId("container"),
             tblHeader = getId("tblHeader");
-
+            // btns = getId("btns");
+            
         if(getId("tbl")) {
             container.removeChild(getId("tbl"));
         }
@@ -209,6 +209,7 @@
             tr.classList.add("row");
             let days = 0; //represents days of the week
             while(days <= 6) {
+                // console.log(dates, dayList[days] + ": " + days);
                 let td = makeElem("td"),
                 a = makeElem("a");
                 a.classList.add("calendarDates");
@@ -217,6 +218,8 @@
                     showTodos(this);
                     removeColour();
                     putColour(this);
+                    // btns.dataset.status = "toDate";
+                    // switchBtnEvent();
                 });
                 if(dates === 1 && days !== fullDate.firstDay) {
                     dates--; // cancels out dates++ at bottom
@@ -225,6 +228,15 @@
                     a.textContent = dates;
                     a.dataset.date = dates;
                 }
+                // populate dates with todo titles
+                // let todosToday = todosMonth.filter(function(todo) {
+                //     return todo.date === dates;
+                // });
+                // for(let i=0; i <= todosToday.length - 1; i++) {
+                //     const p = makeElem("p");
+                //     p.textContent = todosToday[i].title;
+                //     a.appendChild(p);
+                // }
                 dates++;
                 days++;
                 td.appendChild(a);
@@ -232,6 +244,7 @@
             }
             tbl.appendChild(tr);
         }
+    
     container.appendChild(tbl);
     populateCalendarWithDots();
     
@@ -245,6 +258,7 @@
             todosDateAll = [];
             
         // place indicator if date has a todo
+        // todosMonth = getTodosMonth(todos);
         for(let i = 0; i <= todosMonth.length - 1; i++) {
             // store dates only from todosMonth
             todosDateAll.push(todosMonth[i].date);
@@ -264,7 +278,8 @@
             }
         }
     }
-
+    
+    
     function makeBtns() {
         const prevBtn = makeElem("a"),
             nextBtn = makeElem("a"),
@@ -282,6 +297,10 @@
         nextBtn.appendChild(nextImg);
         prevBtn.id = "prevBtn";
         nextBtn.id = "nextBtn";
+        // btns.id = "btns";
+        // btns.appendChild(prevBtn);
+        // btns.appendChild(nextBtn);
+        // calendar.appendChild(btns);
         title.insertBefore(prevBtn, title.children.namedItem("tblHeader"));
         title.insertBefore(nextBtn, title.children.namedItem("tblHeader").nextSibling);
         
@@ -291,7 +310,8 @@
         prevBtn.addEventListener("mousedown", clearEntries);
         nextBtn.addEventListener("mousedown", nextMonth);
         nextBtn.addEventListener("mousedown", clearEntries);
-
+        // btns.dataset.status = "toMonth";
+        
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
         btnsArr.forEach(function(btn) {
             btn.addEventListener("mousedown", holdThis);
@@ -302,6 +322,7 @@
     
     // hold prev and next buttons to scroll through months/dates
     function holdThis() {
+        // const btnsStatus = getId("btns").dataset.status;
         if(this.id ==="nextBtn") {
             holdNext();
         }
@@ -311,13 +332,23 @@
 
         function holdNext() {
             prevNextInterval = setInterval(function() {
-                return nextMonth();
+                // if(btnsStatus === "toMonth") {
+                    return nextMonth();
+                // }
+                // if(btnsStatus === "toDate") {
+                    // return nextDate();
+                // }
             }, 300);
         }
         
         function holdPrev() {
             prevNextInterval = setInterval(function() {
-                return prevMonth();
+                // if(btnsStatus === "toMonth") {
+                    return prevMonth();
+                // }
+                // if(btnsStatus === "toDate") {
+                    // return prevDate();
+                // }
             }, 300);
         }
 
@@ -353,16 +384,66 @@
         }
         makeDayAndDate(calendar);
     }
-
+    
+    // function prevDate() {
+    //     clearEntries();
+    //     if(fullDate.date === 1) {
+    //         if(fullDate.month === 0) {
+    //             fullDate.year = fullDate.year - 1;
+    //             fullDate.month = 11;
+    //             fullDate.maxDates = new Date(fullDate.year, 0, 0).getDate();
+    //         } else {
+    //             fullDate.month = fullDate.month - 1;
+    //             fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+    //         }
+    //         fullDate.date = fullDate.maxDates;
+    //     } else {
+    //         fullDate.date = fullDate.date - 1;
+    //     }
+    //     showTodos();
+    // }
+    
+    // function nextDate() {
+    //     clearEntries();
+    //     if(fullDate.date === fullDate.maxDates) {
+    //         if(fullDate.month === 11) {
+    //             fullDate.year = fullDate.year + 1;
+    //             fullDate.month = 0;
+    //             fullDate.maxDates = new Date(fullDate.year, 1, 0).getDate();
+    //         } else {
+    //             fullDate.month = fullDate.month + 1;
+    //             fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+    //         }
+    //         fullDate.date = 1;
+    //     } else {
+    //         fullDate.date = fullDate.date + 1;
+    //     }
+    //     showTodos();
+    // }
+    
+    // function switchBtnEvent() {
+    //     const prevBtn = getId("prevBtn"),
+    //         nextBtn = getId("nextBtn");
+    //         btnsStatus = getId("btns").dataset.status;
+    //     if(btnsStatus === "toDate") {
+    //         prevBtn.removeEventListener("mousedown", prevMonth);
+    //         nextBtn.removeEventListener("mousedown", nextMonth);
+    //         prevBtn.addEventListener("mousedown", prevDate);
+    //         nextBtn.addEventListener("mousedown", nextDate);
+    //     }
+        
+    //     if(btnsStatus === "toMonth") {
+    //         prevBtn.removeEventListener("mousedown", prevDate);
+    //         nextBtn.removeEventListener("mousedown", nextDate);
+    //         prevBtn.addEventListener("mousedown", prevMonth);
+    //         nextBtn.addEventListener("mousedown", nextMonth);
+    //     }
+    // }
     // clear todo entries on date Level
     function clearEntries() {
-        // let entries = getId("modContent").getElementsByTagName("div");
-        // for(let i = entries.length - 1; i >= 0; i--) {
-        //     entries[i].parentNode.removeChild(entries[i]);
-        // }
-        const modContent = getId("modContent");
-        while(modContent.lastChild) {
-            modContent.removeChild(modContent.lastChild);
+        let entries = getId("todosDateList").getElementsByTagName("div");
+        for(let i = entries.length - 1; i >= 0; i--) {
+            entries[i].parentNode.removeChild(entries[i]);
         }
     }
     
@@ -370,23 +451,33 @@
         const fragHours = document.createDocumentFragment(), //append generated elems here first
             fragTodos = document.createDocumentFragment(), //append generated elems here first
             todosMonth = getTodosMonth(todos),
-            modContent = getId("modContent"),
+            todosDateList = getId("todosDateList"),
             colHours = makeElem("div"),
             colTodos = makeElem("div");
+            // periodSelect = getId("periodSelect");
+            // tbl = getId("tbl"),
+            // title = getId("title"),
+            // container = getId("container"),
+            // calendar = getId("calendar"),
         let todosTodayTemp = [],
             todosToday = [];
         
-        // reset modContent height
-        clearEntries();
-        resetTodosHeight(modContent);
-        console.log(clickedElem);
+        // reset todosDateList height
+        resetTodosHeight(todosDateList);
         // console.log(this.textContent);
         // clicking date on calendar, get date for fullDate.date,
         // otherwise, fullDate.date is taken using prevDate and nextDate functions.
+        clearEntries();
         if(clickedElem) {
             fullDate.date = parseInt(clickedElem.dataset.date);
         }
+        // fullDate.date = parseInt(elemClicked.childNodes[0].nodeValue); // get date of clicked element
+        // switchBtnEvent(input, clickedElem);
 
+        // periodSelect.textContent = "date";
+        // tbl.classList.add("noDisplay");
+        // title.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.date + ", " + fullDate.year;
+        // todosMonth is from todos variable is passed on through index.ejs
         todosTodayTemp = todosMonth.filter(function(todo) {
             return todo.date === fullDate.date;
         });
@@ -397,8 +488,8 @@
         colTodos.id = "colTodos";
         colHours.classList.add("col-hours");
         colTodos.classList.add("col-todos");
-        modContent.appendChild(colHours);
-        modContent.appendChild(colTodos);
+        todosDateList.appendChild(colHours);
+        todosDateList.appendChild(colTodos);
 
         for(let i = 0; i <= todosToday.length - 1; i++) {
             const a = makeElem("a"),
@@ -406,30 +497,33 @@
             a.classList.add("col-todos-a");
             span.classList.add("col-hours-span");
             
-            // a.setAttribute("href", "/todo/" + todosToday[i]._id);
-            a.addEventListener("click", function() {
-                resetTodosHeight(modContent);
-                showFoundTodo(todosToday[i]);
-                });
+            a.setAttribute("href", "/todo/" + todosToday[i]._id);
             span.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + "-" +
                             todosToday[i].toHr + ":" + todosToday[i].toMin;
             a.textContent = todosToday[i].title;
             fragHours.appendChild(span);
             fragTodos.appendChild(a);
         }
+        // container.appendChild(frag);
+        // calendar.appendChild(container);
         colHours.appendChild(fragHours);
         colTodos.appendChild(fragTodos);
-        modContent.appendChild(colHours);
-        modContent.appendChild(colTodos);
-
+        todosDateList.appendChild(colHours);
+        todosDateList.appendChild(colTodos);
+        
+        // todosDateList.style.setProperty("overflow", "scroll");
         if(todosToday.length > 0) {
             setTodosHeight();
         }
         
+        
     }
     
-    function resetTodosHeight(modContent) {
-        modContent.style.setProperty("height", "auto");
+    function resetTodosHeight(todosDateList) {
+        todosDateList.style.setProperty("height", "0px");
+        while(todosDateList.lastChild) {
+            todosDateList.removeChild(todosDateList.lastChild);
+        }
     }
     
     function setTodosHeight() {
@@ -438,14 +532,18 @@
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight)),
-            modContent = getId("modContent"),
+            todosDateList = getId("todosDateList"),
             colHours = getId("colHours"),
             colTodos = getId("colTodos");
             
-        modContent.style.setProperty("height", todosDateHeight + "px");
-        colHours.style.setProperty("height", modContent.scrollHeight + "px");
-        colTodos.style.setProperty("height", modContent.scrollHeight + "px");
+        todosDateList.style.setProperty("height", todosDateHeight + "px");
+        //  - parseInt(window.getComputedStyle(todosDateList).padding)
+        colHours.style.setProperty("height", todosDateList.scrollHeight + "px");
+        colTodos.style.setProperty("height", todosDateList.scrollHeight + "px");
+         
+         
     }
+    
     // use to sort todosToday array (of objects)
     function compareTimes(a,b) {
         if(parseInt(a.frmHr + a.frmMin) < parseInt(b.frmHr + b.frmMin)) {
@@ -471,6 +569,8 @@
             yearList = getId("yearList"),
             calendar = getId("calendar"),
             yearTitle = getId("yearTitle");
+            // prevBtn = getId("prevBtn"),
+            // nextBtn = getId("nextBtn"),
 
         if(this.textContent === "year") {
             monthList.classList.add("noDisplay");
@@ -497,7 +597,12 @@
             }
             this.textContent = "year";
         }
-
+        // if(this.textContent === "date") {
+        //     this.textContent = "month";
+        //     btns.dataset.status = "toMonth";
+        //     switchBtnEvent();
+        //     makeDayAndDate(calendar);
+        // }
     }
     function removeColour() {
         let selectedDate = document.getElementsByClassName("selectedDate")[0];
@@ -509,70 +614,9 @@
     function putColour(elem) {
         elem.parentNode.classList.add("selectedDate");
     }
+    
+    
 
-    
-    function showFoundTodo(todo) {
-        const modContent = getId("modContent"),
-            form = makeElem("form"),
-            btnDel = makeElem("button"),
-            btnEdit = makeElem("button"),
-            btnBack = makeElem("button"),
-            a = makeElem("a"),
-            showTodoDiv = makeElem("div"),
-            showArr = ["title", "description", "year", "month", "date", "frm", "to"],
-            frag = document.createDocumentFragment();
-        clearEntries();
-        for(let i = 0; i <= showArr.length - 1; i++) {
-            let x = makeElem("div");
-            if(showArr[i] === "frm") {
-                x.textContent = todo.frmHr + ":" + todo.frmMin;
-            } else if(showArr[i] === "to") {
-                x.textContent = todo.toHr + ":" + todo.toMin;
-            } else {
-                x.textContent = todo[showArr[i]];
-            }
-            frag.appendChild(x);
-        }
-        // a.setAttribute("href", "/todo/" + todo._id + "/edit");
-        a.addEventListener("click", function() {
-            resetTodosHeight(modContent);
-            editFoundTodo(todo);
-        });
-        btnEdit.textContent = "Edit";
-        a.appendChild(btnEdit);
-        form.setAttribute("action", "/todo/" + todo._id + "?_method=DELETE");
-        form.setAttribute("method", "POST");
-        btnDel.textContent = "Delete";
-        form.appendChild(btnDel);
-        btnBack.textContent = "Back";
-        btnBack.addEventListener("click", function() {
-            showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
-        });
-        showTodoDiv.id = "showTodoDiv";
-        frag.appendChild(a);
-        frag.appendChild(form);
-        frag.appendChild(btnBack);
-        showTodoDiv.appendChild(frag);
-        modContent.appendChild(showTodoDiv);
-
-    }
-    
-    function editFoundTodo(todo) {
-        const showTodoDiv = getId("showTodoDiv"),
-            modContent = getId("modContent"),
-            editTodoDiv = makeElem("div"),
-            btnBack = makeElem("button");
-        showTodoDiv.classList.add("noDisplay");
-        editTodoDiv.textContent = "Hello";
-        modContent.appendChild(showTodoDiv);
-        btnBack.addEventListener("click", function() {
-            
-            showTodoDiv.classList.remove("noDisplay");
-        });
-        modContent.appendChild(btnBack);
-    }
-    
-    
 runOnPageLoad();
 
 })();

@@ -59,7 +59,9 @@
         - remove month and year buttons - click on month header for monthList, click on year header for yearList!
         - separate todos today list and times (how? make separate divs, make them inline-block, all contain in todosDateList)
         - calculate screen height. if colHours and colTodos height < screenheight, fill it.
-        - make it an SPA. Make routes into xmlhttprequests.
+        - make it an SPA. Make routes into xmlhttprequests. how?
+            - remove show route since all the data i'll need is already loaded. rework links.
+            - modify edit route to work on single page?
 - Time
     - drop down?
     - interval? Must be to the minute

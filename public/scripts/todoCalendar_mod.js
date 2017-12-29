@@ -18,10 +18,10 @@
         },
         dayList = {0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat"};
         
-    // use this as counter for holding prev/next buttons.
+        // use this as counter for holding prev/next buttons.
     let prevNextInterval = null,
-    // todos for xmlhttprequest ajax call
-    todos = undefined;
+        // todos for xmlhttprequest ajax call
+        todos = undefined;
 
     function runOnPageLoad() {
         makeRequest("index");
@@ -302,24 +302,16 @@
     
     // hold prev and next buttons to scroll through months/dates
     function holdThis() {
-        if(this.id ==="nextBtn") {
-            holdNext();
-        }
-        if(this.id === "prevBtn") {
-            holdPrev();
-        }
-
-        function holdNext() {
-            prevNextInterval = setInterval(function() {
+        let clickedElem = this;
+        clearEntries();
+        prevNextInterval = setInterval(function() {
+            if(clickedElem.id === "nextBtn") {
                 return nextMonth();
-            }, 300);
-        }
-        
-        function holdPrev() {
-            prevNextInterval = setInterval(function() {
+            }
+            if(clickedElem.id === "prevBtn") {
                 return prevMonth();
-            }, 300);
-        }
+            }
+        }, 300); 
 
     }
     
@@ -356,10 +348,6 @@
 
     // clear todo entries on date Level
     function clearEntries() {
-        // let entries = getId("modContent").getElementsByTagName("div");
-        // for(let i = entries.length - 1; i >= 0; i--) {
-        //     entries[i].parentNode.removeChild(entries[i]);
-        // }
         const modContent = getId("modContent");
         while(modContent.lastChild) {
             modContent.removeChild(modContent.lastChild);
@@ -521,7 +509,9 @@
             showTodoDiv = makeElem("div"),
             showArr = ["title", "description", "year", "month", "date", "frm", "to"],
             frag = document.createDocumentFragment();
+            
         clearEntries();
+        
         for(let i = 0; i <= showArr.length - 1; i++) {
             let x = makeElem("div");
             if(showArr[i] === "frm") {
@@ -533,22 +523,27 @@
             }
             frag.appendChild(x);
         }
+        // id
+        showTodoDiv.id = "showTodoDiv";
+        // text
+        btnEdit.textContent = "Edit";
+        btnDel.textContent = "Delete";
+        btnBack.textContent = "Back";
+        // attributes
+        form.setAttribute("action", "/todo/" + todo._id + "?_method=DELETE");
+        form.setAttribute("method", "POST");
+        // events
         // a.setAttribute("href", "/todo/" + todo._id + "/edit");
         a.addEventListener("click", function() {
             resetTodosHeight(modContent);
             editFoundTodo(todo);
         });
-        btnEdit.textContent = "Edit";
-        a.appendChild(btnEdit);
-        form.setAttribute("action", "/todo/" + todo._id + "?_method=DELETE");
-        form.setAttribute("method", "POST");
-        btnDel.textContent = "Delete";
-        form.appendChild(btnDel);
-        btnBack.textContent = "Back";
         btnBack.addEventListener("click", function() {
             showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
         });
-        showTodoDiv.id = "showTodoDiv";
+        // append
+        a.appendChild(btnEdit);
+        form.appendChild(btnDel);
         frag.appendChild(a);
         frag.appendChild(form);
         frag.appendChild(btnBack);
@@ -558,18 +553,92 @@
     }
     
     function editFoundTodo(todo) {
-        const showTodoDiv = getId("showTodoDiv"),
+        const
+            // get elements
+            showTodoDiv = getId("showTodoDiv"),
             modContent = getId("modContent"),
+            // make elements
             editTodoDiv = makeElem("div"),
-            btnBack = makeElem("button");
-        showTodoDiv.classList.add("noDisplay");
-        editTodoDiv.textContent = "Hello";
-        modContent.appendChild(showTodoDiv);
-        btnBack.addEventListener("click", function() {
+            btnBack = makeElem("button"),
+            form = makeElem("form"),
+
+        
+            objInput = {
+                makeInput: function(x) {
+                    let input = makeElem("input");
+                    input.type = ("text");
+                    input.name = "todo[" + x + "]";
+                    input.value = todo[x];
+                    input.required = "required";
+                    return input;
+                }
+            },
+       
+            title = objInput.makeInput("title"),
+            desc = objInput.makeInput("description");
+        
+            // create dialog boxes
+            const todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
+            let start = 0, end = 0, defaultVal = 0, name = "";
             
+            for(let j = 0; j <= todoArr.length - 1; j++) {
+                let select = makeElem("select"),
+                    optnDefault = makeElem("option");
+                switch(todoArr[j]) {
+                    case todo.year:
+                        start = 2000;
+                        end = 2099;
+                        break;
+                    case todo.month:
+                        start = 0;
+                        end = 12;
+                        break;
+                    case todo.date:
+                        start = 1;
+                        end = 31;
+                        break;
+                    case (todo.frmHr || todo.toHr):
+                        start = 0;
+                        end = 23;
+                        break;
+                    case (todo.frmMin || todo.toMin):
+                        start = 0;
+                        end: 59;
+                        break;
+                } 
+                for(let i = start; i <= end; i++) {
+                    let optns = makeElem("option");
+                }
+                optnDefault.selected = true;
+                optnDefault.disabled = true;
+                optnDefault.hidden = true;
+                optnDefault.textContent = todoArr[j];
+
+            }
+
+        
+        console.log(todo);
+        editTodoDiv.id = "editTodoDiv";
+        
+        showTodoDiv.classList.add("noDisplay");
+        
+        btnBack.textContent = "Back";
+        
+        form.setAttribute("action", "/todo/" + todo._id + "/?_method=PUT");
+        form.setAttribute("method", "POST");
+        
+        // events
+        btnBack.addEventListener("click", function() {
+            modContent.removeChild(getId("editTodoDiv"));
             showTodoDiv.classList.remove("noDisplay");
         });
-        modContent.appendChild(btnBack);
+        
+        // append
+        form.appendChild(title);
+        form.appendChild(desc);
+        editTodoDiv.appendChild(form);
+        editTodoDiv.appendChild(btnBack);
+        modContent.appendChild(editTodoDiv);
     }
     
     

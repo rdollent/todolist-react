@@ -61,7 +61,8 @@
         - calculate screen height. if colHours and colTodos height < screenheight, fill it.
         - make it an SPA. Make routes into xmlhttprequests. how?
             - remove show route since all the data i'll need is already loaded. rework links.
-            - modify edit route to work on single page?
+            - modify edit route to work on single page.
+            - how to detect when month has 28, 29, 30 or 31 dates? figure it out.
 - Time
     - drop down?
     - interval? Must be to the minute

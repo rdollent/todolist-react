@@ -582,8 +582,16 @@
             let start = 0, end = 0, defaultVal = 0, name = "";
             
             for(let j = 0; j <= todoArr.length - 1; j++) {
-                let select = makeElem("select"),
+                let p = makeElem("p"),
+                    select = makeElem("select"),
                     optnDefault = makeElem("option");
+                    
+                optnDefault.selected = true;
+                optnDefault.disabled = true;
+                optnDefault.hidden = true;
+                optnDefault.textContent = todoArr[j];
+                
+                select.appendChild(optnDefault);
                 switch(todoArr[j]) {
                     case todo.year:
                         start = 2000;
@@ -608,16 +616,15 @@
                 } 
                 for(let i = start; i <= end; i++) {
                     let optns = makeElem("option");
+                    optns.textContent = i;
+                    select.appendChild(optns);
                 }
-                optnDefault.selected = true;
-                optnDefault.disabled = true;
-                optnDefault.hidden = true;
-                optnDefault.textContent = todoArr[j];
+                
+                p.appendChild(select);
+                form.appendChild(p);
 
             }
 
-        
-        console.log(todo);
         editTodoDiv.id = "editTodoDiv";
         
         showTodoDiv.classList.add("noDisplay");
@@ -634,8 +641,8 @@
         });
         
         // append
-        form.appendChild(title);
-        form.appendChild(desc);
+        form.insertBefore(desc, form.firstChild);
+        form.insertBefore(title, form.firstChild);
         editTodoDiv.appendChild(form);
         editTodoDiv.appendChild(btnBack);
         modContent.appendChild(editTodoDiv);

@@ -580,26 +580,14 @@
             // create dialog boxes
             todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
             
+            console.log(todoArr);
             // variables for options
             let start = 0, end = 0, defaultVal = 0, selectName = "", selectId = "";
             
             for(let i = 0; i <= todoArr.length - 1; i++) {
                 let p = makeElem("p"),
-                    select = makeElem("select"),
-                    optnDefault = makeElem("option");
-                    
-                optnDefault.selected = true;
-                optnDefault.disabled = true;
-                optnDefault.hidden = true;
-                
-                if(i === 1 ) { //todo.month
-                    optnDefault.textContent = convertMonth(todoArr[i]);
-                } else {
-                    optnDefault.textContent = todoArr[i];
-                }
-                
-                
-                select.appendChild(optnDefault);
+                    select = makeElem("select");
+
                 switch(todoArr[i]) {
                     case todo.year:
                         start = 2000;
@@ -633,13 +621,13 @@
                         break;
                     case (todo.frmMin):
                         start = 0;
-                        end: 59;
+                        end = 59;
                         selectName = "todo[frmMin]";
                         selectId = "editFrmMin";
                         break;
                     case (todo.toMin):
                         start = 0;
-                        end: 59;
+                        end = 59;
                         selectName = "todo[toMin]";
                         selectId = "editToMin";
                         break;
@@ -649,13 +637,17 @@
                 select.setAttribute("name", selectName);
                 select.id = selectId;
                 
-                for(let i = start; i <= end; i++) {
+                for(let j = start; j <= end; j++) {
                     let optns = makeElem("option");
                     // convert month number to name
                     if(selectId === "editMonth") {
-                        optns.textContent = monthList[i];
+                        optns.textContent = monthList[j];
                     } else {
-                        optns.textContent = i;
+                        optns.textContent = j;
+                    }
+                    // set default value
+                    if(j === todoArr[i]) {
+                        optns.selected = true;
                     }
                     select.appendChild(optns);
                 }

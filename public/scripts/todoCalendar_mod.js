@@ -561,8 +561,8 @@
             editTodoDiv = makeElem("div"),
             btnBack = makeElem("button"),
             form = makeElem("form"),
+            timeDiv = makeElem("div"),
 
-        
             objInput = {
                 makeInput: function(x) {
                     let input = makeElem("input");
@@ -575,13 +575,15 @@
             },
        
             title = objInput.makeInput("title"),
-            desc = objInput.makeInput("description");
+            desc = objInput.makeInput("description"),
         
             // create dialog boxes
-            const todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
-            let start = 0, end = 0, defaultVal = 0, name = "";
+            todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
             
-            for(let j = 0; j <= todoArr.length - 1; j++) {
+            // variables for options
+            let start = 0, end = 0, defaultVal = 0, selectName = "", selectId = "";
+            
+            for(let i = 0; i <= todoArr.length - 1; i++) {
                 let p = makeElem("p"),
                     select = makeElem("select"),
                     optnDefault = makeElem("option");
@@ -589,40 +591,87 @@
                 optnDefault.selected = true;
                 optnDefault.disabled = true;
                 optnDefault.hidden = true;
-                optnDefault.textContent = todoArr[j];
+                
+                if(i === 1 ) { //todo.month
+                    optnDefault.textContent = convertMonth(todoArr[i]);
+                } else {
+                    optnDefault.textContent = todoArr[i];
+                }
+                
                 
                 select.appendChild(optnDefault);
-                switch(todoArr[j]) {
+                switch(todoArr[i]) {
                     case todo.year:
                         start = 2000;
                         end = 2099;
+                        selectName = "todo[year]";
+                        selectId = "editYear";
                         break;
                     case todo.month:
                         start = 0;
-                        end = 12;
+                        end = 11;
+                        selectName = "todo[month]";
+                        selectId = "editMonth";
                         break;
                     case todo.date:
                         start = 1;
                         end = 31;
+                        selectName = "todo[date]";
+                        selectId = "editDate";
                         break;
-                    case (todo.frmHr || todo.toHr):
+                    case (todo.frmHr):
                         start = 0;
                         end = 23;
+                        selectName = "todo[frmHr]";
+                        selectId = "editFrmHr";
                         break;
-                    case (todo.frmMin || todo.toMin):
+                    case (todo.toHr):
+                        start = 0;
+                        end = 23;
+                        selectName = "todo[toHr]";
+                        selectId = "editToHr";
+                        break;
+                    case (todo.frmMin):
                         start = 0;
                         end: 59;
+                        selectName = "todo[frmMin]";
+                        selectId = "editFrmMin";
                         break;
-                } 
-                for(let i = start; i <= end; i++) {
-                    let optns = makeElem("option");
-                    optns.textContent = i;
-                    select.appendChild(optns);
+                    case (todo.toMin):
+                        start = 0;
+                        end: 59;
+                        selectName = "todo[toMin]";
+                        selectId = "editToMin";
+                        break;
                 }
                 
-                p.appendChild(select);
-                form.appendChild(p);
+                // assign names and ids
+                select.setAttribute("name", selectName);
+                select.id = selectId;
+                
+                for(let i = start; i <= end; i++) {
+                    let optns = makeElem("option");
+                    // convert month number to name
+                    if(selectId === "editMonth") {
+                        optns.textContent = monthList[i];
+                    } else {
+                        optns.textContent = i;
+                    }
+                    select.appendChild(optns);
+                }
 
+                if(selectId === "editYear" || selectId === "editMonth" || selectId === "editDate") {
+                    p.appendChild(select);
+                    form.appendChild(p);
+                    // add event
+                    if(selectId === "editYear" || selectId === "editMonth") {
+                        select.addEventListener("change", checkOptions);
+                    }
+                } else {
+                    
+                   form.appendChild(select);
+                }
+                
             }
 
         editTodoDiv.id = "editTodoDiv";
@@ -646,6 +695,51 @@
         editTodoDiv.appendChild(form);
         editTodoDiv.appendChild(btnBack);
         modContent.appendChild(editTodoDiv);
+    }
+    
+    // function to capture all values in edit mode and check against them
+    function checkOptions() {
+        // get elements
+        const year = getId("editYear").value,
+            monthName = getId("editMonth").value,
+            date = getId("editDate").value, //for default value
+            editDate = getId("editDate"),
+            start = 1,
+            month = convertMonth(monthName);
+        
+        // max dates
+        let end = new Date(year, month + 1, 0).getDate();
+
+        // remove dates
+        while(editDate.lastChild) {
+            editDate.removeChild(editDate.lastChild);
+        }
+        
+        for(let i = start; i <= end; i++) {
+            let optns = makeElem("option"),
+                optnDefault = makeElem("option");
+                    
+                optnDefault.selected = true;
+                optnDefault.disabled = true;
+                optnDefault.hidden = true;
+                optnDefault.textContent = 
+            optns.textContent = i;
+            editDate.appendChild(optns);
+        }
+            
+    }
+    
+    function convertMonth(input) {
+        if(typeof input === "string") {
+            for(let i = 0; i <= Object.keys(monthList).length - 1; i++) {
+                if(monthList[i] === input) {
+                    return i;
+                }
+            }
+        }
+        if(typeof input === "number") {
+            return monthList[input];
+        }
     }
     
     

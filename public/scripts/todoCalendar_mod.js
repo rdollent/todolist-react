@@ -245,7 +245,7 @@
             todosDateAll = [];
             
         // place indicator if date has a todo
-        for(let i = 0; i <= todosMonth.length - 1; i++) {
+        for(let i = 0; i < todosMonth.length; i++) {
             // store dates only from todosMonth
             todosDateAll.push(todosMonth[i].date);
         }
@@ -254,7 +254,7 @@
         // go through dates, look at where there is a todo
         // do not use innerHTML as it will remove any event listeners
         // use insertAdjacentHTML https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
-        for(let i = 0; i <= calendarDates.length - 1; i++) {
+        for(let i = 0; i < calendarDates.length; i++) {
             // dates in calendar are string, dates in todosDate are numbers
             if(calendarDates[i].textContent) {
                 calendarDates[i].insertAdjacentHTML("afterend", todoIcon);
@@ -380,24 +380,29 @@
         });
         
         todosToday = todosTodayTemp.sort(compareTimes);
-        
+
         colHours.id = "colHours";
         colTodos.id = "colTodos";
         colHours.classList.add("col-hours");
         colTodos.classList.add("col-todos");
         modContent.appendChild(colHours);
         modContent.appendChild(colTodos);
-
-        for(let i = 0; i <= todosToday.length - 1; i++) {
+        
+        //please see
+        //https://stackoverflow.com/questions/48100598/parameter-not-being-passed-on-addeventlistener-on-ie11/48101139#48101139
+        for(let i = 0; i < todosToday.length; i++) {
             const a = makeElem("a"),
                 span = makeElem("span");
+            //todosToday[i] won't be passed through a.addEventListener because of scope
+            //attach todo in element "a" and access it as its property.
+            a.todo = todosToday[i];
             a.classList.add("col-todos-a");
             span.classList.add("col-hours-span");
             
             // a.setAttribute("href", "/todo/" + todosToday[i]._id);
             a.addEventListener("click", function() {
                 resetTodosHeight(modContent);
-                showFoundTodo(todosToday[i]);
+                showFoundTodo(a.todo);
                 });
             span.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + "-" +
                             todosToday[i].toHr + ":" + todosToday[i].toMin;
@@ -500,6 +505,7 @@
 
     
     function showFoundTodo(todo) {
+        // console.log(todo);
         const modContent = getId("modContent"),
             form = makeElem("form"),
             btnDel = makeElem("button"),
@@ -509,10 +515,10 @@
             showTodoDiv = makeElem("div"),
             showArr = ["title", "description", "year", "month", "date", "frm", "to"],
             frag = document.createDocumentFragment();
-            
+   
         clearEntries();
-        
-        for(let i = 0; i <= showArr.length - 1; i++) {
+
+        for(let i = 0; i < showArr.length; i++) {
             let x = makeElem("div");
             if(showArr[i] === "frm") {
                 x.textContent = todo.frmHr + ":" + todo.frmMin;
@@ -584,7 +590,7 @@
             // variables for options
             let start = 0, end = 0, defaultVal = 0, selectName = "", selectId = "";
             
-            for(let i = 0; i <= todoArr.length - 1; i++) {
+            for(let i = 0; i < todoArr.length; i++) {
                 let p = makeElem("p"),
                     select = makeElem("select");
 
@@ -723,7 +729,7 @@
     
     function convertMonth(input) {
         if(typeof input === "string") {
-            for(let i = 0; i <= Object.keys(monthList).length - 1; i++) {
+            for(let i = 0; i < Object.keys(monthList).length; i++) {
                 if(monthList[i] === input) {
                     return i;
                 }

@@ -63,6 +63,7 @@
             - remove show route since all the data i'll need is already loaded. rework links.
             - modify edit route to work on single page.
             - how to detect when month has 28, 29, 30 or 31 dates? figure it out.
+            - hours are in string format. generate strings in dialogue boxes for minutes and hours!
 - Time
     - drop down?
     - interval? Must be to the minute

@@ -703,28 +703,27 @@
             date = getId("editDate").value, //for default value
             editDate = getId("editDate"),
             start = 1,
-            month = convertMonth(monthName);
-        
-        // max dates
-        let end = new Date(year, month + 1, 0).getDate();
+            month = convertMonth(monthName),
+            oldCount = editDate.childElementCount,
+            newCount = new Date(year, month + 1, 0).getDate();
 
-        // remove dates
-        while(editDate.lastChild) {
-            editDate.removeChild(editDate.lastChild);
+
+        // check if same number of dates
+        if(oldCount < newCount) {
+            for(let i = oldCount + 1; i <= newCount; i++) {
+                let optns = makeElem("option");
+                optns.textContent = i;
+                editDate.appendChild(optns);
+            }
+        }
+        if(oldCount > newCount) {
+            while(editDate.childElementCount > newCount) {
+                editDate.removeChild(editDate.lastElementChild);
+            }
+            editDate.lastChild.selected = true;
         }
         
-        for(let i = start; i <= end; i++) {
-            let optns = makeElem("option"),
-                optnDefault = makeElem("option");
-                    
-                optnDefault.selected = true;
-                optnDefault.disabled = true;
-                optnDefault.hidden = true;
-                optnDefault.textContent = 
-            optns.textContent = i;
-            editDate.appendChild(optns);
-        }
-            
+
     }
     
     function convertMonth(input) {

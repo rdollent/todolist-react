@@ -648,13 +648,26 @@
                     // convert month number to name
                     if(selectId === "editMonth") {
                         optns.textContent = monthList[j];
-                    } else {
+                    } else if(selectId === "editYear" || selectId === "editDate") {
                         optns.textContent = j;
+                    // hours and minutes, convert j from for loop to "00" format in option boxes
+                    } else { 
+                        if(j < 10) {
+                            optns.textContent = "0" + j;
+                        } else {
+                            optns.textContent = String(j);
+                        }
                     }
                     // set default value
-                    if(j === todoArr[i]) {
+                    // for month, check if month names match
+                    if(selectId === "editMonth") {
+                        if(optns.textContent === monthList[todoArr[1]]) {
+                            optns.selected = true;
+                        }
+                    } else if(parseInt(optns.textContent) == todoArr[i]){
                         optns.selected = true;
                     }
+
                     select.appendChild(optns);
                 }
 
@@ -666,7 +679,6 @@
                         select.addEventListener("change", checkOptions);
                     }
                 } else {
-                    
                    form.appendChild(select);
                 }
                 
@@ -702,7 +714,6 @@
             monthName = getId("editMonth").value,
             date = getId("editDate").value, //for default value
             editDate = getId("editDate"),
-            start = 1,
             month = convertMonth(monthName),
             oldCount = editDate.childElementCount,
             newCount = new Date(year, month + 1, 0).getDate();
@@ -720,7 +731,10 @@
             while(editDate.childElementCount > newCount) {
                 editDate.removeChild(editDate.lastElementChild);
             }
-            editDate.lastChild.selected = true;
+            // if the default selected date to be edited is higher than the max dates of new month
+            if(date > newCount) {
+                editDate.lastChild.selected = true;
+            }
         }
         
 

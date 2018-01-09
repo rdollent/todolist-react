@@ -568,7 +568,7 @@
             btnBack = makeElem("button"),
             form = makeElem("form"),
             timeDiv = makeElem("div"),
-            submitForm = makeElem("button"),
+            submitForm = makeElem("input"),
 
             objInput = {
                 makeInput: function(x) {
@@ -596,43 +596,43 @@
                     select = makeElem("select");
 
                 switch(i) {
-                    case 0:
+                    case 0: // todo.year
                         start = 2000;
                         end = 2099;
                         selectName = "todo[year]";
                         selectId = "editYear";
                         break;
-                    case 1:
+                    case 1: // todo.month
                         start = 0;
                         end = 11;
                         selectName = "todo[month]";
                         selectId = "editMonth";
                         break;
-                    case 2:
+                    case 2: // todo.date
                         start = 1;
                         end = 31;
                         selectName = "todo[date]";
                         selectId = "editDate";
                         break;
-                    case 3:
+                    case 3: // todo.frmHr
                         start = 0;
                         end = 23;
                         selectName = "todo[frmHr]";
                         selectId = "editFrmHr";
                         break;
-                    case 4:
-                        start = 0;
-                        end = 23;
-                        selectName = "todo[toHr]";
-                        selectId = "editToHr";
-                        break;
-                    case 5:
+                    case 4: // todo.frmMin
                         start = 0;
                         end = 59;
                         selectName = "todo[frmMin]";
                         selectId = "editFrmMin";
                         break;
-                    case 6:
+                    case 5: // todo.toHr
+                        start = 0;
+                        end = 23;
+                        selectName = "todo[toHr]";
+                        selectId = "editToHr";
+                        break;
+                    case 6: // todo.toMin
                         start = 0;
                         end = 59;
                         selectName = "todo[toMin]";
@@ -689,10 +689,11 @@
                 }                
                 
             }
-
+        
+        // ids, classes, attributes, textContent
         editTodoDiv.id = "editTodoDiv";
         submitForm.id = "submitForm";
-        // submitForm.setAttribute("type", "submit");
+        submitForm.setAttribute("type", "submit");
         
         showTodoDiv.classList.add("noDisplay");
         
@@ -774,8 +775,6 @@
             hrGreat = parseInt(frmHr.value) > parseInt(toHr.value),
             hrEqual = parseInt(frmHr.value) === parseInt(toHr.value),
             minGreat = parseInt(frmMin.value) > parseInt(toMin.value);
-        event.preventDefault();
-        console.log(hrGreat, hrEqual, minGreat);
         if(hrGreat) {
             event.preventDefault();
             toHr.classList.add("warning");

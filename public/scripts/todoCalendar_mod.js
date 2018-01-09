@@ -568,7 +568,7 @@
             btnBack = makeElem("button"),
             form = makeElem("form"),
             timeDiv = makeElem("div"),
-            submitForm = makeElem("input"),
+            submitForm = makeElem("button"),
 
             objInput = {
                 makeInput: function(x) {
@@ -595,44 +595,44 @@
                 let p = makeElem("p"),
                     select = makeElem("select");
 
-                switch(todoArr[i]) {
-                    case todo.year:
+                switch(i) {
+                    case 0:
                         start = 2000;
                         end = 2099;
                         selectName = "todo[year]";
                         selectId = "editYear";
                         break;
-                    case todo.month:
+                    case 1:
                         start = 0;
                         end = 11;
                         selectName = "todo[month]";
                         selectId = "editMonth";
                         break;
-                    case todo.date:
+                    case 2:
                         start = 1;
                         end = 31;
                         selectName = "todo[date]";
                         selectId = "editDate";
                         break;
-                    case (todo.frmHr):
+                    case 3:
                         start = 0;
                         end = 23;
                         selectName = "todo[frmHr]";
                         selectId = "editFrmHr";
                         break;
-                    case (todo.toHr):
+                    case 4:
                         start = 0;
                         end = 23;
                         selectName = "todo[toHr]";
                         selectId = "editToHr";
                         break;
-                    case (todo.frmMin):
+                    case 5:
                         start = 0;
                         end = 59;
                         selectName = "todo[frmMin]";
                         selectId = "editFrmMin";
                         break;
-                    case (todo.toMin):
+                    case 6:
                         start = 0;
                         end = 59;
                         selectName = "todo[toMin]";
@@ -692,12 +692,12 @@
 
         editTodoDiv.id = "editTodoDiv";
         submitForm.id = "submitForm";
-        submitForm.setAttribute("type", "submit");
+        // submitForm.setAttribute("type", "submit");
         
         showTodoDiv.classList.add("noDisplay");
         
         btnBack.textContent = "Back";
-        submitForm.textContent = "Submit";
+        submitForm.textContent = "clickme";
         
         form.setAttribute("action", "/todo/" + todo._id + "/?_method=PUT");
         form.setAttribute("method", "POST");
@@ -766,13 +766,16 @@
     }
     
     function validateForm() {
+        event.preventDefault();
         let frmHr = getId("editFrmHr"),
             frmMin = getId("editFrmMin"),
             toHr = getId("editToHr"),
             toMin = getId("editToMin"),
-            hrGreat = frmHr.value > toHr.value,
-            hrEqual = frmHr.value === toHr.value,
-            minGreat = frmMin.value > toMin.value;
+            hrGreat = parseInt(frmHr.value) > parseInt(toHr.value),
+            hrEqual = parseInt(frmHr.value) === parseInt(toHr.value),
+            minGreat = parseInt(frmMin.value) > parseInt(toMin.value);
+        event.preventDefault();
+        console.log(hrGreat, hrEqual, minGreat);
         if(hrGreat) {
             event.preventDefault();
             toHr.classList.add("warning");
@@ -790,7 +793,10 @@
             toHr = getId("editToHr"),
             toMin = getId("editToMin");
         [frmHr, frmMin, toHr, toMin].forEach(function(option) {
-            option.classList.remove("warning");
+            if(option.classList.contains("warning")) {
+                option.classList.remove("warning");
+            }
+            
         });
     }
     

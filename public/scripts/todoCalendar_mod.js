@@ -18,14 +18,14 @@
         },
         dayList = {0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat"};
         
-        // use this as counter for holding prev/next buttons.
+    // use this as counter for holding prev/next buttons.
     let prevNextInterval = null,
         // todos for xmlhttprequest ajax call
         todos = undefined;
 
     function runOnPageLoad() {
-        makeRequest("index");
         const calendar = getId("calendar");
+        makeRequest("index");
         fullDate.year = new Date().getFullYear();
         fullDate.month = new Date().getMonth();
         fullDate.date = new Date().getDate();
@@ -568,6 +568,7 @@
             btnBack = makeElem("button"),
             form = makeElem("form"),
             timeDiv = makeElem("div"),
+            submitForm = makeElem("input"),
 
             objInput = {
                 makeInput: function(x) {
@@ -674,21 +675,29 @@
                 if(selectId === "editYear" || selectId === "editMonth" || selectId === "editDate") {
                     p.appendChild(select);
                     form.appendChild(p);
-                    // add event
-                    if(selectId === "editYear" || selectId === "editMonth") {
-                        select.addEventListener("change", checkOptions);
-                    }
+
                 } else {
                    form.appendChild(select);
                 }
                 
+                // add events
+                if(selectId === "editYear" || selectId === "editMonth") {
+                    select.addEventListener("change", checkOptions);
+                }
+                if(selectId !== "editYear" || selectId !== "editMonth") {
+                    select.addEventListener("change", removeWarning);
+                }                
+                
             }
 
         editTodoDiv.id = "editTodoDiv";
+        submitForm.id = "submitForm";
+        submitForm.setAttribute("type", "submit");
         
         showTodoDiv.classList.add("noDisplay");
         
         btnBack.textContent = "Back";
+        submitForm.textContent = "Submit";
         
         form.setAttribute("action", "/todo/" + todo._id + "/?_method=PUT");
         form.setAttribute("method", "POST");
@@ -698,12 +707,15 @@
             modContent.removeChild(getId("editTodoDiv"));
             showTodoDiv.classList.remove("noDisplay");
         });
+        submitForm.addEventListener("click", validateForm);
         
         // append
         form.insertBefore(desc, form.firstChild);
         form.insertBefore(title, form.firstChild);
+        form.appendChild(submitForm);
+        form.appendChild(btnBack);
         editTodoDiv.appendChild(form);
-        editTodoDiv.appendChild(btnBack);
+        // editTodoDiv.appendChild(btnBack);
         modContent.appendChild(editTodoDiv);
     }
     
@@ -751,6 +763,35 @@
         if(typeof input === "number") {
             return monthList[input];
         }
+    }
+    
+    function validateForm() {
+        let frmHr = getId("editFrmHr"),
+            frmMin = getId("editFrmMin"),
+            toHr = getId("editToHr"),
+            toMin = getId("editToMin"),
+            hrGreat = frmHr.value > toHr.value,
+            hrEqual = frmHr.value === toHr.value,
+            minGreat = frmMin.value > toMin.value;
+        if(hrGreat) {
+            event.preventDefault();
+            toHr.classList.add("warning");
+        }
+        if(hrEqual && minGreat) {
+            event.preventDefault();
+            toMin.classList.add("warning");
+        }
+        
+    }
+    
+    function removeWarning() {
+        const frmHr = getId("editFrmHr"),
+            frmMin = getId("editFrmMin"),
+            toHr = getId("editToHr"),
+            toMin = getId("editToMin");
+        [frmHr, frmMin, toHr, toMin].forEach(function(option) {
+            option.classList.remove("warning");
+        });
     }
     
     

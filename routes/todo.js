@@ -10,6 +10,11 @@ var Todo = require("../models/todoModel");
 // if we require only ""../middleware" it will automatically look for index.js
 var middleware = require("../middleware/index.js");
 
+//monthArray to convert received string to number before storing
+var monthArr = ["January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"];
+
 // note: res.render looks for views folder.
 // to change where you want views to be
 // app.set('views','./folder1/folder2/views');
@@ -49,30 +54,12 @@ router.get("/user/:userid", middleware.isLoggedIn, function(req,res) {
 });
 
 
-// for overlapping hours
-// Todo.find({}, "frmHr toHr", function(err, foundHours) {
-//     if(err) return console.log(err);
-//     var storedHours = [];
-//     var toFrmHrs = [];
-//     for(var i=0; i < foundHours.length;i++) {
-//       toFrmHrs.push(parseInt(foundHours[i].frmHr));
-//       toFrmHrs.push(parseInt(foundHours[i].toHr));
-//       storedHours.push(toFrmHrs);
-//       toFrmHrs = [];
-//     }
-// });
-
-// get route for specific date
-
 
 // create route
 router.post("/", middleware.isLoggedIn, function(req, res) {
     // console.log(req.body);
     // store values in vars
     var year = req.body.year;
-    var monthArr = ["January", "February", "March", "April",
-                "May", "June", "July", "August",
-                "September", "October", "November", "December"];
     var month = monthArr.indexOf(req.body.month);
     var date = req.body.date;
     var title = req.body.title;
@@ -100,21 +87,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
         toMin: toMin,
         author: author
         };
-    
-    // create range for times
-    // var frmHrInt = parseInt(frmHr);
-    // var toHrInt = parseInt(toHr);
-    // var timeRange = [];
-    
-    // for(var i = frmHrInt; i < toHrInt; i++) {
-    //     timeRange.push(i);
-    // }
-    
-    
-    // Todo.find({}, "frmHr toHr", function(err, foundHours) {
-    //     if(err) return console.log(err);
-    //     console.log(foundHours);
-    // });
+
     
     Todo.create(newTodo, function(err, newlyCreated) {
         if(err) {
@@ -158,12 +131,15 @@ router.get("/:id/edit", middleware.isLoggedIn, function(req,res) {
 
 // Update route
 router.put("/:id", middleware.isLoggedIn, function(req, res) {
+    // change req.body.todo.month string to number
+    var month = monthArr.indexOf(req.body.todo.month);
+    req.body.todo.month = month;
     Todo.findByIdAndUpdate(req.params.id, req.body.todo, function(err, updatedTodo) {
         if(err) {
             console.log(err);
             res.redirect("/todo");
         } else {
-            res.redirect("/todo/" + req.params.id);
+            res.redirect("/todo/");// + req.params.id);
         }
     });
 });

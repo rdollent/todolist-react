@@ -587,7 +587,6 @@
             // create dialog boxes
             todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
             
-            console.log(todoArr);
             // variables for options
             let start = 0, end = 0, defaultVal = 0, selectName = "", selectId = "";
             
@@ -698,7 +697,7 @@
         showTodoDiv.classList.add("noDisplay");
         
         btnBack.textContent = "Back";
-        submitForm.textContent = "clickme";
+        submitForm.textContent = "Submit";
         
         form.setAttribute("action", "/todo/" + todo._id + "/?_method=PUT");
         form.setAttribute("method", "POST");
@@ -750,6 +749,7 @@
             }
         }
         
+        
 
     }
     
@@ -767,8 +767,7 @@
     }
     
     function validateForm() {
-        event.preventDefault();
-        let frmHr = getId("editFrmHr"),
+        const frmHr = getId("editFrmHr"),
             frmMin = getId("editFrmMin"),
             toHr = getId("editToHr"),
             toMin = getId("editToMin"),
@@ -783,7 +782,6 @@
             event.preventDefault();
             toMin.classList.add("warning");
         }
-        
     }
     
     function removeWarning() {
@@ -803,5 +801,7 @@
 runOnPageLoad();
 
 })();
+
+
 
 

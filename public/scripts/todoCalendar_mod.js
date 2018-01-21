@@ -22,17 +22,10 @@
     let prevNextInterval = null,
         // todos for xmlhttprequest ajax call
         todos = undefined;
+        // isAjaxReady = false;
 
     function runOnPageLoad() {
-        const calendar = getId("calendar");
-        makeRequest("index");
-        fullDate.year = new Date().getFullYear();
-        fullDate.month = new Date().getMonth();
-        fullDate.date = new Date().getDate();
-        fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
-        makePeriodSelectBtns(calendar);
-        makeCalendar();
-        makeDayAndDate(calendar);
+        requestTodo();
         // added mouseup event listener on whole document when scrolling through dates
         // and months, hovering mouse outside prev and next buttons while holding mousedown
         // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
@@ -49,24 +42,29 @@
         return document.createElement(input);
     }
     
-    function makeRequest(route) {
-        const myReq = new XMLHttpRequest();
-        let url = "";
+    function requestTodo() {
+        const myReq = new XMLHttpRequest(),
+            url = "/todo/user/" + user; 
         // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
         // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
-        if(route === "index") {
-           url = "/todo/user/" + user; 
-        }
-
+        console.log("user ",  user);
         myReq.onreadystatechange = function() {
             if(myReq.readyState === 4 && myReq.status === 200) {
-                todos = JSON.parse(myReq.responseText); 
+                todos = JSON.parse(myReq.responseText);
+                fullDate.year = new Date().getFullYear();
+                fullDate.month = new Date().getMonth();
+                fullDate.date = new Date().getDate();
+                fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+                makeCalendar();
+                makeDayAndDate();
+                makePeriodSelectBtns();
             }
         };
         // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
-        myReq.open("GET", url, false);
+        myReq.open("GET", url);
         myReq.send();
     }
+
     // populate Year OR Month list
     // need to start makeList when pressing button to allow functions to run!
     function makeList(input) {
@@ -124,7 +122,6 @@
     
     function monthClicked() {
         const monthList = getId("monthList"),
-            calendar = getId("calendar"),
             yearTitle = getId("yearTitle");
         monthList.classList.add("noDisplay");
         yearTitle.classList.add("noDisplay");
@@ -132,7 +129,7 @@
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").textContent = "month";
         makeCalendar();
-        makeDayAndDate(calendar);
+        makeDayAndDate();
     }
     
     function makeCalendar() {
@@ -140,6 +137,9 @@
             container = makeElem("div"),
             titleHeader = makeTitleHeader();
         container.id = "container";
+        while(calendar.lastChild) {
+            calendar.removeChild(calendar.lastChild);
+        }
         calendar.appendChild(container);
         container.appendChild(titleHeader);
         makeBtns();
@@ -186,10 +186,11 @@
         });
     }
 
-    function makeDayAndDate(calendar) {
+    function makeDayAndDate() {
         const tbl = makeTbl(),
             container = getId("container"),
-            tblHeader = getId("tblHeader");
+            tblHeader = getId("tblHeader"),
+            calendar = getId("calendar");
 
         if(getId("tbl")) {
             container.removeChild(getId("tbl"));
@@ -321,7 +322,6 @@
     }
     
     function prevMonth() {
-        const calendar = getId("calendar");
         if(fullDate.month === 0) {
             fullDate.year = fullDate.year - 1;
             fullDate.month = 11;
@@ -330,11 +330,10 @@
             fullDate.month = fullDate.month - 1;
             fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         }
-        makeDayAndDate(calendar);
+        makeDayAndDate();
     }
     
     function nextMonth() {
-        const calendar = getId("calendar");
         if(fullDate.month === 11) {
             fullDate.year = fullDate.year + 1;
             fullDate.month = 0;
@@ -343,7 +342,7 @@
             fullDate.month = fullDate.month + 1;
             fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         }
-        makeDayAndDate(calendar);
+        makeDayAndDate();
     }
 
     // clear todo entries on date Level
@@ -451,12 +450,13 @@
         return 0;
     }
     
-    function makePeriodSelectBtns(calendar) {
-        const btn = makeElem("button");
+    function makePeriodSelectBtns() {
+        const btn = makeElem("button"),
+            calendar = getId("calendar");
         btn.id = "periodSelect";
         btn.textContent = "month";
         btn.addEventListener("click", switchPeriod);
-        calendar.appendChild(btn);
+        calendar.insertBefore(btn, calendar.firstChild);
     }
     
     function switchPeriod() {
@@ -547,6 +547,7 @@
         btnBack.addEventListener("click", function() {
             showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
         });
+
         // append
         a.appendChild(btnEdit);
         form.appendChild(btnDel);
@@ -567,14 +568,13 @@
             editTodoDiv = makeElem("div"),
             btnBack = makeElem("button"),
             form = makeElem("form"),
-            timeDiv = makeElem("div"),
             submitForm = makeElem("input"),
 
             objInput = {
                 makeInput: function(x) {
                     let input = makeElem("input");
                     input.type = ("text");
-                    input.name = "todo[" + x + "]";
+                    input.name = x;
                     input.value = todo[x];
                     input.required = "required";
                     return input;
@@ -598,43 +598,43 @@
                     case 0: // todo.year
                         start = 2000;
                         end = 2099;
-                        selectName = "todo[year]";
+                        selectName = "year";
                         selectId = "editYear";
                         break;
                     case 1: // todo.month
                         start = 0;
                         end = 11;
-                        selectName = "todo[month]";
+                        selectName = "month";
                         selectId = "editMonth";
                         break;
                     case 2: // todo.date
                         start = 1;
                         end = 31;
-                        selectName = "todo[date]";
+                        selectName = "date";
                         selectId = "editDate";
                         break;
                     case 3: // todo.frmHr
                         start = 0;
                         end = 23;
-                        selectName = "todo[frmHr]";
+                        selectName = "frmHr";
                         selectId = "editFrmHr";
                         break;
                     case 4: // todo.frmMin
                         start = 0;
                         end = 59;
-                        selectName = "todo[frmMin]";
+                        selectName = "frmMin";
                         selectId = "editFrmMin";
                         break;
                     case 5: // todo.toHr
                         start = 0;
                         end = 23;
-                        selectName = "todo[toHr]";
+                        selectName = "toHr";
                         selectId = "editToHr";
                         break;
                     case 6: // todo.toMin
                         start = 0;
                         end = 59;
-                        selectName = "todo[toMin]";
+                        selectName = "toMin";
                         selectId = "editToMin";
                         break;
                 }
@@ -692,22 +692,24 @@
         // ids, classes, attributes, textContent
         editTodoDiv.id = "editTodoDiv";
         submitForm.id = "submitForm";
+        form.id = "editForm";
         submitForm.setAttribute("type", "submit");
-        
+
         showTodoDiv.classList.add("noDisplay");
         
         btnBack.textContent = "Back";
         submitForm.textContent = "Submit";
-        
-        form.setAttribute("action", "/todo/" + todo._id + "/?_method=PUT");
-        form.setAttribute("method", "POST");
-        
+
         // events
         btnBack.addEventListener("click", function() {
             modContent.removeChild(getId("editTodoDiv"));
             showTodoDiv.classList.remove("noDisplay");
         });
-        submitForm.addEventListener("click", validateForm);
+        //update todo xmlhttprequest
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            validateForm(todo, this);
+        });
         
         // append
         form.insertBefore(desc, form.firstChild);
@@ -766,7 +768,7 @@
         }
     }
     
-    function validateForm() {
+    function validateForm(todo, form) {
         const frmHr = getId("editFrmHr"),
             frmMin = getId("editFrmMin"),
             toHr = getId("editToHr"),
@@ -774,13 +776,19 @@
             hrGreat = parseInt(frmHr.value) > parseInt(toHr.value),
             hrEqual = parseInt(frmHr.value) === parseInt(toHr.value),
             minGreat = parseInt(frmMin.value) > parseInt(toMin.value);
+        let pass = true;
         if(hrGreat) {
             event.preventDefault();
             toHr.classList.add("warning");
+            pass = false;
         }
         if(hrEqual && minGreat) {
             event.preventDefault();
             toMin.classList.add("warning");
+            pass = false;
+        }
+        if(pass === true) {
+            updateTodo(todo, form);
         }
     }
     
@@ -796,7 +804,46 @@
             
         });
     }
+
+    function updateTodo(todo, form) {
+        const myReq = new XMLHttpRequest(),
+            url = "/todo/" + todo._id;
+        // let todoString = "";
+        // let todoArr = []; // hello hi
+        // let name;
+        // for(name in form) {
+        //     todoArr.push(encodeURIComponent(name) + "=" + encodeURIComponent(todo[name]));
+        // }
+        // todoString = todoArr.join('&').replace(/%20/g, '+');
+        
+        let fd = new FormData(form);
+        let todoObj = {};
+
+        myReq.onreadystatechange = function() {
+            if(myReq.readyState === 4 && myReq.status === 200) {
+                requestTodo();
+            }
+        };
+        
+        // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
+        for(let [key,val] of fd.entries()) {
+            todoObj[key] = val;
+        }
+        todoObj["_id"] = todo._id;
+        myReq.open("POST", url);
+
+        // myReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        // myReq.setRequestHeader("Content-Type", "multipart/form-data;charset=UTF-8");
+        myReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        // // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
+        let jsonTodo = JSON.stringify(todoObj);
+        myReq.send(jsonTodo);  
+
+        //https://stackoverflow.com/questions/19286301/webkitformboundary-when-parsing-post-using-nodejs
+        //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
+    }    
     
+
     
 runOnPageLoad();
 

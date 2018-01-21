@@ -2,6 +2,11 @@
 var express = require("express");
 var router = express.Router();
 
+//required for parsing received json string from user-submitted form
+var bodyParser = require("body-parser");
+router.use(bodyParser.urlencoded({extended: true}));
+router.use(bodyParser.json({strict: false}));
+
 // require todo schema
 // "../" will move you up one directory
 var Todo = require("../models/todoModel");
@@ -42,6 +47,7 @@ router.get("/", middleware.isLoggedIn,function(req,res) {
 
 // xmlhttprequest get todos given userid
 router.get("/user/:userid", middleware.isLoggedIn, function(req,res) {
+    console.log("req.params ", req.params);
     Todo.find({"author.id" : req.params.userid},
         "date description frmHr frmMin month title toHr toMin year _id",
         function(err, allTodos) {
@@ -119,29 +125,47 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 // });
 
 // Edit route
-router.get("/:id/edit", middleware.isLoggedIn, function(req,res) {
-    Todo.findById(req.params.id, function(err, foundTodo) {
-        if(err) {
-            console.log(err);
-        } else {
-            res.render("todo/edit.ejs", {todo: foundTodo});
-        }
-    });
-});
+// router.get("/:id/edit", middleware.isLoggedIn, function(req,res) {
+//     Todo.findById(req.params.id, function(err, foundTodo) {
+//         if(err) {
+//             console.log(err);
+//         } else {
+//             res.render("todo/edit.ejs", {todo: foundTodo});
+//         }
+//     });
+// });
 
 // Update route
-router.put("/:id", middleware.isLoggedIn, function(req, res) {
+// router.put("/:id/", middleware.isLoggedIn, function(req, res) {
+//     // change req.body.todo.month string to number
+//     console.log(req.body.todo);
+//     var month = monthArr.indexOf(req.body.todo.month);
+//     req.body.todo.month = month;
+//     Todo.findByIdAndUpdate(req.params.id, req.body.todo, function(err, updatedTodo) {
+//         if(err) {
+//             console.log(err);
+//             res.redirect("/todo");
+//          } else {
+//         //     res.redirect("/todo/");// + req.params.id);
+//             res.send("done!");
+//         }
+//     });
+// });
+
+router.post("/:id", middleware.isLoggedIn, function(req, res) {
     // change req.body.todo.month string to number
-    var month = monthArr.indexOf(req.body.todo.month);
-    req.body.todo.month = month;
-    Todo.findByIdAndUpdate(req.params.id, req.body.todo, function(err, updatedTodo) {
+    var month = monthArr.indexOf(req.body.month);
+    req.body.month = month;
+    Todo.findByIdAndUpdate(req.body._id, req.body, function(err, updatedTodo) {
         if(err) {
             console.log(err);
-            res.redirect("/todo");
-        } else {
-            res.redirect("/todo/");// + req.params.id);
+            // res.redirect("/todo");
+         } else {
+            // res.redirect("/todo/");// + req.params.id);
+            res.send("done!");
         }
     });
+    
 });
 
 // delete route
@@ -150,8 +174,8 @@ router.delete("/:id", middleware.isLoggedIn, function(req, res) {
         if(err) {
             console.log(err);
             res.redirect("/todo");
-        } else {
-            res.redirect("/todo");            
+        // } else {
+        //     res.redirect("/todo");            
         }
 
     });

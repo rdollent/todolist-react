@@ -130,6 +130,7 @@
         getId("periodSelect").textContent = "month";
         makeCalendar();
         makeDayAndDate();
+        makePeriodSelectBtns();
     }
     
     function makeCalendar() {

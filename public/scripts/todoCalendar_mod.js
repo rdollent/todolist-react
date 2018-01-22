@@ -3,18 +3,8 @@
 (function() {
     const fullDate = {},
         monthList = { 
-            0: "January",
-            1: "February",
-            2: "March",
-            3: "April", 
-            4: "May",
-            5: "June",
-            6: "July",
-            7: "August",
-            8: "September",
-            9: "October",
-            10: "November",
-            11: "December"
+            0: "January", 1: "February", 2: "March", 3: "April",  4: "May", 5: "June",
+            6: "July", 7: "August", 8: "September", 9: "October", 10: "November", 11: "December"
         },
         dayList = {0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat"};
         
@@ -25,7 +15,7 @@
         // isAjaxReady = false;
 
     function runOnPageLoad() {
-        requestTodo();
+        makeRequest("reqTodo");
         // added mouseup event listener on whole document when scrolling through dates
         // and months, hovering mouse outside prev and next buttons while holding mousedown
         // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
@@ -42,35 +32,66 @@
         return document.createElement(input);
     }
     
-    function requestTodo() {
-        const myReq = new XMLHttpRequest(),
-            url = "/todo/user/" + user; 
+    function makeRequest(index, todo, form) {
+        const myReq = new XMLHttpRequest();
+        let url, fd, todoObj = {}, jsonTodo, sendItem;
+        
+        if(index === "reqTodo") {
+            url = "/todo/user/" + user;
+            myReq.open("GET", url);
+        }
+
         // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
         // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
-        console.log("user ",  user);
+        if(index === "updTodo") {
+            url = "/todo/" + todo._id;
+            fd = new FormData(form);
+            // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
+            for(let [key,val] of fd.entries()) {
+                todoObj[key] = val;
+            }
+            todoObj["_id"] = todo._id;
+            // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
+            //https://stackoverflow.com/questions/19286301/webkitformboundary-when-parsing-post-using-nodejs
+            //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
+            jsonTodo = JSON.stringify(todoObj);
+            myReq.open("POST", url);
+            sendItem = jsonTodo;
+            myReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        }
         myReq.onreadystatechange = function() {
             if(myReq.readyState === 4 && myReq.status === 200) {
-                todos = JSON.parse(myReq.responseText);
-                if(fullDate.year === undefined) {
-                    fullDate.year = new Date().getFullYear();
+                if(index === "reqTodo") {
+                    todos = JSON.parse(myReq.responseText);
+                    getCurrentCalendar();
                 }
-                
-                if(fullDate.month === undefined) {
-                    fullDate.month = new Date().getMonth();
+                if(index === "updTodo") {
+                    makeRequest("reqTodo");
+                    clearEntries();
                 }
-                
-                if(fullDate.date === undefined) {
-                    fullDate.date = new Date().getDate();
-                }
-                fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
-                makeCalendar();
-                makeDayAndDate();
-                makePeriodSelectBtns();
             }
         };
-        // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
-        myReq.open("GET", url);
-        myReq.send();
+
+        myReq.send(sendItem);
+        
+    }
+
+    function getCurrentCalendar() {
+        if(fullDate.year === undefined) {
+            fullDate.year = new Date().getFullYear();
+        }
+        
+        if(fullDate.month === undefined) {
+            fullDate.month = new Date().getMonth();
+        }
+        
+        if(fullDate.date === undefined) {
+            fullDate.date = new Date().getDate();
+        }
+        fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+        makeCalendar();
+        makeDayAndDate();
+        makePeriodSelectBtns();
     }
 
     // populate Year OR Month list
@@ -782,8 +803,6 @@
                 formDate.lastChild.selected = true;
             }
         }
-        
-        
 
     }
     
@@ -820,7 +839,7 @@
             pass = false;
         }
         if(pass === true) {
-            updateTodo(todo, form);
+            makeRequest("updTodo", todo, form);
         }
     }
     
@@ -837,44 +856,7 @@
         });
     }
 
-    function updateTodo(todo, form) {
-        const myReq = new XMLHttpRequest(),
-            url = "/todo/" + todo._id;
-        // let todoString = "";
-        // let todoArr = []; // hello hi
-        // let name;
-        // for(name in form) {
-        //     todoArr.push(encodeURIComponent(name) + "=" + encodeURIComponent(todo[name]));
-        // }
-        // todoString = todoArr.join('&').replace(/%20/g, '+');
-        
-        let fd = new FormData(form);
-        let todoObj = {};
 
-        myReq.onreadystatechange = function() {
-            if(myReq.readyState === 4 && myReq.status === 200) {
-                requestTodo();
-                clearEntries();
-            }
-        };
-        
-        // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
-        for(let [key,val] of fd.entries()) {
-            todoObj[key] = val;
-        }
-        todoObj["_id"] = todo._id;
-        myReq.open("POST", url);
-
-        // myReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        // myReq.setRequestHeader("Content-Type", "multipart/form-data;charset=UTF-8");
-        myReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        // // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
-        let jsonTodo = JSON.stringify(todoObj);
-        myReq.send(jsonTodo);  
-
-        //https://stackoverflow.com/questions/19286301/webkitformboundary-when-parsing-post-using-nodejs
-        //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
-    }    
     
 
     

@@ -51,9 +51,17 @@
         myReq.onreadystatechange = function() {
             if(myReq.readyState === 4 && myReq.status === 200) {
                 todos = JSON.parse(myReq.responseText);
-                fullDate.year = new Date().getFullYear();
-                fullDate.month = new Date().getMonth();
-                fullDate.date = new Date().getDate();
+                if(fullDate.year === undefined) {
+                    fullDate.year = new Date().getFullYear();
+                }
+                
+                if(fullDate.month === undefined) {
+                    fullDate.month = new Date().getMonth();
+                }
+                
+                if(fullDate.date === undefined) {
+                    fullDate.date = new Date().getDate();
+                }
                 fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
                 makeCalendar();
                 makeDayAndDate();
@@ -543,7 +551,7 @@
         // a.setAttribute("href", "/todo/" + todo._id + "/edit");
         a.addEventListener("click", function() {
             resetTodosHeight(modContent);
-            editFoundTodo(todo);
+            createOrEditTodo("edit", todo);
         });
         btnBack.addEventListener("click", function() {
             showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
@@ -560,138 +568,161 @@
 
     }
     
-    function editFoundTodo(todo) {
-        const
-            // get elements
-            showTodoDiv = getId("showTodoDiv"),
+    function createOrEditTodo(command, todo) {
+        // declare all variables. cant declare inside if since let and const are block-scoped.
+        //for edit
+        const showTodoDiv = getId("showTodoDiv"),
+            // create dialog boxes
+            todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin],
+
+        // for edit and create
             modContent = getId("modContent"),
-            // make elements
-            editTodoDiv = makeElem("div"),
+             // make elements
+            formTodoDiv = makeElem("div"),
             btnBack = makeElem("button"),
             form = makeElem("form"),
             submitForm = makeElem("input"),
-
             objInput = {
                 makeInput: function(x) {
                     let input = makeElem("input");
+                    input.required = "required";
                     input.type = ("text");
                     input.name = x;
-                    input.value = todo[x];
-                    input.required = "required";
+                    if(command === "edit") {
+                        input.value = todo[x];
+                    } else if(command === "create") {
+                        input.placeholder = x;
+                    }
+                    if(x === "title") {
+                        input.maxlength = 15;
+                    } else if(x === "description") {
+                        input.maxlength = 140;
+                    }
                     return input;
                 }
             },
        
             title = objInput.makeInput("title"),
-            desc = objInput.makeInput("description"),
-        
-            // create dialog boxes
-            todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
+            desc = objInput.makeInput("description");
+        // variables for options
+        let start = 0, end = 0, selectName = "", selectId = "";
             
-            // variables for options
-            let start = 0, end = 0, defaultVal = 0, selectName = "", selectId = "";
-            
-            for(let i = 0; i < todoArr.length; i++) {
-                let p = makeElem("p"),
-                    select = makeElem("select");
 
-                switch(i) {
-                    case 0: // todo.year
-                        start = 2000;
-                        end = 2099;
-                        selectName = "year";
-                        selectId = "editYear";
-                        break;
-                    case 1: // todo.month
-                        start = 0;
-                        end = 11;
-                        selectName = "month";
-                        selectId = "editMonth";
-                        break;
-                    case 2: // todo.date
-                        start = 1;
-                        end = 31;
-                        selectName = "date";
-                        selectId = "editDate";
-                        break;
-                    case 3: // todo.frmHr
-                        start = 0;
-                        end = 23;
-                        selectName = "frmHr";
-                        selectId = "editFrmHr";
-                        break;
-                    case 4: // todo.frmMin
-                        start = 0;
-                        end = 59;
-                        selectName = "frmMin";
-                        selectId = "editFrmMin";
-                        break;
-                    case 5: // todo.toHr
-                        start = 0;
-                        end = 23;
-                        selectName = "toHr";
-                        selectId = "editToHr";
-                        break;
-                    case 6: // todo.toMin
-                        start = 0;
-                        end = 59;
-                        selectName = "toMin";
-                        selectId = "editToMin";
-                        break;
-                }
-                
-                // assign names and ids
-                select.setAttribute("name", selectName);
-                select.id = selectId;
-                
-                for(let j = start; j <= end; j++) {
-                    let optns = makeElem("option");
-                    // convert month number to name
-                    if(selectId === "editMonth") {
-                        optns.textContent = monthList[j];
-                    } else if(selectId === "editYear" || selectId === "editDate") {
-                        optns.textContent = j;
-                    // hours and minutes, convert j from for loop to "00" format in option boxes
-                    } else { 
-                        if(j < 10) {
-                            optns.textContent = "0" + j;
-                        } else {
-                            optns.textContent = String(j);
-                        }
+        for(let i = 0; i < todoArr.length; i++) {
+            let p = makeElem("p"),
+                select = makeElem("select");
+
+            switch(i) {
+                case 0: // todo.year
+                    start = 2000;
+                    end = 2099;
+                    selectName = "year";
+                    selectId = "formYear";
+                    break;
+                case 1: // todo.month
+                    start = 0;
+                    end = 11;
+                    selectName = "month";
+                    selectId = "formMonth";
+                    break;
+                case 2: // todo.date
+                    start = 1;
+                    end = 31;
+                    selectName = "date";
+                    selectId = "formDate";
+                    break;
+                case 3: // todo.frmHr
+                    start = 0;
+                    end = 23;
+                    selectName = "frmHr";
+                    selectId = "formFrmHr";
+                    break;
+                case 4: // todo.frmMin
+                    start = 0;
+                    end = 59;
+                    selectName = "frmMin";
+                    selectId = "formFrmMin";
+                    break;
+                case 5: // todo.toHr
+                    start = 0;
+                    end = 23;
+                    selectName = "toHr";
+                    selectId = "formToHr";
+                    break;
+                case 6: // todo.toMin
+                    start = 0;
+                    end = 59;
+                    selectName = "toMin";
+                    selectId = "formToMin";
+                    break;
+            }
+            
+            // assign names and ids
+            select.setAttribute("name", selectName);
+            select.id = selectId;
+            
+            for(let j = start; j <= end; j++) {
+                let optns = makeElem("option");
+                // convert month number to name
+                if(selectId === "formMonth") {
+                    optns.textContent = monthList[j];
+                } else if(selectId === "formYear" || selectId === "formDate") {
+                    optns.textContent = j;
+                // hours and minutes, convert j from for loop to "00" format in option boxes
+                } else { 
+                    if(j < 10) {
+                        optns.textContent = "0" + j;
+                    } else {
+                        optns.textContent = String(j);
                     }
-                    // set default value
-                    // for month, check if month names match
-                    if(selectId === "editMonth") {
-                        if(optns.textContent === monthList[todoArr[1]]) {
-                            optns.selected = true;
-                        }
-                    } else if(parseInt(optns.textContent) == todoArr[i]){
+                }
+                // set default value
+                // for month, check if month names match
+                if(selectId === "formMonth") {
+                    if(command === "edit" && optns.textContent === monthList[todoArr[1]]) {
+                        optns.selected = true;
+                    } else if(command === "create" && optns.textContent === monthList[fullDate.month]) {
                         optns.selected = true;
                     }
-
-                    select.appendChild(optns);
+                } else if(command === "edit" && parseInt(optns.textContent) == todoArr[i]){
+                    optns.selected = true;
+                } else if(command === "create") {
+                    if(selectId === "formYear" && optns.textContent === fullDate.year) {
+                        optns.selected = true;
+                    }
+                    if(selectId === "formDate" && optns.textContent === fullDate.date) {
+                        optns.selected = true;
+                    }
+                    if(selectId === "formFrmHr" || selectId === "formFrmMin" || selectId === "formToHr" || selectId === "formToMin") {
+                        if(optns.textContent === "00") {
+                            optns.selected = true;
+                        }
+                    }
                 }
 
-                if(selectId === "editYear" || selectId === "editMonth" || selectId === "editDate") {
-                    p.appendChild(select);
-                    form.appendChild(p);
-
-                } else {
-                   form.appendChild(select);
-                }
-                
-                // add events
-                if(selectId === "editYear" || selectId === "editMonth") {
-                    select.addEventListener("change", checkOptions);
-                }
-                if(selectId !== "editYear" || selectId !== "editMonth") {
-                    select.addEventListener("change", removeWarning);
-                }                
-                
+                select.appendChild(optns);
             }
+
+            if(selectId === "formYear" || selectId === "formMonth" || selectId === "formDate") {
+                p.appendChild(select);
+                form.appendChild(p);
+
+            } else {
+               form.appendChild(select);
+            }
+            
+            // add events
+            if(selectId === "formYear" || selectId === "formMonth") {
+                select.addEventListener("change", checkOptions);
+            }
+            if(selectId !== "formYear" || selectId !== "formMonth") {
+                select.addEventListener("change", removeWarning);
+            }                
+            
+        }
         
         // ids, classes, attributes, textContent
-        editTodoDiv.id = "editTodoDiv";
+        formTodoDiv.id = "formTodoDiv";
         submitForm.id = "submitForm";
         form.id = "editForm";
         submitForm.setAttribute("type", "submit");
@@ -703,7 +734,7 @@
 
         // events
         btnBack.addEventListener("click", function() {
-            modContent.removeChild(getId("editTodoDiv"));
+            modContent.removeChild(getId("formTodoDiv"));
             showTodoDiv.classList.remove("noDisplay");
         });
         //update todo xmlhttprequest
@@ -717,20 +748,20 @@
         form.insertBefore(title, form.firstChild);
         form.appendChild(submitForm);
         form.appendChild(btnBack);
-        editTodoDiv.appendChild(form);
-        // editTodoDiv.appendChild(btnBack);
-        modContent.appendChild(editTodoDiv);
+        formTodoDiv.appendChild(form);
+        // formTodoDiv.appendChild(btnBack);
+        modContent.appendChild(formTodoDiv);
     }
     
     // function to capture all values in edit mode and check against them
     function checkOptions() {
         // get elements
-        const year = getId("editYear").value,
-            monthName = getId("editMonth").value,
-            date = getId("editDate").value, //for default value
-            editDate = getId("editDate"),
+        const year = getId("formYear").value,
+            monthName = getId("formMonth").value,
+            date = getId("formDate").value, //for default value
+            formDate = getId("formDate"),
             month = convertMonth(monthName),
-            oldCount = editDate.childElementCount,
+            oldCount = formDate.childElementCount,
             newCount = new Date(year, month + 1, 0).getDate();
 
 
@@ -739,16 +770,16 @@
             for(let i = oldCount + 1; i <= newCount; i++) {
                 let optns = makeElem("option");
                 optns.textContent = i;
-                editDate.appendChild(optns);
+                formDate.appendChild(optns);
             }
         }
         if(oldCount > newCount) {
-            while(editDate.childElementCount > newCount) {
-                editDate.removeChild(editDate.lastElementChild);
+            while(formDate.childElementCount > newCount) {
+                formDate.removeChild(formDate.lastElementChild);
             }
             // if the default selected date to be edited is higher than the max dates of new month
             if(date > newCount) {
-                editDate.lastChild.selected = true;
+                formDate.lastChild.selected = true;
             }
         }
         
@@ -770,10 +801,10 @@
     }
     
     function validateForm(todo, form) {
-        const frmHr = getId("editFrmHr"),
-            frmMin = getId("editFrmMin"),
-            toHr = getId("editToHr"),
-            toMin = getId("editToMin"),
+        const frmHr = getId("formFrmHr"),
+            frmMin = getId("formFrmMin"),
+            toHr = getId("formToHr"),
+            toMin = getId("formToMin"),
             hrGreat = parseInt(frmHr.value) > parseInt(toHr.value),
             hrEqual = parseInt(frmHr.value) === parseInt(toHr.value),
             minGreat = parseInt(frmMin.value) > parseInt(toMin.value);
@@ -794,10 +825,10 @@
     }
     
     function removeWarning() {
-        const frmHr = getId("editFrmHr"),
-            frmMin = getId("editFrmMin"),
-            toHr = getId("editToHr"),
-            toMin = getId("editToMin");
+        const frmHr = getId("formFrmHr"),
+            frmMin = getId("formFrmMin"),
+            toHr = getId("formToHr"),
+            toMin = getId("formToMin");
         [frmHr, frmMin, toHr, toMin].forEach(function(option) {
             if(option.classList.contains("warning")) {
                 option.classList.remove("warning");
@@ -823,6 +854,7 @@
         myReq.onreadystatechange = function() {
             if(myReq.readyState === 4 && myReq.status === 200) {
                 requestTodo();
+                clearEntries();
             }
         };
         

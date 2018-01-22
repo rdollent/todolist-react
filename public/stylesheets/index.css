@@ -205,8 +205,8 @@ td {
   color: red;
 }
 
-button, input, optgroup, select, textarea {
-    border: 1px solid;
-    padding: 4px;
-    margin-right: 10px;
-}
+/*button, input, optgroup, select, textarea {*/
+/*    border: 1px solid;*/
+/*    padding: 4px;*/
+/*    margin-right: 10px;*/
+/*}*/

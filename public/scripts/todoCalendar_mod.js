@@ -22,6 +22,9 @@
         // to detect mouseup.
         document.addEventListener("mouseup", letGo);
         document.addEventListener("touchend", letGo);
+        document.getElementById("addNewTodo").addEventListener("click", function() {
+            createOrEditTodo("newTodo");
+        })
     }
     
     function getId(input) {
@@ -32,7 +35,7 @@
         return document.createElement(input);
     }
     
-    function makeRequest(index, todo, form) {
+    function makeRequest(index, form, todo) {
         const myReq = new XMLHttpRequest();
         let url, fd, todoObj = {}, jsonTodo, sendItem;
         
@@ -43,14 +46,20 @@
 
         // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
         // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
-        if(index === "updTodo") {
-            url = "/todo/" + todo._id;
+        if(index === "updTodo" || index === "newTodo") {
+            if(index === "updTodo") {
+                url = "/todo/" + todo._id;
+                todoObj["_id"] = todo._id;
+            }
+            if(index === "newTodo") {
+                url = "/todo/";
+            }
+            
             fd = new FormData(form);
             // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
             for(let [key,val] of fd.entries()) {
                 todoObj[key] = val;
             }
-            todoObj["_id"] = todo._id;
             // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
             //https://stackoverflow.com/questions/19286301/webkitformboundary-when-parsing-post-using-nodejs
             //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
@@ -572,7 +581,7 @@
         // a.setAttribute("href", "/todo/" + todo._id + "/edit");
         a.addEventListener("click", function() {
             resetTodosHeight(modContent);
-            createOrEditTodo("edit", todo);
+            createOrEditTodo("updTodo", todo);
         });
         btnBack.addEventListener("click", function() {
             showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
@@ -589,29 +598,27 @@
 
     }
     
-    function createOrEditTodo(command, todo) {
+    function createOrEditTodo(index, todo) {
         // declare all variables. cant declare inside if since let and const are block-scoped.
-        //for edit
-        const showTodoDiv = getId("showTodoDiv"),
-            // create dialog boxes
-            todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin],
-
+        
+        // create dialog boxes for edit
+        const
         // for edit and create
             modContent = getId("modContent"),
              // make elements
             formTodoDiv = makeElem("div"),
             btnBack = makeElem("button"),
             form = makeElem("form"),
-            submitForm = makeElem("input"),
+            submitTodo = makeElem("input"),
             objInput = {
                 makeInput: function(x) {
                     let input = makeElem("input");
                     input.required = "required";
                     input.type = ("text");
                     input.name = x;
-                    if(command === "edit") {
+                    if(index === "updTodo") {
                         input.value = todo[x];
-                    } else if(command === "create") {
+                    } else if(index === "newTodo") {
                         input.placeholder = x;
                     }
                     if(x === "title") {
@@ -626,8 +633,14 @@
             title = objInput.makeInput("title"),
             desc = objInput.makeInput("description");
         // variables for options
-        let start = 0, end = 0, selectName = "", selectId = "";
-            
+        let todoArr, start = 0, end = 0, selectName = "", selectId = "", showTodoDiv;
+        
+        if(index === "updTodo") {
+            todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
+        }
+        if(index === "newTodo") {
+            todoArr = [0,1,2,3,4,5,6];
+        }
 
         for(let i = 0; i < todoArr.length; i++) {
             let p = makeElem("p"),
@@ -700,14 +713,14 @@
                 // set default value
                 // for month, check if month names match
                 if(selectId === "formMonth") {
-                    if(command === "edit" && optns.textContent === monthList[todoArr[1]]) {
+                    if(index === "updTodo" && optns.textContent === monthList[todoArr[1]]) {
                         optns.selected = true;
-                    } else if(command === "create" && optns.textContent === monthList[fullDate.month]) {
+                    } else if(index === "newTodo" && optns.textContent === monthList[fullDate.month]) {
                         optns.selected = true;
                     }
-                } else if(command === "edit" && parseInt(optns.textContent) == todoArr[i]){
+                } else if(index === "updTodo" && parseInt(optns.textContent) == todoArr[i]){
                     optns.selected = true;
-                } else if(command === "create") {
+                } else if(index === "newTodo") {
                     if(selectId === "formYear" && optns.textContent === fullDate.year) {
                         optns.selected = true;
                     }
@@ -744,30 +757,35 @@
         
         // ids, classes, attributes, textContent
         formTodoDiv.id = "formTodoDiv";
-        submitForm.id = "submitForm";
-        form.id = "editForm";
-        submitForm.setAttribute("type", "submit");
-
-        showTodoDiv.classList.add("noDisplay");
+        submitTodo.id = "submitTodo";
+        form.id = "formTodo";
+        submitTodo.setAttribute("type", "submit");
+        
+        if(getId("showTodoDiv")) {
+             showTodoDiv = getId("showTodoDiv");
+             showTodoDiv.classList.add("noDisplay");
+        }
         
         btnBack.textContent = "Back";
-        submitForm.textContent = "Submit";
+        submitTodo.textContent = "Submit";
 
         // events
         btnBack.addEventListener("click", function() {
             modContent.removeChild(getId("formTodoDiv"));
-            showTodoDiv.classList.remove("noDisplay");
+            if(getId("showTodoDiv")) {
+                showTodoDiv.classList.remove("noDisplay");
+            }
         });
         //update todo xmlhttprequest
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-            validateForm(todo, this);
+            validateForm(index, this, todo);
         });
         
         // append
         form.insertBefore(desc, form.firstChild);
         form.insertBefore(title, form.firstChild);
-        form.appendChild(submitForm);
+        form.appendChild(submitTodo);
         form.appendChild(btnBack);
         formTodoDiv.appendChild(form);
         // formTodoDiv.appendChild(btnBack);
@@ -819,7 +837,7 @@
         }
     }
     
-    function validateForm(todo, form) {
+    function validateForm(index, form, todo) {
         const frmHr = getId("formFrmHr"),
             frmMin = getId("formFrmMin"),
             toHr = getId("formToHr"),
@@ -839,7 +857,7 @@
             pass = false;
         }
         if(pass === true) {
-            makeRequest("updTodo", todo, form);
+            makeRequest(index, form, todo);
         }
     }
     

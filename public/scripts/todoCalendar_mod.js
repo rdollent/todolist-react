@@ -398,7 +398,8 @@
             todosMonth = getTodosMonth(todos),
             modContent = getId("modContent"),
             colHours = makeElem("div"),
-            colTodos = makeElem("div");
+            colTodos = makeElem("div"),
+            showTodoDiv = makeElem("div");
         let todosTodayTemp = [],
             todosToday = [];
         
@@ -418,13 +419,13 @@
         });
         
         todosToday = todosTodayTemp.sort(compareTimes);
-
+        
+        showTodoDiv.id = "showTodoDiv";
         colHours.id = "colHours";
         colTodos.id = "colTodos";
         colHours.classList.add("col-hours");
         colTodos.classList.add("col-todos");
-        modContent.appendChild(colHours);
-        modContent.appendChild(colTodos);
+
         
         //please see
         //https://stackoverflow.com/questions/48100598/parameter-not-being-passed-on-addeventlistener-on-ie11/48101139#48101139
@@ -450,8 +451,9 @@
         }
         colHours.appendChild(fragHours);
         colTodos.appendChild(fragTodos);
-        modContent.appendChild(colHours);
-        modContent.appendChild(colTodos);
+        showTodoDiv.appendChild(colHours);
+        showTodoDiv.appendChild(colTodos);
+        modContent.appendChild(showTodoDiv);
 
         if(todosToday.length > 0) {
             setTodosHeight();
@@ -551,7 +553,7 @@
             btnEdit = makeElem("button"),
             btnBack = makeElem("button"),
             a = makeElem("a"),
-            showTodoDiv = makeElem("div"),
+            showFoundTodoDiv = makeElem("div"),
             showArr = ["title", "description", "year", "month", "date", "frm", "to"],
             frag = document.createDocumentFragment();
    
@@ -569,7 +571,7 @@
             frag.appendChild(x);
         }
         // id
-        showTodoDiv.id = "showTodoDiv";
+        showFoundTodoDiv.id = "showFoundTodoDiv";
         // text
         btnEdit.textContent = "Edit";
         btnDel.textContent = "Delete";
@@ -593,15 +595,19 @@
         frag.appendChild(a);
         frag.appendChild(form);
         frag.appendChild(btnBack);
-        showTodoDiv.appendChild(frag);
-        modContent.appendChild(showTodoDiv);
+        showFoundTodoDiv.appendChild(frag);
+        modContent.appendChild(showFoundTodoDiv);
 
     }
     
     function createOrEditTodo(index, todo) {
-        // declare all variables. cant declare inside if since let and const are block-scoped.
+        if(getId("showTodoDiv")) {
+            let showTodoDiv = getId("showTodoDiv");
+            showTodoDiv.classList.add("noDisplay");
+        }
         
-        // create dialog boxes for edit
+        // declare all variables. cant declare inside if since let and const are block-scoped
+
         const
         // for edit and create
             modContent = getId("modContent"),
@@ -633,7 +639,7 @@
             title = objInput.makeInput("title"),
             desc = objInput.makeInput("description");
         // variables for options
-        let todoArr, start = 0, end = 0, selectName = "", selectId = "", showTodoDiv;
+        let todoArr, start = 0, end = 0, selectName = "", selectId = "", showFoundTodoDiv;
         
         if(index === "updTodo") {
             todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
@@ -761,9 +767,9 @@
         form.id = "formTodo";
         submitTodo.setAttribute("type", "submit");
         
-        if(getId("showTodoDiv")) {
-             showTodoDiv = getId("showTodoDiv");
-             showTodoDiv.classList.add("noDisplay");
+        if(getId("showFoundTodoDiv")) {
+             showFoundTodoDiv = getId("showFoundTodoDiv");
+             showFoundTodoDiv.classList.add("noDisplay");
         }
         
         btnBack.textContent = "Back";
@@ -772,7 +778,11 @@
         // events
         btnBack.addEventListener("click", function() {
             modContent.removeChild(getId("formTodoDiv"));
-            if(getId("showTodoDiv")) {
+            if(getId("showFoundTodoDiv")) {
+                showFoundTodoDiv.classList.remove("noDisplay");
+            }
+            if(index === "newTodo") {
+                let showTodoDiv = getId("showTodoDiv");
                 showTodoDiv.classList.remove("noDisplay");
             }
         });

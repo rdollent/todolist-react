@@ -15,7 +15,7 @@
         // isAjaxReady = false;
 
     function runOnPageLoad() {
-        makeRequest("reqTodo");
+        makeRequest({index: "reqTodo"});
         // added mouseup event listener on whole document when scrolling through dates
         // and months, hovering mouse outside prev and next buttons while holding mousedown
         // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
@@ -23,7 +23,7 @@
         document.addEventListener("mouseup", letGo);
         document.addEventListener("touchend", letGo);
         document.getElementById("addNewTodo").addEventListener("click", function() {
-            createOrEditTodo("newTodo");
+            createOrEditTodo({index: "newTodo"});
         })
     }
     
@@ -35,27 +35,29 @@
         return document.createElement(input);
     }
     
-    function makeRequest(index, form, todo) {
+    function makeRequest(obj) {
         const myReq = new XMLHttpRequest();
         let url, fd, todoObj = {}, jsonTodo, sendItem;
         
-        if(index === "reqTodo") {
+        //GET list of todos
+        if(obj.index === "reqTodo") { 
             url = "/todo/user/" + user;
             myReq.open("GET", url);
         }
 
         // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
         // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
-        if(index === "updTodo" || index === "newTodo") {
-            if(index === "updTodo") {
-                url = "/todo/" + todo._id;
-                todoObj["_id"] = todo._id;
+        //update edited todo or create new one
+        if(obj.index === "updTodo" || obj.index === "newTodo") { 
+            if(obj.index === "updTodo") {
+                url = "/todo/" + obj.todo._id;
+                todoObj["_id"] = obj.todo._id;
             }
-            if(index === "newTodo") {
+            if(obj.index === "newTodo") {
                 url = "/todo/";
             }
             
-            fd = new FormData(form);
+            fd = new FormData(obj.form);
             // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
             for(let [key,val] of fd.entries()) {
                 todoObj[key] = val;
@@ -68,16 +70,24 @@
             sendItem = jsonTodo;
             myReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         }
+        
+        // delete a todo
+        if(obj.index === "delTodo") {
+            url = "/todo/delete/" + obj.todo._id;
+            myReq.open("POST", url);
+        }
         myReq.onreadystatechange = function() {
             if(myReq.readyState === 4 && myReq.status === 200) {
-                if(index === "reqTodo") {
+                if(obj.index === "reqTodo") {
                     todos = JSON.parse(myReq.responseText);
                     getCurrentCalendar();
                 }
-                if(index === "updTodo") {
-                    makeRequest("reqTodo");
+                if(obj.index === "updTodo" || obj.index === "newTodo" || obj.index === "delTodo") {
+                    makeRequest({index: "reqTodo"});
                     clearEntries();
-                }
+                }     
+
+
             }
         };
 
@@ -472,12 +482,10 @@
             navHeight = window.getComputedStyle(nav).height, //string
             todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight)),
             modContent = getId("modContent"),
-            colHours = getId("colHours"),
-            colTodos = getId("colTodos");
+            showTodoDiv = getId("showTodoDiv");
             
         modContent.style.setProperty("height", todosDateHeight + "px");
-        colHours.style.setProperty("height", modContent.scrollHeight + "px");
-        colTodos.style.setProperty("height", modContent.scrollHeight + "px");
+        showTodoDiv.style.setProperty("height", modContent.scrollHeight + "px");
     }
     // use to sort todosToday array (of objects)
     function compareTimes(a,b) {
@@ -577,16 +585,20 @@
         btnDel.textContent = "Delete";
         btnBack.textContent = "Back";
         // attributes
-        form.setAttribute("action", "/todo/" + todo._id + "?_method=DELETE");
-        form.setAttribute("method", "POST");
+        // form.setAttribute("action", "/todo/" + todo._id + "?_method=DELETE");
+        // form.setAttribute("method", "POST");
         // events
         // a.setAttribute("href", "/todo/" + todo._id + "/edit");
         a.addEventListener("click", function() {
             resetTodosHeight(modContent);
-            createOrEditTodo("updTodo", todo);
+            createOrEditTodo({index: "updTodo", todo: todo});
         });
         btnBack.addEventListener("click", function() {
             showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
+        });
+        btnDel.addEventListener("click", function() {
+            event.preventDefault();
+            makeRequest({index: "delTodo", todo: todo}); //xmlhttprequest
         });
 
         // append
@@ -600,10 +612,14 @@
 
     }
     
-    function createOrEditTodo(index, todo) {
+    function createOrEditTodo(obj) {
         if(getId("showTodoDiv")) {
             let showTodoDiv = getId("showTodoDiv");
             showTodoDiv.classList.add("noDisplay");
+        }
+        if(getId("formTodoDiv")) {
+            let formTodoDiv = getId("formTodoDiv");
+            formTodoDiv.parentNode.removeChild(formTodoDiv);
         }
         
         // declare all variables. cant declare inside if since let and const are block-scoped
@@ -622,9 +638,9 @@
                     input.required = "required";
                     input.type = ("text");
                     input.name = x;
-                    if(index === "updTodo") {
-                        input.value = todo[x];
-                    } else if(index === "newTodo") {
+                    if(obj.index === "updTodo") {
+                        input.value = obj.todo[x];
+                    } else if(obj.index === "newTodo") {
                         input.placeholder = x;
                     }
                     if(x === "title") {
@@ -641,10 +657,10 @@
         // variables for options
         let todoArr, start = 0, end = 0, selectName = "", selectId = "", showFoundTodoDiv;
         
-        if(index === "updTodo") {
-            todoArr = [todo.year, todo.month, todo.date, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
+        if(obj.index === "updTodo") {
+            todoArr = [obj.todo.year, obj.todo.month, obj.todo.date, obj.todo.frmHr, obj.todo.frmMin, obj.todo.toHr, obj.todo.toMin];
         }
-        if(index === "newTodo") {
+        if(obj.index === "newTodo") {
             todoArr = [0,1,2,3,4,5,6];
         }
 
@@ -719,18 +735,18 @@
                 // set default value
                 // for month, check if month names match
                 if(selectId === "formMonth") {
-                    if(index === "updTodo" && optns.textContent === monthList[todoArr[1]]) {
+                    if(obj.index === "updTodo" && optns.textContent === monthList[todoArr[1]]) {
                         optns.selected = true;
-                    } else if(index === "newTodo" && optns.textContent === monthList[fullDate.month]) {
+                    } else if(obj.index === "newTodo" && optns.textContent === monthList[fullDate.month]) {
                         optns.selected = true;
                     }
-                } else if(index === "updTodo" && parseInt(optns.textContent) == todoArr[i]){
+                } else if(obj.index === "updTodo" && parseInt(optns.textContent) == todoArr[i]){
                     optns.selected = true;
-                } else if(index === "newTodo") {
-                    if(selectId === "formYear" && optns.textContent === fullDate.year) {
+                } else if(obj.index === "newTodo") {
+                    if(selectId === "formYear" && optns.textContent === String(fullDate.year)) {
                         optns.selected = true;
                     }
-                    if(selectId === "formDate" && optns.textContent === fullDate.date) {
+                    if(selectId === "formDate" && optns.textContent === String(fullDate.date)) {
                         optns.selected = true;
                     }
                     if(selectId === "formFrmHr" || selectId === "formFrmMin" || selectId === "formToHr" || selectId === "formToMin") {
@@ -781,7 +797,7 @@
             if(getId("showFoundTodoDiv")) {
                 showFoundTodoDiv.classList.remove("noDisplay");
             }
-            if(index === "newTodo") {
+            if(obj.index === "newTodo" && getId("showTodoDiv")) {
                 let showTodoDiv = getId("showTodoDiv");
                 showTodoDiv.classList.remove("noDisplay");
             }
@@ -789,7 +805,7 @@
         //update todo xmlhttprequest
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-            validateForm(index, this, todo);
+            validateForm({index: obj.index, form: this, todo: obj.todo});
         });
         
         // append
@@ -847,7 +863,7 @@
         }
     }
     
-    function validateForm(index, form, todo) {
+    function validateForm(obj) {
         const frmHr = getId("formFrmHr"),
             frmMin = getId("formFrmMin"),
             toHr = getId("formToHr"),
@@ -867,7 +883,7 @@
             pass = false;
         }
         if(pass === true) {
-            makeRequest(index, form, todo);
+            makeRequest({index: obj.index, form: obj.form, todo: obj.todo});
         }
     }
     

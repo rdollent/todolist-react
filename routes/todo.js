@@ -159,23 +159,32 @@ router.post("/:id", middleware.isLoggedIn, function(req, res) {
     Todo.findByIdAndUpdate(req.body._id, req.body, function(err, updatedTodo) {
         if(err) {
             console.log(err);
-            // res.redirect("/todo");
          } else {
-            // res.redirect("/todo/");// + req.params.id);
-            res.send("done!");
+            res.send("recorded!");
         }
     });
     
 });
 
 // delete route
-router.delete("/:id", middleware.isLoggedIn, function(req, res) {
+// router.delete("/:id", middleware.isLoggedIn, function(req, res) {
+//     Todo.findByIdAndRemove(req.params.id, function(err) {
+//         if(err) {
+//             console.log(err);
+//             res.redirect("/todo");
+//         // } else {
+//         //     res.redirect("/todo");            
+//         }
+
+//     });
+// });
+
+router.post("/delete/:id", middleware.isLoggedIn, function(req, res) {
     Todo.findByIdAndRemove(req.params.id, function(err) {
         if(err) {
             console.log(err);
-            res.redirect("/todo");
-        // } else {
-        //     res.redirect("/todo");            
+        } else {
+            res.send("deleted!");            
         }
 
     });

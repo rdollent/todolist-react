@@ -66,6 +66,7 @@
             - hours are in string format. generate strings in dialogue boxes for minutes and hours!
             - submit button in edit, submit click event verifies values and e.preventDefault() if incorrect or logically wrong
             - dont make update route refresh page. instead, just do ajax call on specific date after Delete or Edit.
+            - fix Delete button so it deletes entry and do a makeRequest!
 - Time
     - drop down?
     - interval? Must be to the minute

@@ -12,7 +12,36 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local");
 
 
-mongoose.connect("mongodb://localhost/to-do-list");
+// mongoose.connect("mongodb://localhost/to-do-list");
+//mongodb://<dbuser>:<dbpassword>@ds046867.mlab.com:46867/rdollent-todo
+//mongodb://roo:123456@ds046867.mlab.com:46867/rdollent-todo
+
+// environment variable
+
+// to create environment variable
+// in command line do
+// export DATABASEURL (any name, allcaps) = mongodb://roo:123456@ds129043.mlab.com:29043/rdyelpcamp
+// or
+// export DATABASEURL (any name, allcaps) = mongodb://localhost/yelp_camp_v13
+
+// console.log(process.env.DATABASEURL);
+// mongoose.connect("mongodb://localhost/yelp_camp_v13"); //will create yelp_camp database
+//  mongoose.connect("mongodb://roo:123456@ds129043.mlab.com:29043/rdyelpcamp"); //will create yelp_camp database
+// mongodb://roo:123456@ds129043.mlab.com:29043/rdyelpcamp
+// mongodb://<dbuser>:<dbpassword>@ds129043.mlab.com:29043/rdyelpcamp
+
+// for heroku environment
+// go to app, go to settings, reveal config variables
+// add variable called DATABASEURL as variable name (key)
+// value is mongodb://roo:123456@ds129043.mlab.com:29043/rdyelpcamp
+// or using heroku nodejs support documentation "customizing the build process" section
+// heroku config:set (key)=(value) in the terminal
+// heroku config:set DATABASEURL=mongodb://roo:123456@ds129043.mlab.com:29043/rdyelpcamp
+
+// backup in case environment variable does not work
+var url = process.env.DATABASEURL || "mongodb://localhost/to-do-list";
+mongoose.connect(url);
+
 // for forms (req.body...)
 // in order to read HTTP POST data , we have to use "body-parser" node module.
 // body-parser is a piece of express middleware that reads a form's input 
@@ -81,6 +110,7 @@ var seedDB = require("./seeds.js");
 
 
 
+// where environment is run
 
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("todo app started");

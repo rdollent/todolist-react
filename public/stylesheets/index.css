@@ -124,6 +124,7 @@ a {
 #modContent {
   /*height: 15vh;*/
   overflow: scroll;
+  padding-left: 20px;
 }
 
 #tbl {

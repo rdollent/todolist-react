@@ -214,6 +214,22 @@ td {
   text-align: center;
 }
 
+
+
+
+/*media queries*/
+@media only screen
+  and (min-device-width: 768px) {
+    .index-container {
+      max-width: 600px;
+      height: 250px;
+      margin: 0 auto;
+    }
+    #modContent {
+      overflow: auto;
+    }
+  }
+
 /*button, input, optgroup, select, textarea {*/
 /*    border: 1px solid;*/
 /*    padding: 4px;*/

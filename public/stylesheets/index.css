@@ -204,6 +204,15 @@ td {
   color: red;
 }
 
+.monthList {
+  width: 30%;
+  height: 50px;
+  line-height: 50px;
+  border: 1px solid black;
+  display: inline-block;
+  text-align: center;
+}
+
 /*button, input, optgroup, select, textarea {*/
 /*    border: 1px solid;*/
 /*    padding: 4px;*/

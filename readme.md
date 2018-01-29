@@ -67,6 +67,7 @@
             - submit button in edit, submit click event verifies values and e.preventDefault() if incorrect or logically wrong
             - dont make update route refresh page. instead, just do ajax call on specific date after Delete or Edit.
             - fix Delete button so it deletes entry and do a makeRequest!
+        - change monthList and yearList to drop-downs
 - Time
     - drop down?
     - interval? Must be to the minute

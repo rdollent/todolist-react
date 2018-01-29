@@ -128,11 +128,21 @@
             start = 0, end = 11, value = function() { return monthList[i] }, clicked = monthClicked;
         }
         for(i = start; i <= end; i++) {
-            let elem = makeElem("div");
-            elem.textContent = value();
-            elem.setAttribute("data-" + input, i);
-            elem.addEventListener("click", clicked);
-            frag.appendChild(elem);  
+            let div = makeElem("div");
+            div.textContent = value();
+            if(input === "month") {
+            div.classList.add("monthList");
+                if(div.textContent === monthList[fullDate.month]) {
+                    div.selected = true;
+                }
+            }
+            if(input === "year" && div.textContent === String(fullDate.year)) {
+                div.selected = true;
+            }
+            div.setAttribute("data-" + input, i);
+            div.addEventListener("click", clicked);
+
+            frag.appendChild(div);
         }
         main.appendChild(frag);
         calendar.appendChild(main);
@@ -153,6 +163,8 @@
             monthList = getId("monthList"),
             periodSelect = getId("periodSelect"),
             yearTitle = getId("yearTitle");
+            // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
+
         fullDate.year = parseInt(this.textContent);
         yearList.classList.add("noDisplay");
         if(monthList && yearTitle) {
@@ -171,6 +183,7 @@
     function monthClicked() {
         const monthList = getId("monthList"),
             yearTitle = getId("yearTitle");
+            // selectedMonth = event.target.options[event.target.options.selectedIndex].dataset.month;
         monthList.classList.add("noDisplay");
         yearTitle.classList.add("noDisplay");
         fullDate.month = parseInt(this.dataset.month);

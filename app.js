@@ -111,7 +111,6 @@ var seedDB = require("./seeds.js");
 
 
 // where environment is run
-
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("todo app started");
 })

@@ -583,13 +583,14 @@
             btnBack = makeElem("button"),
             a = makeElem("a"),
             showFoundTodoDiv = makeElem("div"),
-            showArr = ["title", "description", "year", "month", "date", "frm", "to"],
+            showArr = ["title", "description", "frm", "to"],
             frag = document.createDocumentFragment();
    
         clearEntries();
 
         for(let i = 0; i < showArr.length; i++) {
             let x = makeElem("div");
+            
             if(showArr[i] === "frm") {
                 x.textContent = todo.frmHr + ":" + todo.frmMin;
             } else if(showArr[i] === "to") {

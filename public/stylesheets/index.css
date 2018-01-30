@@ -259,6 +259,9 @@ td {
       text-align: center;
       margin: 1rem;
     }
+    #formTodoDiv {
+      margin: 0 auto;
+    }
 
 
   }

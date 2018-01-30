@@ -136,8 +136,11 @@
                     div.selected = true;
                 }
             }
-            if(input === "year" && div.textContent === String(fullDate.year)) {
-                div.selected = true;
+            if(input === "year") {
+            div.classList.add("yearList");
+                if(div.textContent === String(fullDate.year)) {
+                    div.selected = true;
+                }
             }
             div.setAttribute("data-" + input, i);
             div.addEventListener("click", clicked);

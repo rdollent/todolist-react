@@ -207,11 +207,21 @@ td {
 
 .monthList {
   width: 30%;
-  height: 50px;
-  line-height: 50px;
-  border: 1px solid black;
+  height: 5rem;
+  line-height: 5rem;
   display: inline-block;
   text-align: center;
+  margin: 0.5rem;
+}
+
+.yearList {
+  display: inline-block;
+  margin: 1.75rem 1.75rem;
+  border-bottom: 0.1rem solid grey;
+}
+
+#yearList {
+  margin: 0 auto;
 }
 
 
@@ -239,6 +249,15 @@ td {
     }
     .nav-hamburger {
       display: none;
+    }
+    #yearList {
+      max-width: 600px;
+    }
+    .yearList {
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      margin: 1rem;
     }
 
 

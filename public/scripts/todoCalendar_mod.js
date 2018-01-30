@@ -182,10 +182,12 @@
     
     function monthClicked() {
         const monthList = getId("monthList"),
-            yearTitle = getId("yearTitle");
+            yearTitle = getId("yearTitle"),
+            addNewTodo = getId("addNewTodo");
             // selectedMonth = event.target.options[event.target.options.selectedIndex].dataset.month;
         monthList.classList.add("noDisplay");
         yearTitle.classList.add("noDisplay");
+        addNewTodo.classList.remove("noDisplay");
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").textContent = "month";
@@ -525,7 +527,8 @@
         const monthList = getId("monthList"),
             yearList = getId("yearList"),
             calendar = getId("calendar"),
-            yearTitle = getId("yearTitle");
+            yearTitle = getId("yearTitle"),
+            addNewTodo = getId("addNewTodo");
 
         if(this.textContent === "year") {
             monthList.classList.add("noDisplay");
@@ -551,7 +554,9 @@
                 makeList("month");
             }
             this.textContent = "year";
+            addNewTodo.classList.add("noDisplay");
         }
+        
 
     }
     function removeColour() {
@@ -913,7 +918,27 @@
         });
     }
 
+    // window.addEventListener("resize", function() {
+    //     if(document.body.clientWidth >= 768) {
+    //         document.getElementsByClassName("nav-menu")[0].classList.remove("noDisplay");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("noDisplay");
+    //     }
+    //     if(document.body.clientWidth <= 768) {
+    //         document.getElementsByClassName("nav-menu")[0].classList.add("noDisplay");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("noDisplay");
+    //     }
+    // });
+    
+    // window.addEventListener("load", function() {
+    //     if(document.body.clientWidth >= 768) {
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("noDisplay");
+    //     }
+    //     if(document.body.clientWidth <= 768) {
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("noDisplay");
+    //     }
+            
 
+    // });
     
 
     

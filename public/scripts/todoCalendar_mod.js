@@ -212,12 +212,12 @@
         makeBtns();
     }
     function makeTitleHeader() {
-        const p = makeElem("p"),
+        const span = makeElem("span"),
             titleHeader = makeElem("div");
-        p.id = "tblHeader";
+        span.id = "tblHeader";
         titleHeader.id = "title";
-        p.textContent = monthList[fullDate.month] + " " + fullDate.year;
-        titleHeader.appendChild(p);
+        span.textContent = monthList[fullDate.month] + " " + fullDate.year;
+        titleHeader.appendChild(span);
         return titleHeader;
     }
     
@@ -334,37 +334,51 @@
     }
 
     function makeBtns() {
-        const prevBtn = makeElem("a"),
-            nextBtn = makeElem("a"),
+        const //prevBtn = makeElem("a"),
+            //nextBtn = makeElem("a"),
             // btns = makeElem("div"),
-            btnsArr = [prevBtn, nextBtn],
+            
             prevImg = makeElem("i"),
             nextImg = makeElem("i"),
-            title = getId("title");
+            btnsArr = [prevImg, nextImg],
+            eventsArr = ["mousedown", "touchstart"],
+            modContent = getId("modContent"),
+            container = getId("container");
         
         prevImg.classList.add("material-icons", "prevNext-icon");
         nextImg.classList.add("material-icons", "prevNext-icon");
         prevImg.textContent = "navigate_before";
         nextImg.textContent = "navigate_next";
-        prevBtn.appendChild(prevImg);
-        nextBtn.appendChild(nextImg);
-        prevBtn.id = "prevBtn";
-        nextBtn.id = "nextBtn";
-        title.insertBefore(prevBtn, title.children.namedItem("tblHeader"));
-        title.insertBefore(nextBtn, title.children.namedItem("tblHeader").nextSibling);
+        //prevBtn.appendChild(prevImg);
+        //nextBtn.appendChild(nextImg);
+        prevImg.id = "prevBtn";
+        nextImg.id = "nextBtn";
+        container.insertBefore(prevImg, container.children.namedItem("title"));
+        container.insertBefore(nextImg, container.children.namedItem("title").nextSibling);
         
         
         // initial values
-        prevBtn.addEventListener("mousedown", prevMonth);
-        prevBtn.addEventListener("mousedown", clearEntries);
-        nextBtn.addEventListener("mousedown", nextMonth);
-        nextBtn.addEventListener("mousedown", clearEntries);
+        prevImg.addEventListener("mousedown", prevMonth);
+        // prevImg.addEventListener("mousedown", clearEntries);
+        // prevImg.addEventListener("touchstart", clearEntries);
+        nextImg.addEventListener("mousedown", nextMonth);
+        // nextImg.addEventListener("mousedown", clearEntries);
+        // nextImg.addEventListener("touchstart", clearEntries);
+        
+        eventsArr.forEach(function(btnEvent) {
+            btnsArr.forEach(function(btn) {
+                btn.addEventListener(btnEvent, clearEntries);
+                btn.addEventListener(btnEvent, function() {resetTodosHeight(modContent)});
+            });
+        });
+
 
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
         btnsArr.forEach(function(btn) {
             btn.addEventListener("mousedown", holdThis);
             btn.addEventListener("touchstart", holdThis, {passive: true});
         });
+        
         
     }
     
@@ -418,6 +432,7 @@
         while(modContent.lastChild) {
             modContent.removeChild(modContent.lastChild);
         }
+        
     }
     
     function showTodos(clickedElem) {

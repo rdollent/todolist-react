@@ -137,7 +137,12 @@ a {
   max-width: 3rem;
   padding: 0.25rem;
   font-size: 1.25rem;
+
   /*font-style: normal;*/
+}
+
+.row {
+    height:4rem;
 }
 
 #tblHeader {
@@ -145,18 +150,15 @@ a {
   margin: 0 auto;
   text-align: center;
   display: inline-block;
+  /*padding-top: 1rem;*/
+  font-size: 2rem;
 }
 
-#title {
-  width:100%;
-}
 
-#tblHeader h2 {
-  margin: 0.5rem auto;
-}
 
 #container {
   text-align:center;
+  margin-top:10px;
 }
 
 .icon-tiny {
@@ -173,13 +175,26 @@ td {
   vertical-align: text-bottom !important;
 }
 
+
+
+
 .prevNext-icon {
-  font-size: 1.6rem;
+  font-size:4rem;
+  vertical-align: bottom;
 }
 
+#prevBtn {
+  float:left;
+  clear:left;
+}
+
+#nextBtn {
+  float:right;
+  clear:right;
+}
 #title {
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem auto;
+  display:inline-block;
 }
 
 
@@ -232,7 +247,6 @@ td {
   and (min-width: 768px) {
     .index-container {
       max-width: 600px;
-      height: 250px;
       margin: 0 auto;
     }
     #modContent {

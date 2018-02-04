@@ -9,11 +9,10 @@
         dayList = {0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat"};
         
     // use this as counter for holding prev/next buttons.
-    let prevNextInterval = null,
-        // todos for xmlhttprequest ajax call
-        todos = undefined;
-        // isAjaxReady = false;
-
+    let prevNextInterval = null;
+    // todos for xmlhttprequest ajax call
+    let todos = undefined;
+    
     function runOnPageLoad() {
         makeRequest({index: "reqTodo"});
         // added mouseup event listener on whole document when scrolling through dates
@@ -22,11 +21,12 @@
         // to detect mouseup.
         document.addEventListener("mouseup", letGo);
         document.addEventListener("touchend", letGo);
-        document.getElementById("addNewTodo").addEventListener("click", function() {
+        getId("addNewTodo").addEventListener("click", function() {
             createOrEditTodo({index: "newTodo"});
         })
     }
     
+        
     function getId(input) {
         return document.getElementById(input);
     }
@@ -349,8 +349,6 @@
         nextImg.classList.add("material-icons", "prevNext-icon");
         prevImg.textContent = "navigate_before";
         nextImg.textContent = "navigate_next";
-        //prevBtn.appendChild(prevImg);
-        //nextBtn.appendChild(nextImg);
         prevImg.id = "prevBtn";
         nextImg.id = "nextBtn";
         container.insertBefore(prevImg, container.children.namedItem("title"));
@@ -359,12 +357,8 @@
         
         // initial values
         prevImg.addEventListener("mousedown", prevMonth);
-        // prevImg.addEventListener("mousedown", clearEntries);
-        // prevImg.addEventListener("touchstart", clearEntries);
         nextImg.addEventListener("mousedown", nextMonth);
-        // nextImg.addEventListener("mousedown", clearEntries);
-        // nextImg.addEventListener("touchstart", clearEntries);
-        
+
         eventsArr.forEach(function(btnEvent) {
             btnsArr.forEach(function(btn) {
                 btn.addEventListener(btnEvent, clearEntries);
@@ -486,7 +480,7 @@
                 resetTodosHeight(modContent);
                 showFoundTodo(a.todo);
                 });
-            span.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + "-" +
+            span.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + " - " +
                             todosToday[i].toHr + ":" + todosToday[i].toMin;
             a.textContent = todosToday[i].title;
             fragHours.appendChild(span);
@@ -508,17 +502,17 @@
         modContent.style.setProperty("height", "auto");
     }
     
-    function setTodosHeight() {
+    function setTodosHeight(x) {
         const container = document.getElementsByClassName("index-container")[0],
             nav = document.getElementsByClassName("nav")[0],
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight)),
             modContent = getId("modContent"),
-            showTodoDiv = getId("showTodoDiv");
+            elem = getId(x);
             
         modContent.style.setProperty("height", todosDateHeight + "px");
-        showTodoDiv.style.setProperty("height", modContent.scrollHeight + "px");
+        elem.style.setProperty("height", modContent.scrollHeight + "px");
     }
     // use to sort todosToday array (of objects)
     function compareTimes(a,b) {
@@ -853,6 +847,9 @@
         formTodoDiv.appendChild(form);
         // formTodoDiv.appendChild(btnBack);
         modContent.appendChild(formTodoDiv);
+        
+        resetTodosHeight(modContent);
+        setTodosHeight("formTodoDiv");
     }
     
     // function to capture all values in edit mode and check against them

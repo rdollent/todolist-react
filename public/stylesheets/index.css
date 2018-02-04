@@ -208,6 +208,7 @@ td {
 .col-todos {
   width:20rem;
   display:inline-block;
+  margin-left: 5px;
 }
 
 .col-hours-span, .col-todos-a {
@@ -239,13 +240,18 @@ td {
   margin: 0 auto;
 }
 
+#formTodoDiv {
+  padding-bottom: 5px;
+}
 
-
+button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
+  cursor: pointer;
+}
 
 /*media queries*/
 @media only screen
   and (min-width: 768px) {
-    .index-container {
+    .index-container, #showTodoDiv, #formTodoDiv, #showFoundTodoDiv {
       max-width: 600px;
       margin: 0 auto;
     }
@@ -272,9 +278,6 @@ td {
       line-height: 25px;
       text-align: center;
       margin: 1rem;
-    }
-    #formTodoDiv {
-      margin: 0 auto;
     }
 
 

@@ -675,9 +675,9 @@
                         input.placeholder = x;
                     }
                     if(x === "title") {
-                        input.maxlength = 15;
+                        input.setAttribute("maxlength", 15);
                     } else if(x === "description") {
-                        input.maxlength = 140;
+                        input.setAttribute("maxlength", 140);
                     }
                     return input;
                 }

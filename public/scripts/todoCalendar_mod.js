@@ -23,6 +23,7 @@
         document.addEventListener("touchend", letGo);
         getId("addNewTodo").addEventListener("click", function() {
             createOrEditTodo({index: "newTodo"});
+            getId("addNewTodo").classList.add("no-display");
         })
     }
     
@@ -204,6 +205,10 @@
         const calendar = getId("calendar"),
             container = makeElem("div"),
             titleHeader = makeTitleHeader();
+        if(getId("periodSelect")) {
+            let periodSelect = getId("periodSelect");
+            periodSelect.parentNode.removeChild(periodSelect);
+        }
         container.id = "container";
         while(calendar.lastChild) {
             calendar.removeChild(calendar.lastChild);
@@ -505,7 +510,7 @@
             nav = document.getElementsByClassName("nav")[0],
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
-            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight)),
+            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight)) - 10, //10px is margin-top of index-container
             modContent = getId("modContent"),
             elem = getId(x);
             
@@ -529,11 +534,11 @@
     
     function makePeriodSelectBtns() {
         const btn = makeElem("button"),
-            calendar = getId("calendar");
+            nav = document.getElementsByClassName("nav")[0];
         btn.id = "periodSelect";
         btn.textContent = "month";
         btn.addEventListener("click", switchPeriod);
-        calendar.insertBefore(btn, calendar.firstChild);
+        nav.insertBefore(btn, nav.firstChild);
     }
     
     function switchPeriod() {
@@ -829,9 +834,13 @@
             if(getId("showFoundTodoDiv")) {
                 showFoundTodoDiv.classList.remove("no-display");
             }
-            if(obj.index === "newTodo" && getId("showTodoDiv")) {
-                let showTodoDiv = getId("showTodoDiv");
-                showTodoDiv.classList.remove("no-display");
+            if(obj.index === "newTodo") {
+                let addNewTodo = getId("addNewTodo");
+                addNewTodo.classList.remove("no-display");
+                if(getId("showTodoDiv")) {
+                    let showTodoDiv = getId("showTodoDiv");
+                    showTodoDiv.classList.remove("no-display");
+                }
             }
         });
         //update todo xmlhttprequest

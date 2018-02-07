@@ -59,7 +59,7 @@
             
             fd = new FormData(obj.form);
             // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
-            for(let [key,val] of fd.entries()) {
+            for(var [key,val] of fd.entries()) {
                 todoObj[key] = val;
             }
             // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.

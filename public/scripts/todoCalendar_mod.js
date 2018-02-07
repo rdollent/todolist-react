@@ -169,15 +169,15 @@
             // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
 
         fullDate.year = parseInt(this.textContent);
-        yearList.classList.add("noDisplay");
+        yearList.classList.add("no-display");
         if(monthList && yearTitle) {
-            monthList.classList.remove("noDisplay");
-            yearTitle.classList.remove("noDisplay");
+            monthList.classList.remove("no-display");
+            yearTitle.classList.remove("no-display");
             // change the displayed year in the Year Header
             yearTitle.firstChild.textContent = fullDate.year;
         }
         if(periodSelect) {
-            periodSelect.classList.remove("noDisplay");
+            periodSelect.classList.remove("no-display");
             periodSelect.textContent = "year";
         }
         
@@ -188,9 +188,9 @@
             yearTitle = getId("yearTitle"),
             addNewTodo = getId("addNewTodo");
             // selectedMonth = event.target.options[event.target.options.selectedIndex].dataset.month;
-        monthList.classList.add("noDisplay");
-        yearTitle.classList.add("noDisplay");
-        addNewTodo.classList.remove("noDisplay");
+        monthList.classList.add("no-display");
+        yearTitle.classList.add("no-display");
+        addNewTodo.classList.remove("no-display");
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").textContent = "month";
@@ -434,8 +434,7 @@
             fragTodos = document.createDocumentFragment(), //append generated elems here first
             todosMonth = getTodosMonth(todos),
             modContent = getId("modContent"),
-            colHours = makeElem("div"),
-            colTodos = makeElem("div"),
+            entries = makeElem("div"),
             showTodoDiv = makeElem("div");
         let todosTodayTemp = [],
             todosToday = [];
@@ -458,38 +457,36 @@
         todosToday = todosTodayTemp.sort(compareTimes);
         
         showTodoDiv.id = "showTodoDiv";
-        colHours.id = "colHours";
-        colTodos.id = "colTodos";
-        colHours.classList.add("col-hours");
-        colTodos.classList.add("col-todos");
+        entries.id = "entries";
 
-        
         //please see
         //https://stackoverflow.com/questions/48100598/parameter-not-being-passed-on-addeventlistener-on-ie11/48101139#48101139
         for(let i = 0; i < todosToday.length; i++) {
             const a = makeElem("a"),
-                span = makeElem("span");
+                spanHour = makeElem("span"),
+                spanTodo = makeElem("span");
             //todosToday[i] won't be passed through a.addEventListener because of scope
             //attach todo in element "a" and access it as its property.
             a.todo = todosToday[i];
-            a.classList.add("col-todos-a");
-            span.classList.add("col-hours-span");
+            a.classList.add("single-entry")
+            spanTodo.classList.add("col-todos");
+            spanHour.classList.add("col-hours");
             
             // a.setAttribute("href", "/todo/" + todosToday[i]._id);
             a.addEventListener("click", function() {
                 resetTodosHeight(modContent);
                 showFoundTodo(a.todo);
                 });
-            span.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + " - " +
+            spanHour.textContent = todosToday[i].frmHr + ":" + todosToday[i].frmMin + " - " +
                             todosToday[i].toHr + ":" + todosToday[i].toMin;
-            a.textContent = todosToday[i].title;
-            fragHours.appendChild(span);
+            spanTodo.textContent = todosToday[i].title;
+            a.appendChild(spanHour);
+            a.appendChild(spanTodo);
             fragTodos.appendChild(a);
         }
-        colHours.appendChild(fragHours);
-        colTodos.appendChild(fragTodos);
-        showTodoDiv.appendChild(colHours);
-        showTodoDiv.appendChild(colTodos);
+
+        entries.appendChild(fragTodos);
+        showTodoDiv.appendChild(entries);
         modContent.appendChild(showTodoDiv);
 
         if(todosToday.length > 0) {
@@ -512,7 +509,10 @@
             elem = getId(x);
             
         modContent.style.setProperty("height", todosDateHeight + "px");
-        elem.style.setProperty("height", modContent.scrollHeight + "px");
+        if(x) {
+            elem.style.setProperty("height", modContent.scrollHeight + "px");
+        }
+        
     }
     // use to sort todosToday array (of objects)
     function compareTimes(a,b) {
@@ -543,14 +543,14 @@
             addNewTodo = getId("addNewTodo");
 
         if(this.textContent === "year") {
-            monthList.classList.add("noDisplay");
-            yearTitle.classList.add("noDisplay");
+            monthList.classList.add("no-display");
+            yearTitle.classList.add("no-display");
             if(yearList) {
-                yearList.classList.remove("noDisplay");
+                yearList.classList.remove("no-display");
             } else {
                 makeList("year");
             }
-            this.classList.add("noDisplay");
+            this.classList.add("no-display");
         }
         if(this.textContent === "month") {
             // note: if I try to put container in variable, it won't work.
@@ -558,15 +558,15 @@
             calendar.removeChild(getId("container"));
             clearEntries();
             if(monthList && yearTitle) {
-                monthList.classList.remove("noDisplay");
-                yearTitle.classList.remove("noDisplay");
+                monthList.classList.remove("no-display");
+                yearTitle.classList.remove("no-display");
                 yearTitle.firstChild.textContent = fullDate.year;
             } else {
                 makeYearHeader();
                 makeList("month");
             }
             this.textContent = "year";
-            addNewTodo.classList.add("noDisplay");
+            addNewTodo.classList.add("no-display");
         }
         
 
@@ -646,7 +646,7 @@
     function createOrEditTodo(obj) {
         if(getId("showTodoDiv")) {
             let showTodoDiv = getId("showTodoDiv");
-            showTodoDiv.classList.add("noDisplay");
+            showTodoDiv.classList.add("no-display");
         }
         if(getId("formTodoDiv")) {
             let formTodoDiv = getId("formTodoDiv");
@@ -816,7 +816,7 @@
         
         if(getId("showFoundTodoDiv")) {
              showFoundTodoDiv = getId("showFoundTodoDiv");
-             showFoundTodoDiv.classList.add("noDisplay");
+             showFoundTodoDiv.classList.add("no-display");
         }
         
         btnBack.textContent = "Back";
@@ -826,11 +826,11 @@
         btnBack.addEventListener("click", function() {
             modContent.removeChild(getId("formTodoDiv"));
             if(getId("showFoundTodoDiv")) {
-                showFoundTodoDiv.classList.remove("noDisplay");
+                showFoundTodoDiv.classList.remove("no-display");
             }
             if(obj.index === "newTodo" && getId("showTodoDiv")) {
                 let showTodoDiv = getId("showTodoDiv");
-                showTodoDiv.classList.remove("noDisplay");
+                showTodoDiv.classList.remove("no-display");
             }
         });
         //update todo xmlhttprequest
@@ -936,21 +936,21 @@
 
     // window.addEventListener("resize", function() {
     //     if(document.body.clientWidth >= 768) {
-    //         document.getElementsByClassName("nav-menu")[0].classList.remove("noDisplay");
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("noDisplay");
+    //         document.getElementsByClassName("nav-menu")[0].classList.remove("no-display");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("no-display");
     //     }
     //     if(document.body.clientWidth <= 768) {
-    //         document.getElementsByClassName("nav-menu")[0].classList.add("noDisplay");
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("noDisplay");
+    //         document.getElementsByClassName("nav-menu")[0].classList.add("no-display");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("no-display");
     //     }
     // });
     
     // window.addEventListener("load", function() {
     //     if(document.body.clientWidth >= 768) {
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("noDisplay");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("no-display");
     //     }
     //     if(document.body.clientWidth <= 768) {
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("noDisplay");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("no-display");
     //     }
             
 

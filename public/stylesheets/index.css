@@ -124,7 +124,6 @@ a {
 #modContent {
   /*height: 15vh;*/
   overflow: scroll;
-  padding-left: 20px;
 }
 
 #tbl {
@@ -199,9 +198,9 @@ td {
 
 
 .col-hours {
-  width: 12rem;
+  width: 10rem;
   display:inline-block;
-  padding-left:1.25rem;
+  margin-left:3rem;
 
 }
 .col-todos {
@@ -213,7 +212,10 @@ td {
 .single-entry {
   display: block;
   margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 0.25px solid #E1E1E1;
 }
+
 
 .warning {
   color: red;
@@ -276,6 +278,10 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
       line-height: 25px;
       text-align: center;
       margin: 1rem;
+    }
+    
+    .col-hours {
+      margin-left:5rem;
     }
 
 

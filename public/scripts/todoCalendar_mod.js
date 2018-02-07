@@ -56,10 +56,11 @@
             if(obj.index === "newTodo") {
                 url = "/todo/";
             }
-            
+            // FormData does not work on IE!!!!
             fd = new FormData(obj.form);
+            console.log(fd.entries());
             // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
-            for(var [key,val] of fd.entries()) {
+            for(let [key,val] of fd.entries()) {
                 todoObj[key] = val;
             }
             // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.

@@ -102,11 +102,9 @@ body {
 .index-container {
   padding: 1rem;
   padding-bottom: 0;
+  position:relative;
 }
 
-.add-todo {
-  float:right;
-}
 
 
 .no-display {
@@ -286,6 +284,25 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
 
 
   }
+  
+
+.add-todo {
+  font-size: 4rem;
+}
+.add-container {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+}
+
+.add-inner {
+  position: relative;
+  height: auto;
+}
+
+.add-full-height {
+  height: 100%;
+}
 
 /*button, input, optgroup, select, textarea {*/
 /*    border: 1px solid;*/

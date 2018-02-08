@@ -6,7 +6,7 @@
             0: "January", 1: "February", 2: "March", 3: "April",  4: "May", 5: "June",
             6: "July", 7: "August", 8: "September", 9: "October", 10: "November", 11: "December"
         },
-        dayList = {0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat"};
+        dayList = {0: "S", 1: "M", 2: "T", 3: "W", 4: "T", 5: "F", 6: "S"};
         
     // use this as counter for holding prev/next buttons.
     let prevNextInterval = null;
@@ -88,13 +88,9 @@
                     makeRequest({index: "reqTodo"});
                     clearEntries();
                 }     
-
-
             }
         };
-
         myReq.send(sendItem);
-        
     }
 
     function getCurrentCalendar() {
@@ -179,8 +175,9 @@
             yearTitle.firstChild.textContent = fullDate.year;
         }
         if(periodSelect) {
-            periodSelect.classList.remove("no-display");
-            periodSelect.textContent = "year";
+            // periodSelect.classList.remove("no-display");
+            periodSelect.dataset.period = "year";
+            periodSelect.textContent = "view_comfy";
         }
         
     }
@@ -195,7 +192,8 @@
         addNewTodo.classList.remove("no-display");
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
-        getId("periodSelect").textContent = "month";
+        getId("periodSelect").dataset.period = "month";
+        getId("periodSelect").textContent = "view_module";
         makeCalendar();
         makeDayAndDate();
         makePeriodSelectBtns();
@@ -371,14 +369,11 @@
                 btn.addEventListener(btnEvent, function() {resetTodosHeight(modContent)});
             });
         });
-
-
         // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
         btnsArr.forEach(function(btn) {
             btn.addEventListener("mousedown", holdThis);
             btn.addEventListener("touchstart", holdThis, {passive: true});
         });
-        
         
     }
     
@@ -394,7 +389,6 @@
                 return prevMonth();
             }
         }, 300); 
-
     }
     
     function letGo() {
@@ -432,7 +426,6 @@
         while(modContent.lastChild) {
             modContent.removeChild(modContent.lastChild);
         }
-        
     }
     
     function showTodos(clickedElem) {
@@ -533,12 +526,16 @@
     }
     
     function makePeriodSelectBtns() {
-        const btn = makeElem("button"),
+        const i = makeElem("i"),
             nav = document.getElementsByClassName("nav")[0];
-        btn.id = "periodSelect";
-        btn.textContent = "month";
-        btn.addEventListener("click", switchPeriod);
-        nav.insertBefore(btn, nav.firstChild);
+        i.id = "periodSelect";
+        //  initial values
+        // <i class="large material-icons">insert_chart</i>
+        i.classList.add("material-icons", "period-icon");
+        i.textContent = "view_module";
+        i.dataset.period = "month";
+        i.addEventListener("click", switchPeriod);
+        nav.insertBefore(i, nav.firstChild);
     }
     
     function switchPeriod() {
@@ -548,7 +545,7 @@
             yearTitle = getId("yearTitle"),
             addNewTodo = getId("addNewTodo");
 
-        if(this.textContent === "year") {
+        if(this.dataset.period === "year") {
             monthList.classList.add("no-display");
             yearTitle.classList.add("no-display");
             if(yearList) {
@@ -556,9 +553,10 @@
             } else {
                 makeList("year");
             }
-            this.classList.add("no-display");
+            // this.classList.add("no-display");
+            this.textContent = "crop_square";
         }
-        if(this.textContent === "month") {
+        if(this.dataset.period === "month") {
             // note: if I try to put container in variable, it won't work.
             // see https://stackoverflow.com/questions/42956884/failed-to-execute-removechild-on-node
             calendar.removeChild(getId("container"));
@@ -571,24 +569,24 @@
                 makeYearHeader();
                 makeList("month");
             }
-            this.textContent = "year";
+            this.dataset.period = "year";
+            this.textContent = "view_comfy";
             addNewTodo.classList.add("no-display");
         }
-        
-
     }
+    
     function removeColour() {
         let selectedDate = document.getElementsByClassName("selectedDate")[0];
         if(selectedDate) {
             selectedDate.classList.remove("selectedDate");
         }
         
-    }   
+    }  
+    
     function putColour(elem) {
         elem.parentNode.classList.add("selectedDate");
     }
 
-    
     function showFoundTodo(todo) {
         // console.log(todo);
         const modContent = getId("modContent"),
@@ -646,7 +644,6 @@
         frag.appendChild(btnBack);
         showFoundTodoDiv.appendChild(frag);
         modContent.appendChild(showFoundTodoDiv);
-
     }
     
     function createOrEditTodo(obj) {
@@ -658,9 +655,7 @@
             let formTodoDiv = getId("formTodoDiv");
             formTodoDiv.parentNode.removeChild(formTodoDiv);
         }
-        
         // declare all variables. cant declare inside if since let and const are block-scoped
-
         const
         // for edit and create
             modContent = getId("modContent"),
@@ -891,7 +886,6 @@
                 formDate.lastChild.selected = true;
             }
         }
-
     }
     
     function convertMonth(input) {

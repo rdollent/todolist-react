@@ -47,7 +47,6 @@ router.get("/", middleware.isLoggedIn,function(req,res) {
 
 // xmlhttprequest get todos given userid
 router.get("/user/:userid", middleware.isLoggedIn, function(req,res) {
-    console.log("req.params ", req.params);
     Todo.find({"author.id" : req.params.userid},
         "date description frmHr frmMin month title toHr toMin year _id",
         function(err, allTodos) {

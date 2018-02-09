@@ -177,7 +177,8 @@
         if(periodSelect) {
             // periodSelect.classList.remove("no-display");
             periodSelect.dataset.period = "year";
-            periodSelect.textContent = "view_comfy";
+            // periodSelect.textContent = "view_module";
+            periodSelect.textContent = "arrow_back";
         }
         
     }
@@ -193,7 +194,7 @@
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").dataset.period = "month";
-        getId("periodSelect").textContent = "view_module";
+        getId("periodSelect").textContent = "arrow_back";
         makeCalendar();
         makeDayAndDate();
         makePeriodSelectBtns();
@@ -532,7 +533,7 @@
         //  initial values
         // <i class="large material-icons">insert_chart</i>
         i.classList.add("material-icons", "period-icon");
-        i.textContent = "view_module";
+        i.textContent = "arrow_back";
         i.dataset.period = "month";
         i.addEventListener("click", switchPeriod);
         nav.insertBefore(i, nav.firstChild);
@@ -554,7 +555,7 @@
                 makeList("year");
             }
             // this.classList.add("no-display");
-            this.textContent = "crop_square";
+            this.textContent = "date_range";
         }
         if(this.dataset.period === "month") {
             // note: if I try to put container in variable, it won't work.
@@ -570,7 +571,7 @@
                 makeList("month");
             }
             this.dataset.period = "year";
-            this.textContent = "view_comfy";
+            // this.textContent = "view_module";
             addNewTodo.classList.add("no-display");
         }
     }

@@ -204,10 +204,10 @@
         const calendar = getId("calendar"),
             container = makeElem("div"),
             titleHeader = makeTitleHeader();
-        if(getId("periodSelect")) {
-            let periodSelect = getId("periodSelect");
-            periodSelect.parentNode.removeChild(periodSelect);
-        }
+        // if(getId("periodSelect")) {
+        //     let periodSelect = getId("periodSelect");
+        //     periodSelect.parentNode.removeChild(periodSelect);
+        // }
         container.id = "container";
         while(calendar.lastChild) {
             calendar.removeChild(calendar.lastChild);
@@ -527,16 +527,13 @@
     }
     
     function makePeriodSelectBtns() {
-        const i = makeElem("i"),
-            nav = document.getElementsByClassName("nav")[0];
-        i.id = "periodSelect";
+        const periodSelect = getId("periodSelect");
         //  initial values
         // <i class="large material-icons">insert_chart</i>
-        i.classList.add("material-icons", "period-icon");
-        i.textContent = "arrow_back";
-        i.dataset.period = "month";
-        i.addEventListener("click", switchPeriod);
-        nav.insertBefore(i, nav.firstChild);
+        // periodSelect.classList.add("period-icon");
+        periodSelect.textContent = "arrow_back";
+        periodSelect.dataset.period = "month";
+        periodSelect.addEventListener("click", switchPeriod);
     }
     
     function switchPeriod() {

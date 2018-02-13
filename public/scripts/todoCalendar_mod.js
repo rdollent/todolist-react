@@ -589,9 +589,9 @@
         // console.log(todo);
         const modContent = getId("modContent"),
             form = makeElem("form"),
-            btnDel = makeElem("button"),
-            btnEdit = makeElem("button"),
-            btnBack = makeElem("button"),
+            btnDel = makeElem("i"),
+            btnEdit = makeElem("i"),
+            btnBack = makeElem("i"),
             a = makeElem("a"),
             showFoundTodoDiv = makeElem("div"),
             showArr = ["title", "description", "frm", "to"],
@@ -613,10 +613,18 @@
         }
         // id
         showFoundTodoDiv.id = "showFoundTodoDiv";
+        // class
+        btnEdit.classList.add("material-icons");
+        btnDel.classList.add("material-icons");
+        btnBack.classList.add("material-icons");
+        // dataset mode
+        btnEdit.dataset.mode = "edit";
+        btnDel.dataset.mode = "delete";
+        btnBack.dataset.mode = "back";
         // text
-        btnEdit.textContent = "Edit";
-        btnDel.textContent = "Delete";
-        btnBack.textContent = "Back";
+        btnEdit.textContent = "edit";
+        btnDel.textContent = "delete";
+        btnBack.textContent = "arrow_back";
         // attributes
         // form.setAttribute("action", "/todo/" + todo._id + "?_method=DELETE");
         // form.setAttribute("method", "POST");

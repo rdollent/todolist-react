@@ -267,6 +267,13 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   height: 100%;
 }
 
+.icon-mode {
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 3px;
+}
+
+
 
 /*media queries*/
 @media only screen
@@ -311,7 +318,6 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
 
   }
   
-
 
 /*button, input, optgroup, select, textarea {*/
 /*    border: 1px solid;*/

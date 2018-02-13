@@ -614,9 +614,9 @@
         // id
         showFoundTodoDiv.id = "showFoundTodoDiv";
         // class
-        btnEdit.classList.add("material-icons");
-        btnDel.classList.add("material-icons");
-        btnBack.classList.add("material-icons");
+        btnEdit.classList.add("material-icons", "icon-mode");
+        btnDel.classList.add("material-icons", "icon-mode");
+        btnBack.classList.add("material-icons", "icon-mode");
         // dataset mode
         btnEdit.dataset.mode = "edit";
         btnDel.dataset.mode = "delete";

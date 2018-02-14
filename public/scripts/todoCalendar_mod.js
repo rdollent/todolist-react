@@ -23,7 +23,7 @@
         document.addEventListener("touchend", letGo);
         getId("addNewTodo").addEventListener("click", function() {
             createOrEditTodo({index: "newTodo"});
-            getId("addNewTodo").classList.add("no-display");
+            getId("addNewTodo").classList.toggle("no-display");
         })
     }
     
@@ -129,13 +129,13 @@
             let div = makeElem("div");
             div.textContent = value();
             if(input === "month") {
-            div.classList.add("monthList");
+                div.classList.toggle("month-list");
                 if(div.textContent === monthList[fullDate.month]) {
                     div.selected = true;
                 }
             }
             if(input === "year") {
-            div.classList.add("yearList");
+                div.classList.toggle("year-list");
                 if(div.textContent === String(fullDate.year)) {
                     div.selected = true;
                 }
@@ -167,15 +167,15 @@
             // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
 
         fullDate.year = parseInt(this.textContent);
-        yearList.classList.add("no-display");
+        yearList.classList.toggle("no-display");
         if(monthList && yearTitle) {
-            monthList.classList.remove("no-display");
-            yearTitle.classList.remove("no-display");
+            monthList.classList.toggle("no-display");
+            yearTitle.classList.toggle("no-display");
             // change the displayed year in the Year Header
             yearTitle.firstChild.textContent = fullDate.year;
         }
         if(periodSelect) {
-            // periodSelect.classList.remove("no-display");
+            // periodSelect.classList.toggle("no-display");
             periodSelect.dataset.period = "year";
             // periodSelect.textContent = "view_module";
             periodSelect.textContent = "arrow_back";
@@ -188,9 +188,9 @@
             yearTitle = getId("yearTitle"),
             addNewTodo = getId("addNewTodo");
             // selectedMonth = event.target.options[event.target.options.selectedIndex].dataset.month;
-        monthList.classList.add("no-display");
-        yearTitle.classList.add("no-display");
-        addNewTodo.classList.remove("no-display");
+        monthList.classList.toggle("no-display");
+        yearTitle.classList.toggle("no-display");
+        addNewTodo.classList.toggle("no-display");
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").dataset.period = "month";
@@ -228,11 +228,11 @@
     
     function makeDayHeader() {
         const trDays = makeElem("tr");
-        trDays.classList.add("row");
+        trDays.classList.toggle("row");
         // populate table with day headers
         for(let i = 0; i <= 6; i++) {
             const th = makeElem("th");
-            th.classList.add("col");
+            th.classList.toggle("col");
             // dayList is global variable
             th.textContent = dayList[i];
             trDays.appendChild(th);
@@ -279,14 +279,18 @@
         let dates = 1;
         while(dates  <= fullDate.maxDates) {
             let tr = makeElem("tr");
-            tr.classList.add("row");
+            tr.classList.toggle("row");
             let days = 0; //represents days of the week
             while(days <= 6) {
                 let td = makeElem("td"),
                 a = makeElem("a");
-                a.classList.add("calendarDates");
-                td.classList.add("col");
+                a.classList.toggle("calendar-dates");
+                td.classList.toggle("col");
                 a.addEventListener("click", function() { 
+                    let addNewTodo = getId("addNewTodo");
+                    if(addNewTodo.classList.contains("no-display")) {
+                        addNewTodo.classList.toggle("no-display");   
+                    }
                     showTodos(this);
                     removeColour();
                     putColour(this);
@@ -312,7 +316,7 @@
     
     function populateCalendarWithDots() {
         const todosMonth = getTodosMonth(todos),
-            calendarDates = document.getElementsByClassName("calendarDates"),
+            calendarDates = document.getElementsByClassName("calendar-dates"),
             todoIcon = "<i class='icon-tiny material-icons icon-white'>arrow_drop_down</i>";
         let todosDate = {},
             todosDateAll = [];
@@ -333,49 +337,46 @@
                 calendarDates[i].insertAdjacentHTML("afterend", todoIcon);
             }
             if(todosDate.has(parseInt(calendarDates[i].textContent))) {
-                calendarDates[i].nextElementSibling.classList.remove("icon-white");
+                calendarDates[i].nextElementSibling.classList.toggle("icon-white");
             }
         }
     }
 
     function makeBtns() {
-        const //prevBtn = makeElem("a"),
-            //nextBtn = makeElem("a"),
-            // btns = makeElem("div"),
-            
-            prevImg = makeElem("i"),
+        const prevImg = makeElem("i"),
             nextImg = makeElem("i"),
             btnsArr = [prevImg, nextImg],
             eventsArr = ["mousedown", "touchstart"],
             modContent = getId("modContent"),
             container = getId("container");
-        
-        prevImg.classList.add("material-icons", "prevNext-icon");
-        nextImg.classList.add("material-icons", "prevNext-icon");
-        prevImg.textContent = "navigate_before";
-        nextImg.textContent = "navigate_next";
-        prevImg.id = "prevBtn";
-        nextImg.id = "nextBtn";
-        container.insertBefore(prevImg, container.children.namedItem("title"));
-        container.insertBefore(nextImg, container.children.namedItem("title").nextSibling);
-        
-        
-        // initial values
-        prevImg.addEventListener("mousedown", prevMonth);
-        nextImg.addEventListener("mousedown", nextMonth);
+
+        btnsArr.forEach(function(btn) {
+            btn.classList.toggle("material-icons");
+            btn.classList.toggle("prev-next-icon");
+            if(btn === prevImg) {
+                btn.textContent = "navigate_before";
+                btn.id = "prevBtn";
+                btn.addEventListener("mousedown", prevMonth);
+            }
+            if(btn === nextImg) {
+                btn.textContent = "navigate_next";
+                btn.id = "nextBtn";
+                btn.addEventListener("mousedown", nextMonth);
+            }
+        });
 
         eventsArr.forEach(function(btnEvent) {
             btnsArr.forEach(function(btn) {
                 btn.addEventListener(btnEvent, clearEntries);
+                // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
+                btn.addEventListener(btnEvent, holdThis);
                 btn.addEventListener(btnEvent, function() {resetTodosHeight(modContent)});
             });
         });
-        // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
-        btnsArr.forEach(function(btn) {
-            btn.addEventListener("mousedown", holdThis);
-            btn.addEventListener("touchstart", holdThis, {passive: true});
-        });
         
+        container.insertBefore(prevImg, container.children.namedItem("title"));
+        container.insertBefore(nextImg, container.children.namedItem("title").nextSibling);
+
     }
     
     // hold prev and next buttons to scroll through months/dates
@@ -468,9 +469,9 @@
             //todosToday[i] won't be passed through a.addEventListener because of scope
             //attach todo in element "a" and access it as its property.
             a.todo = todosToday[i];
-            a.classList.add("single-entry")
-            spanTodo.classList.add("col-todos");
-            spanHour.classList.add("col-hours");
+            a.classList.toggle("single-entry")
+            spanTodo.classList.toggle("col-todos");
+            spanHour.classList.toggle("col-hours");
             
             // a.setAttribute("href", "/todo/" + todosToday[i]._id);
             a.addEventListener("click", function() {
@@ -530,7 +531,7 @@
         const periodSelect = getId("periodSelect");
         //  initial values
         // <i class="large material-icons">insert_chart</i>
-        // periodSelect.classList.add("period-icon");
+        // periodSelect.classList.toggle("period-icon");
         periodSelect.textContent = "arrow_back";
         periodSelect.dataset.period = "month";
         periodSelect.addEventListener("click", switchPeriod);
@@ -544,14 +545,14 @@
             addNewTodo = getId("addNewTodo");
 
         if(this.dataset.period === "year") {
-            monthList.classList.add("no-display");
-            yearTitle.classList.add("no-display");
+            monthList.classList.toggle("no-display");
+            yearTitle.classList.toggle("no-display");
             if(yearList) {
-                yearList.classList.remove("no-display");
+                yearList.classList.toggle("no-display");
             } else {
                 makeList("year");
             }
-            // this.classList.add("no-display");
+            // this.classList.toggle("no-display");
             this.textContent = "date_range";
         }
         if(this.dataset.period === "month") {
@@ -560,8 +561,8 @@
             calendar.removeChild(getId("container"));
             clearEntries();
             if(monthList && yearTitle) {
-                monthList.classList.remove("no-display");
-                yearTitle.classList.remove("no-display");
+                monthList.classList.toggle("no-display");
+                yearTitle.classList.toggle("no-display");
                 yearTitle.firstChild.textContent = fullDate.year;
             } else {
                 makeYearHeader();
@@ -569,20 +570,20 @@
             }
             this.dataset.period = "year";
             // this.textContent = "view_module";
-            addNewTodo.classList.add("no-display");
+            addNewTodo.classList.toggle("no-display");
         }
     }
     
     function removeColour() {
-        let selectedDate = document.getElementsByClassName("selectedDate")[0];
+        let selectedDate = document.getElementsByClassName("selected-date")[0];
         if(selectedDate) {
-            selectedDate.classList.remove("selectedDate");
+            selectedDate.classList.toggle("selected-date");
         }
         
     }  
     
     function putColour(elem) {
-        elem.parentNode.classList.add("selectedDate");
+        elem.parentNode.classList.toggle("selected-date");
     }
 
     function showFoundTodo(todo) {
@@ -595,28 +596,28 @@
             a = makeElem("a"),
             showFoundTodoDiv = makeElem("div"),
             showArr = ["title", "description", "frm", "to"],
+            btnArr = [btnEdit, btnDel, btnBack],
             frag = document.createDocumentFragment();
    
         clearEntries();
-
-        for(let i = 0; i < showArr.length; i++) {
+        showArr.forEach(function(t) {
             let x = makeElem("div");
-            
-            if(showArr[i] === "frm") {
+            if(t === "frm") {
                 x.textContent = todo.frmHr + ":" + todo.frmMin;
-            } else if(showArr[i] === "to") {
+            } else if(t === "to") {
                 x.textContent = todo.toHr + ":" + todo.toMin;
             } else {
-                x.textContent = todo[showArr[i]];
+                x.textContent = todo[t];
             }
             frag.appendChild(x);
-        }
+        })
         // id
         showFoundTodoDiv.id = "showFoundTodoDiv";
         // class
-        btnEdit.classList.add("material-icons", "icon-mode");
-        btnDel.classList.add("material-icons", "icon-mode");
-        btnBack.classList.add("material-icons", "icon-mode");
+        btnArr.forEach(function(btn) {
+            btn.classList.toggle("material-icons");
+            btn.classList.toggle("icon-mode");
+        });
         // dataset mode
         btnEdit.dataset.mode = "edit";
         btnDel.dataset.mode = "delete";
@@ -655,7 +656,7 @@
     function createOrEditTodo(obj) {
         if(getId("showTodoDiv")) {
             let showTodoDiv = getId("showTodoDiv");
-            showTodoDiv.classList.add("no-display");
+            showTodoDiv.classList.toggle("no-display");
         }
         if(getId("formTodoDiv")) {
             let formTodoDiv = getId("formTodoDiv");
@@ -823,7 +824,7 @@
         
         if(getId("showFoundTodoDiv")) {
              showFoundTodoDiv = getId("showFoundTodoDiv");
-             showFoundTodoDiv.classList.add("no-display");
+             showFoundTodoDiv.classList.toggle("no-display");
         }
         
         btnBack.textContent = "Back";
@@ -833,14 +834,14 @@
         btnBack.addEventListener("click", function() {
             modContent.removeChild(getId("formTodoDiv"));
             if(getId("showFoundTodoDiv")) {
-                showFoundTodoDiv.classList.remove("no-display");
+                showFoundTodoDiv.classList.toggle("no-display");
             }
             if(obj.index === "newTodo") {
                 let addNewTodo = getId("addNewTodo");
-                addNewTodo.classList.remove("no-display");
+                addNewTodo.classList.toggle("no-display");
                 if(getId("showTodoDiv")) {
                     let showTodoDiv = getId("showTodoDiv");
-                    showTodoDiv.classList.remove("no-display");
+                    showTodoDiv.classList.toggle("no-display");
                 }
             }
         });
@@ -918,12 +919,12 @@
         let pass = true;
         if(hrGreat) {
             event.preventDefault();
-            toHr.classList.add("warning");
+            toHr.classList.toggle("warning");
             pass = false;
         }
         if(hrEqual && minGreat) {
             event.preventDefault();
-            toMin.classList.add("warning");
+            toMin.classList.toggle("warning");
             pass = false;
         }
         if(pass === true) {
@@ -938,7 +939,7 @@
             toMin = getId("formToMin");
         [frmHr, frmMin, toHr, toMin].forEach(function(option) {
             if(option.classList.contains("warning")) {
-                option.classList.remove("warning");
+                option.classList.toggle("warning");
             }
             
         });
@@ -946,21 +947,21 @@
 
     // window.addEventListener("resize", function() {
     //     if(document.body.clientWidth >= 768) {
-    //         document.getElementsByClassName("nav-menu")[0].classList.remove("no-display");
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("no-display");
+    //         document.getElementsByClassName("nav-menu")[0].classList.toggle("no-display");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.toggle("no-display");
     //     }
     //     if(document.body.clientWidth <= 768) {
-    //         document.getElementsByClassName("nav-menu")[0].classList.add("no-display");
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("no-display");
+    //         document.getElementsByClassName("nav-menu")[0].classList.toggle("no-display");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.toggle("no-display");
     //     }
     // });
     
     // window.addEventListener("load", function() {
     //     if(document.body.clientWidth >= 768) {
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.add("no-display");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.toggle("no-display");
     //     }
     //     if(document.body.clientWidth <= 768) {
-    //         document.getElementsByClassName("nav-hamburger")[0].classList.remove("no-display");
+    //         document.getElementsByClassName("nav-hamburger")[0].classList.toggle("no-display");
     //     }
             
 

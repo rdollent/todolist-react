@@ -112,7 +112,7 @@ body {
   display: none;
 }
 
-.selectedDate {
+.selected-date {
   background-color: #e6e6e6;
 }
 
@@ -176,7 +176,7 @@ td {
 
 
 
-.prevNext-icon, .period-icon {
+.prev-next-icon, .period-icon {
   font-size:3rem;
   vertical-align: bottom;
   margin: 0.5rem;
@@ -221,7 +221,7 @@ td {
   color: red;
 }
 
-.monthList {
+.month-list {
   width: 30%;
   height: 5rem;
   line-height: 5rem;
@@ -230,7 +230,7 @@ td {
   margin: 0.5rem;
 }
 
-.yearList {
+.year-list {
   display: inline-block;
   margin: 1.75rem 1.75rem;
   border-bottom: 0.1rem solid grey;

@@ -54,7 +54,7 @@
                 url = "/todo/" + obj.todo._id;
                 todoObj["_id"] = obj.todo._id;
             }
-            if(obj.index === "newTodo") {
+            else if(obj.index === "newTodo") {
                 url = "/todo/";
             }
             // FormData does not work on IE!!!!
@@ -74,13 +74,14 @@
         }
         
         // delete a todo
-        if(obj.index === "delTodo") {
+        else if(obj.index === "delTodo") {
             url = "/todo/delete/" + obj.todo._id;
             myReq.open("POST", url);
         }
         myReq.onreadystatechange = function() {
             if(myReq.readyState === 4 && myReq.status === 200) {
                 if(obj.index === "reqTodo") {
+                    console.warn(typeof myReq.responseText);
                     todos = JSON.parse(myReq.responseText);
                     getCurrentCalendar();
                 }
@@ -121,8 +122,7 @@
         let i, start, end, value, clicked;
         if(input === "year") {
             start = 2000, end = 2099, value = function() { return i }, clicked = yearClicked;
-        }
-        if(input === "month") {
+        } else if(input === "month") {
             start = 0, end = 11, value = function() { return monthList[i] }, clicked = monthClicked;
         }
         for(i = start; i <= end; i++) {
@@ -133,8 +133,7 @@
                 if(div.textContent === monthList[fullDate.month]) {
                     div.selected = true;
                 }
-            }
-            if(input === "year") {
+            } else if(input === "year") {
                 div.classList.toggle("year-list");
                 if(div.textContent === String(fullDate.year)) {
                     div.selected = true;
@@ -178,7 +177,7 @@
             // periodSelect.classList.toggle("no-display");
             periodSelect.dataset.period = "year";
             // periodSelect.textContent = "view_module";
-            periodSelect.textContent = "arrow_back";
+            periodSelect.textContent = "keyboard_backspace";
         }
         
     }
@@ -194,7 +193,7 @@
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").dataset.period = "month";
-        getId("periodSelect").textContent = "arrow_back";
+        getId("periodSelect").textContent = "keyboard_backspace";
         makeCalendar();
         makeDayAndDate();
         makePeriodSelectBtns();
@@ -297,8 +296,7 @@
                 });
                 if(dates === 1 && days !== fullDate.firstDay) {
                     dates--; // cancels out dates++ at bottom
-                }
-                if(dates > 0 && dates <= fullDate.maxDates) {
+                } else if(dates > 0 && dates <= fullDate.maxDates) {
                     a.textContent = dates;
                     a.dataset.date = dates;
                 }
@@ -357,8 +355,7 @@
                 btn.textContent = "navigate_before";
                 btn.id = "prevBtn";
                 btn.addEventListener("mousedown", prevMonth);
-            }
-            if(btn === nextImg) {
+            } else if(btn === nextImg) {
                 btn.textContent = "navigate_next";
                 btn.id = "nextBtn";
                 btn.addEventListener("mousedown", nextMonth);
@@ -386,8 +383,7 @@
         prevNextInterval = setInterval(function() {
             if(clickedElem.id === "nextBtn") {
                 return nextMonth();
-            }
-            if(clickedElem.id === "prevBtn") {
+            } else if(clickedElem.id === "prevBtn") {
                 return prevMonth();
             }
         }, 300); 
@@ -519,8 +515,7 @@
     function compareTimes(a,b) {
         if(parseInt(a.frmHr + a.frmMin) < parseInt(b.frmHr + b.frmMin)) {
             return - 1;
-        }
-        if(parseInt(a.frmHr + a.frmMin) > parseInt(b.frmHr + b.frmMin)) {
+        } else if(parseInt(a.frmHr + a.frmMin) > parseInt(b.frmHr + b.frmMin)) {
             return 1;
         }
         // if a.frmHr and b.frmHr are equal
@@ -532,7 +527,7 @@
         //  initial values
         // <i class="large material-icons">insert_chart</i>
         // periodSelect.classList.toggle("period-icon");
-        periodSelect.textContent = "arrow_back";
+        periodSelect.textContent = "keyboard_backspace";
         periodSelect.dataset.period = "month";
         periodSelect.addEventListener("click", switchPeriod);
     }
@@ -555,7 +550,7 @@
             // this.classList.toggle("no-display");
             this.textContent = "date_range";
         }
-        if(this.dataset.period === "month") {
+        else if(this.dataset.period === "month") {
             // note: if I try to put container in variable, it won't work.
             // see https://stackoverflow.com/questions/42956884/failed-to-execute-removechild-on-node
             calendar.removeChild(getId("container"));
@@ -593,21 +588,35 @@
             btnDel = makeElem("i"),
             btnEdit = makeElem("i"),
             btnBack = makeElem("i"),
-            a = makeElem("a"),
             showFoundTodoDiv = makeElem("div"),
-            showArr = ["title", "description", "frm", "to"],
+            showArr = ["time", "title", "description"],
             btnArr = [btnEdit, btnDel, btnBack],
-            frag = document.createDocumentFragment();
+            frag = document.createDocumentFragment(),
+            addNewTodo = getId("addNewTodo"),
+            span = makeElem("span");
    
         clearEntries();
+        
+        if(!addNewTodo.classList.contains("no-display")) {
+            addNewTodo.classList.toggle("no-display");
+        }
+        
+
+        
         showArr.forEach(function(t) {
             let x = makeElem("div");
-            if(t === "frm") {
-                x.textContent = todo.frmHr + ":" + todo.frmMin;
-            } else if(t === "to") {
-                x.textContent = todo.toHr + ":" + todo.toMin;
+            if(t === "time") {
+                let icon = makeElem("i");
+                span.textContent = todo.frmHr + ":" + todo.frmMin + " - " + todo.toHr + ":" + todo.toMin;
+                icon.classList.toggle("material-icons");
+                icon.textContent = "access_time";
+                x.appendChild(icon);
+                x.appendChild(span);
+                x.classList.toggle("todo-show-time");
+
             } else {
                 x.textContent = todo[t];
+                x.classList.toggle("todo-show-content");
             }
             frag.appendChild(x);
         })
@@ -615,40 +624,53 @@
         showFoundTodoDiv.id = "showFoundTodoDiv";
         // class
         btnArr.forEach(function(btn) {
+            let iconHeight = makeElem("div"),
+            iconInner = makeElem("div"),
+            iconCont = makeElem("div");
+            iconHeight.classList.toggle("icon-full-height");
+            iconInner.classList.toggle("icon-inner");
+            iconCont.classList.toggle("icon-container");
+            
+            iconCont.appendChild(iconInner);
+            iconInner.appendChild(iconHeight);
+            iconHeight.appendChild(btn);
+            
             btn.classList.toggle("material-icons");
             btn.classList.toggle("icon-mode");
+            if(btn === btnEdit) {
+                iconCont.classList.toggle("icon-edit-pos");
+                btn.classList.toggle("icon-edit");
+                btn.dataset.mode = btn.textContent = "edit";
+                btn.addEventListener("click", function() {
+                    resetTodosHeight(modContent);
+                    createOrEditTodo({index: "updTodo", todo: todo});
+                });
+                frag.appendChild(iconCont);
+            } else if(btn === btnDel) {
+                iconCont.classList.toggle("icon-del-pos");
+                btn.classList.toggle("icon-delete");
+                btn.dataset.mode = "delete";
+                btn.textContent = "delete_forever";
+                btn.addEventListener("click", function() {
+                    event.preventDefault();
+                    makeRequest({index: "delTodo", todo: todo}); //xmlhttprequest
+                });
+                form.appendChild(iconCont);
+                frag.appendChild(form);
+            } else if(btn === btnBack) {
+                iconCont.classList.toggle("icon-back-pos");
+                btn.classList.toggle("icon-back");
+                btn.dataset.mode = "back";
+                btn.textContent = "keyboard_backspace";
+                btn.addEventListener("click", function() {
+                    addNewTodo.classList.toggle("no-display");
+                    showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
+                });
+                frag.appendChild(iconCont);
+            }
+            
+            
         });
-        // dataset mode
-        btnEdit.dataset.mode = "edit";
-        btnDel.dataset.mode = "delete";
-        btnBack.dataset.mode = "back";
-        // text
-        btnEdit.textContent = "edit";
-        btnDel.textContent = "delete";
-        btnBack.textContent = "arrow_back";
-        // attributes
-        // form.setAttribute("action", "/todo/" + todo._id + "?_method=DELETE");
-        // form.setAttribute("method", "POST");
-        // events
-        // a.setAttribute("href", "/todo/" + todo._id + "/edit");
-        a.addEventListener("click", function() {
-            resetTodosHeight(modContent);
-            createOrEditTodo({index: "updTodo", todo: todo});
-        });
-        btnBack.addEventListener("click", function() {
-            showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
-        });
-        btnDel.addEventListener("click", function() {
-            event.preventDefault();
-            makeRequest({index: "delTodo", todo: todo}); //xmlhttprequest
-        });
-
-        // append
-        a.appendChild(btnEdit);
-        form.appendChild(btnDel);
-        frag.appendChild(a);
-        frag.appendChild(form);
-        frag.appendChild(btnBack);
         showFoundTodoDiv.appendChild(frag);
         modContent.appendChild(showFoundTodoDiv);
     }
@@ -699,7 +721,7 @@
         if(obj.index === "updTodo") {
             todoArr = [obj.todo.year, obj.todo.month, obj.todo.date, obj.todo.frmHr, obj.todo.frmMin, obj.todo.toHr, obj.todo.toMin];
         }
-        if(obj.index === "newTodo") {
+        else if(obj.index === "newTodo") {
             todoArr = [0,1,2,3,4,5,6];
         }
 
@@ -784,11 +806,9 @@
                 } else if(obj.index === "newTodo") {
                     if(selectId === "formYear" && optns.textContent === String(fullDate.year)) {
                         optns.selected = true;
-                    }
-                    if(selectId === "formDate" && optns.textContent === String(fullDate.date)) {
+                    } else if(selectId === "formDate" && optns.textContent === String(fullDate.date)) {
                         optns.selected = true;
-                    }
-                    if(selectId === "formFrmHr" || selectId === "formFrmMin" || selectId === "formToHr" || selectId === "formToMin") {
+                    } else if(selectId === "formFrmHr" || selectId === "formFrmMin" || selectId === "formToHr" || selectId === "formToMin") {
                         if(optns.textContent === "00") {
                             optns.selected = true;
                         }
@@ -809,8 +829,7 @@
             // add events
             if(selectId === "formYear" || selectId === "formMonth") {
                 select.addEventListener("change", checkOptions);
-            }
-            if(selectId !== "formYear" || selectId !== "formMonth") {
+            } else if(selectId !== "formYear" || selectId !== "formMonth") {
                 select.addEventListener("change", removeWarning);
             }                
             
@@ -902,8 +921,7 @@
                     return i;
                 }
             }
-        }
-        if(typeof input === "number") {
+        } else if(typeof input === "number") {
             return monthList[input];
         }
     }
@@ -921,8 +939,7 @@
             event.preventDefault();
             toHr.classList.toggle("warning");
             pass = false;
-        }
-        if(hrEqual && minGreat) {
+        } else if(hrEqual && minGreat) {
             event.preventDefault();
             toMin.classList.toggle("warning");
             pass = false;

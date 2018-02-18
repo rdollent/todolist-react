@@ -1,6 +1,6 @@
 html {
   font-size: 62.5%;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Comfortaa', cursive;
 }
 
 body {
@@ -17,11 +17,16 @@ body {
 
 }
 
+.font-one {
+  
+}
+
+
 
 .nav {
   width: 100%;
   background-color: #e6e6e6;
-  height: 4rem;
+  height: 4.2rem;
   padding: 0;
 
 }
@@ -34,8 +39,8 @@ body {
   display: inline-block;
   text-decoration: none;
   max-height: 100%;
-  margin: 0.5rem;
   font-size:2.4rem;
+  margin: 0.5rem;
 }
 
 
@@ -63,6 +68,7 @@ body {
   width: 100%;
   text-decoration: inherit;
   padding: 0.5rem 0 0.5rem 1rem;
+  font-size: 1.8rem;
 }
 
 .form-form {
@@ -156,7 +162,7 @@ a {
 
 #container {
   text-align:center;
-  margin-top:10px;
+  margin-top:5px;
 }
 
 .icon-tiny {
@@ -249,31 +255,69 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
 }
 
 
-.add-todo {
-  font-size: 4rem;
-}
-.add-container {
+.icon-container {
   position: absolute;
-  right: 2rem;
-  bottom: 2rem;
+
 }
 
-.add-inner {
+.icon-inner {
   position: relative;
   height: auto;
 }
 
-.add-full-height {
+.icon-full-height {
   height: 100%;
 }
 
+.icon-add-pos {
+  right: 2rem;
+  bottom: 2rem;
+}
+
+.icon-edit-pos {
+  right: 18rem;
+  bottom: 2.5rem;
+}
+
+.icon-del-pos {
+  right: 10rem;
+  bottom: 2.5rem;
+}
+.icon-back-pos {
+  right: 2rem;
+  bottom: 2.5rem;
+}
+
+.icon-add {
+  font-size: 6rem;
+}
+
 .icon-mode {
-  border: 2px solid black;
-  border-radius: 20px;
+  border: 3.5px solid black;
+  border-radius: 50px;
   padding: 3px;
+  font-size: 4rem;
 }
 
 
+.todo-show-content {
+  width: 30rem;
+  overflow-wrap: break-word;
+  
+}
+.todo-show-time {
+  display: table;
+}
+.todo-show-time span {
+  display:table-cell;
+  vertical-align: middle;
+}
+
+#showFoundTodoDiv {
+  overflow: scroll;
+  margin: 0 auto;
+  width: 30rem;
+}
 
 /*media queries*/
 @media only screen

@@ -3,15 +3,15 @@
 
 <nav class="nav">
     <i id="periodSelect" class="material-icons period-icon">date_range</i>
-    <a href="/" class="nav-title">
-        <span><strong>To-Do App</strong></span>
+    <a href="/" class="nav-title font-one">
+        <span><strong>To-Do List</strong></span>
     </a>
     <button class="nav-hamburger">
         <div class="hamburger"></div>
         <div class="hamburger"></div>
         <div class="hamburger"></div>
     </button>
-    <div class="nav-menu no-display">
+    <div class="nav-menu no-display font-one">
         <% if(currentUser) { %>
             <a href="/todo" class="nav-viewAll">Home</a>
             <a class="nav-signedIn">Signed in as <%= currentUser.username %></a>

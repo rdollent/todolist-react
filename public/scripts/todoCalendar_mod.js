@@ -320,7 +320,7 @@
             todosDateAll = [];
             
         // place indicator if date has a todo
-        for(let i = 0; i < todosMonth.length; i++) {
+        for(let i = 0, s = todosMonth.length; i < s; i++) {
             // store dates only from todosMonth
             todosDateAll.push(todosMonth[i].date);
         }
@@ -329,7 +329,7 @@
         // go through dates, look at where there is a todo
         // do not use innerHTML as it will remove any event listeners
         // use insertAdjacentHTML https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
-        for(let i = 0; i < calendarDates.length; i++) {
+        for(let i = 0, s = calendarDates.length; i < s; i++) {
             // dates in calendar are string, dates in todosDate are numbers
             if(calendarDates[i].textContent) {
                 calendarDates[i].insertAdjacentHTML("afterend", todoIcon);
@@ -458,7 +458,7 @@
 
         //please see
         //https://stackoverflow.com/questions/48100598/parameter-not-being-passed-on-addeventlistener-on-ie11/48101139#48101139
-        for(let i = 0; i < todosToday.length; i++) {
+        for(let i = 0, s = todosToday.length; i < s; i++) {
             const a = makeElem("a"),
                 spanHour = makeElem("span"),
                 spanTodo = makeElem("span");
@@ -684,6 +684,8 @@
             btnBack = makeElem("i"),
             submitTodo = makeElem("i"),
             // submitForm = makeElem("input"),
+            iconContBack = createIcon(btnBack),
+            iconContSub = createIcon(submitTodo),
             objInput = {
                 makeInput: function(x) {
                     let input;
@@ -712,16 +714,13 @@
 			dateDiv = makeElem("div"),
 			timeDiv = makeElem("div");
         // variables for options
-        let todoArr, start = 0, end = 0, selectName = "", selectId = "", showFoundTodoDiv;
+        let todoArr = [0,1,2,3,4,5,6], start = 0, end = 0, selectName = "", selectId = "", showFoundTodoDiv;
         
         if(obj.index === "updTodo") {
             todoArr = [obj.todo.date, obj.todo.month, obj.todo.year, obj.todo.frmHr, obj.todo.frmMin, obj.todo.toHr, obj.todo.toMin];
         }
-        else if(obj.index === "newTodo") {
-            todoArr = [0,1,2,3,4,5,6];
-        }
 
-        for(let i = 0, l = todoArr.length; i < l; i++) {
+        for(let i = 0, s = todoArr.length; i < s; i++) {
             let select = makeElem("select");
 
             switch(i) {
@@ -877,8 +876,8 @@
 		timeDiv.classList.toggle("form-time");
 		// btnBack.classList.toggle("icon-back-pos");
         // append
-        let iconContBack = createIcon(btnBack);
-        let iconContSub = createIcon(submitTodo);
+        // let iconContBack = createIcon(btnBack);
+        // let iconContSub = createIcon(submitTodo);
         iconContBack.classList.toggle("icon-back-pos");
         iconContSub.classList.toggle("icon-del-submit-pos");
         // submitForm.appendChild(iconContSub);
@@ -927,7 +926,7 @@
     
     function convertMonth(input) {
         if(typeof input === "string") {
-            for(let i = 0; i < Object.keys(monthList).length; i++) {
+            for(let i = 0, s = Object.keys(monthList).length; i < s; i++) {
                 if(monthList[i] === input) {
                     return i;
                 }

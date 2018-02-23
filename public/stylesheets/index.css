@@ -179,7 +179,9 @@ td {
   vertical-align: text-bottom !important;
 }
 
-
+#yearTitle {
+  text-align: center;
+}
 
 
 .prev-next-icon, .period-icon {
@@ -246,9 +248,6 @@ td {
   margin: 0 auto;
 }
 
-#formTodoDiv {
-  padding-bottom: 5px;
-}
 
 button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   cursor: pointer;
@@ -279,7 +278,7 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   bottom: 2.5rem;
 }
 
-.icon-del-pos {
+.icon-del-submit-pos {
   right: 10rem;
   bottom: 2.5rem;
 }
@@ -307,10 +306,22 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
 }
 .todo-show-time {
   display: table;
+  border-bottom: 1px solid #E1E1E1;
 }
 .todo-show-time span {
   display:table-cell;
   vertical-align: middle;
+  padding-left: 1rem;
+}
+
+.content-title {
+  margin: 0.5rem auto;
+  font-size:2rem;
+  font-weight: bold;
+}
+
+.content-desc {
+  text-align: justify;
 }
 
 #showFoundTodoDiv {
@@ -318,6 +329,50 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   margin: 0 auto;
   width: 30rem;
 }
+
+
+/*edit and new todo form*/
+
+#formTodo {
+  padding-bottom: 5px;
+  display: grid;
+  grid-template-columns: [col1-a] 10% [co1-b col2-a] 80% [col2-b col3-a] 10% [col3-b];
+  grid-template-rows: [row1-a] 10% [row1-b row2-a] 10% [row2-b row3-a] 10% [row3-b row4-a] 40% [row4-b row5-a] 30% [row5-b];
+  justify-content: center;
+  align-content: stretch;
+  height:100%;
+}
+
+  /*#formTodo {*/
+  /*  display: grid;*/
+  /*  grid-column: col1-a / col3-b;*/
+  /*  grid-row: row1-a / row4-b;*/
+  /*}*/
+
+  .form-date {
+    grid-column: col2-a / col2-b;
+    grid-row: row1-a / row1-b;
+  }
+  
+  .form-time {
+    grid-column: col2-a / col2-b;
+    grid-row: row2-a / row1-b;
+    
+  }
+  
+  .form-title {
+    grid-column: col2-a / col2-b;
+    grid-row: row3-a / row3-b;
+    
+  }
+  
+  .form-desc {
+    word-break: break-word;
+    grid-column: col2-a / col2-b;
+    grid-row: row4-a / row4-b;
+    
+  }
+
 
 /*media queries*/
 @media only screen

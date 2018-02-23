@@ -617,6 +617,7 @@
             } else {
                 x.textContent = todo[t];
                 x.classList.toggle("todo-show-content");
+                (t==="title" ? x.classList.toggle("content-title") : x.classList.toggle("content-desc"));
             }
             frag.appendChild(x);
         })
@@ -624,19 +625,8 @@
         showFoundTodoDiv.id = "showFoundTodoDiv";
         // class
         btnArr.forEach(function(btn) {
-            let iconHeight = makeElem("div"),
-            iconInner = makeElem("div"),
-            iconCont = makeElem("div");
-            iconHeight.classList.toggle("icon-full-height");
-            iconInner.classList.toggle("icon-inner");
-            iconCont.classList.toggle("icon-container");
+            let iconCont = createIcon(btn);
             
-            iconCont.appendChild(iconInner);
-            iconInner.appendChild(iconHeight);
-            iconHeight.appendChild(btn);
-            
-            btn.classList.toggle("material-icons");
-            btn.classList.toggle("icon-mode");
             if(btn === btnEdit) {
                 iconCont.classList.toggle("icon-edit-pos");
                 btn.classList.toggle("icon-edit");
@@ -647,7 +637,7 @@
                 });
                 frag.appendChild(iconCont);
             } else if(btn === btnDel) {
-                iconCont.classList.toggle("icon-del-pos");
+                iconCont.classList.toggle("icon-del-submit-pos");
                 btn.classList.toggle("icon-delete");
                 btn.dataset.mode = "delete";
                 btn.textContent = "delete_forever";
@@ -661,7 +651,7 @@
                 iconCont.classList.toggle("icon-back-pos");
                 btn.classList.toggle("icon-back");
                 btn.dataset.mode = "back";
-                btn.textContent = "keyboard_backspace";
+                btn.textContent = "arrow_back";
                 btn.addEventListener("click", function() {
                     addNewTodo.classList.toggle("no-display");
                     showTodos(); //if not using anonym function, clickedElem parametre in showTodos will be the event (mouseclick)
@@ -690,51 +680,56 @@
             modContent = getId("modContent"),
              // make elements
             formTodoDiv = makeElem("div"),
-            btnBack = makeElem("button"),
             form = makeElem("form"),
-            submitTodo = makeElem("input"),
+            btnBack = makeElem("i"),
+            submitTodo = makeElem("i"),
+            // submitForm = makeElem("input"),
             objInput = {
                 makeInput: function(x) {
-                    let input = makeElem("input");
+                    let input;
+                    if(x === "title") {
+                        input = makeElem("input");
+                        input.type = ("text");
+                        input.setAttribute("maxlength", 15);
+                    } else if(x === "description") {
+                        input = makeElem("textarea");
+                        input.setAttribute("maxlength", 140);
+                    }
                     input.required = "required";
-                    input.type = ("text");
+                    
                     input.name = x;
                     if(obj.index === "updTodo") {
                         input.value = obj.todo[x];
                     } else if(obj.index === "newTodo") {
                         input.placeholder = x;
                     }
-                    if(x === "title") {
-                        input.setAttribute("maxlength", 15);
-                    } else if(x === "description") {
-                        input.setAttribute("maxlength", 140);
-                    }
                     return input;
                 }
             },
        
             title = objInput.makeInput("title"),
-            desc = objInput.makeInput("description");
+            desc = objInput.makeInput("description"),
+			dateDiv = makeElem("div"),
+			timeDiv = makeElem("div");
         // variables for options
         let todoArr, start = 0, end = 0, selectName = "", selectId = "", showFoundTodoDiv;
         
         if(obj.index === "updTodo") {
-            todoArr = [obj.todo.year, obj.todo.month, obj.todo.date, obj.todo.frmHr, obj.todo.frmMin, obj.todo.toHr, obj.todo.toMin];
+            todoArr = [obj.todo.date, obj.todo.month, obj.todo.year, obj.todo.frmHr, obj.todo.frmMin, obj.todo.toHr, obj.todo.toMin];
         }
         else if(obj.index === "newTodo") {
             todoArr = [0,1,2,3,4,5,6];
         }
 
-        for(let i = 0; i < todoArr.length; i++) {
-            let p = makeElem("p"),
-                select = makeElem("select");
+        for(let i = 0, l = todoArr.length; i < l; i++) {
+            let select = makeElem("select");
 
             switch(i) {
-                case 0: // todo.year
-                    start = 2000;
-                    end = 2099;
-                    selectName = "year";
-                    selectId = "formYear";
+				case 0: // todo.date
+                    start = 1;
+                    end = 31;
+                    selectName = "date";
+                    selectId = "formDate";
                     break;
                 case 1: // todo.month
                     start = 0;
@@ -742,11 +737,11 @@
                     selectName = "month";
                     selectId = "formMonth";
                     break;
-                case 2: // todo.date
-                    start = 1;
-                    end = 31;
-                    selectName = "date";
-                    selectId = "formDate";
+                case 2: // todo.year
+                    start = 2000;
+                    end = 2099;
+                    selectName = "year";
+                    selectId = "formYear";
                     break;
                 case 3: // todo.frmHr
                     start = 0;
@@ -819,11 +814,12 @@
             }
 
             if(selectId === "formYear" || selectId === "formMonth" || selectId === "formDate") {
-                p.appendChild(select);
-                form.appendChild(p);
+                dateDiv.appendChild(select);
+                form.appendChild(dateDiv);
 
-            } else {
-               form.appendChild(select);
+            } else if(selectId === "formFrmHr" || selectId === "formFrmMin" || selectId === "formToHr" || selectId === "formToMin"){
+				timeDiv.appendChild(select);
+                form.appendChild(timeDiv);
             }
             
             // add events
@@ -839,15 +835,15 @@
         formTodoDiv.id = "formTodoDiv";
         submitTodo.id = "submitTodo";
         form.id = "formTodo";
-        submitTodo.setAttribute("type", "submit");
+        // submitForm.setAttribute("type", "submit");
         
         if(getId("showFoundTodoDiv")) {
              showFoundTodoDiv = getId("showFoundTodoDiv");
              showFoundTodoDiv.classList.toggle("no-display");
         }
         
-        btnBack.textContent = "Back";
-        submitTodo.textContent = "Submit";
+        btnBack.textContent = "arrow_back";
+        submitTodo.textContent = "check";
 
         // events
         btnBack.addEventListener("click", function() {
@@ -865,16 +861,31 @@
             }
         });
         //update todo xmlhttprequest
-        form.addEventListener("submit", function(event) {
+        // form.addEventListener("submit", function(event) {
+        //     event.preventDefault();
+        //     validateForm({index: obj.index, form: this, todo: obj.todo});
+        // });
+        submitTodo.addEventListener("click", function(event) {
             event.preventDefault();
-            validateForm({index: obj.index, form: this, todo: obj.todo});
+            validateForm({index: obj.index, form: getId("formTodo"), todo: obj.todo});
         });
         
+        // classes
+        title.classList.toggle("form-title");
+		desc.classList.toggle("form-desc");
+		dateDiv.classList.toggle("form-date");
+		timeDiv.classList.toggle("form-time");
+		// btnBack.classList.toggle("icon-back-pos");
         // append
+        let iconContBack = createIcon(btnBack);
+        let iconContSub = createIcon(submitTodo);
+        iconContBack.classList.toggle("icon-back-pos");
+        iconContSub.classList.toggle("icon-del-submit-pos");
+        // submitForm.appendChild(iconContSub);
         form.insertBefore(desc, form.firstChild);
         form.insertBefore(title, form.firstChild);
-        form.appendChild(submitTodo);
-        form.appendChild(btnBack);
+        form.appendChild(iconContSub);
+        form.appendChild(iconContBack);
         formTodoDiv.appendChild(form);
         // formTodoDiv.appendChild(btnBack);
         modContent.appendChild(formTodoDiv);
@@ -960,6 +971,25 @@
             }
             
         });
+    }
+    
+    function createIcon(btn) {
+        const iconHeight = makeElem("div"),
+            iconInner = makeElem("div"),
+            iconCont = makeElem("div");
+            
+        iconHeight.classList.toggle("icon-full-height");
+        iconInner.classList.toggle("icon-inner");
+        iconCont.classList.toggle("icon-container");
+            
+        iconCont.appendChild(iconInner);
+        iconInner.appendChild(iconHeight);
+        iconHeight.appendChild(btn);
+        
+        btn.classList.toggle("material-icons");
+        btn.classList.toggle("icon-mode");
+        
+        return iconCont;
     }
 
     // window.addEventListener("resize", function() {

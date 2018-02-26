@@ -177,7 +177,7 @@
             // periodSelect.classList.toggle("no-display");
             periodSelect.dataset.period = "year";
             // periodSelect.textContent = "view_module";
-            periodSelect.textContent = "keyboard_backspace";
+            periodSelect.textContent = "arrow_back";
         }
         
     }
@@ -193,7 +193,7 @@
         fullDate.month = parseInt(this.dataset.month);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").dataset.period = "month";
-        getId("periodSelect").textContent = "keyboard_backspace";
+        getId("periodSelect").textContent = "arrow_back";
         makeCalendar();
         makeDayAndDate();
         makePeriodSelectBtns();
@@ -527,7 +527,7 @@
         //  initial values
         // <i class="large material-icons">insert_chart</i>
         // periodSelect.classList.toggle("period-icon");
-        periodSelect.textContent = "keyboard_backspace";
+        periodSelect.textContent = "arrow_back";
         periodSelect.dataset.period = "month";
         periodSelect.addEventListener("click", switchPeriod);
     }
@@ -722,11 +722,10 @@
 
         for(let i = 0, s = todoArr.length; i < s; i++) {
             let select = makeElem("select");
-
             switch(i) {
 				case 0: // todo.date
                     start = 1;
-                    end = 31;
+                    end = fullDate.maxDates;
                     selectName = "date";
                     selectId = "formDate";
                     break;
@@ -767,7 +766,6 @@
                     selectId = "formToMin";
                     break;
             }
-            
             // assign names and ids
             select.setAttribute("name", selectName);
             select.id = selectId;

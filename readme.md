@@ -69,6 +69,8 @@
             - fix Delete button so it deletes entry and do a makeRequest!
         - change monthList and yearList to drop-downs
         - design changes, afterwards read up on Javascript and make code better!
+        - fix date generation in edit/new todo form (always 31 days)
+        - fix icon placements on mobile (adjusts when keyboard appears)
 - Time
     - drop down?
     - interval? Must be to the minute

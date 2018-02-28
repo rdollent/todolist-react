@@ -62,7 +62,12 @@ body {
 .nav-hamburger:focus {
   outline: none;
 }
-
+.nav-menu {
+  position: absolute;
+  background: inherit;
+  width:100%;
+  z-index: 1;
+}
 .nav-menu a {
   display: block;
   width: 100%;
@@ -109,7 +114,7 @@ body {
 
 .index-container {
   padding: 0 1rem;
-  position:relative;
+  position: relative;
 }
 
 
@@ -373,6 +378,11 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
     
   }
 
+
+.select-none {
+  pointer-events: none;
+  filter: blur(3px);
+}
 
 /*media queries*/
 @media only screen

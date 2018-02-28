@@ -13,6 +13,19 @@
     // todos for xmlhttprequest ajax call
     let todos = undefined;
     
+    
+    
+    let hamburger = document.getElementsByClassName("nav-hamburger")[0];
+    
+    hamburger.addEventListener("click", function() {
+        let navMenu = document.getElementsByClassName("nav-menu")[0];
+        // select body and all but not nav and all its children
+        let allDiv = document.querySelectorAll("body > *:not(.nav)");
+        for(let i = 0; i <= allDiv.length - 1; i++) {
+            allDiv[i].classList.toggle("select-none");
+        }
+    });
+    
     function runOnPageLoad() {
         makeRequest({index: "reqTodo"});
         // added mouseup event listener on whole document when scrolling through dates

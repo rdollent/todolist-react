@@ -50,7 +50,8 @@
     }
     
     function makeRequest(obj) {
-        const myReq = new XMLHttpRequest();
+        const myReq = new XMLHttpRequest(),
+            formTodo = getId("formTodo");
         let url, fd, todoObj = {}, jsonTodo, sendItem;
         
         //GET list of todos
@@ -71,12 +72,21 @@
                 url = "/todo/";
             }
             // FormData does not work on IE!!!!
-            fd = new FormData(obj.form);
-            console.log(fd.entries());
-            // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
-            for(let [key,val] of fd.entries()) {
-                todoObj[key] = val;
+            // fd = new FormData(obj.form);
+            // console.log(fd.entries());
+            // // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
+            // for(let [key,val] of fd.entries()) {
+            //     todoObj[key] = val;
+            // }
+            
+            // take all form data and put it into an object
+            fd = formTodo.querySelectorAll("input, textarea, select");
+            // console.log(fd);
+            for(let i = 0; i < fd.length; i++) {
+                todoObj[fd[i].name] = fd[i].value;
+                // console.log(todoObj);
             }
+            
             // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
             //https://stackoverflow.com/questions/19286301/webkitformboundary-when-parsing-post-using-nodejs
             //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries

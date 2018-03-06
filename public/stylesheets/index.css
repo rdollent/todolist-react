@@ -341,8 +341,8 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
 #formTodo {
   display: grid;
   max-width:600px;
-  grid-template-columns: [col1-a] 10% [co1-b col2-a] /* 80% */ 40% [col2-b col3-a] 40% [col3-b col4-a] 10% [col4-b];
-  grid-template-rows: [row1-a] 10% [row1-b row2-a] 10% [row2-b row3-a] 10% [row3-b row4-a] 40% [row4-b row5-a] 30% [row5-b];
+  grid-template-columns: [col1] 10% [col2] /* 80% */ 10% [col-back] 30% 10% [col-check] 30% [col3] 10% [col4];
+  grid-template-rows: [row1] 10% [row2] 10% [row3] 10% [row4] 40% [row5] 5% [row-icon] 25% [row6];
   justify-content: center;
   align-content: stretch;
   height:100%;
@@ -355,27 +355,37 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   /*}*/
 
   .form-date {
-    grid-column: col2-a / col3-b;
-    grid-row: row1-a / row1-b;
+    grid-column: col2 / col3;
+    grid-row: row1 / row2;
   }
   
   .form-time {
-    grid-column: col2-a / col3-b;
-    grid-row: row2-a / row1-b;
+    grid-column: col2 / col3;
+    grid-row: row2 / row3;
     
   }
   
   .form-title {
-    grid-column: col2-a / col3-b;
-    grid-row: row3-a / row3-b;
+    grid-column: col2 / col3;
+    grid-row: row3 / row4;
     
   }
   
   .form-desc {
     word-break: break-word;
-    grid-column: col2-a / col3-b;
-    grid-row: row4-a / row4-b;
+    grid-column: col2 / col3;
+    grid-row: row4 / row5;
     
+  }
+  
+  .icon-back {
+    grid-column: col-back / auto;
+    grid-row: row-icon / auto;
+  }
+  
+  .icon-sub {
+    grid-column: col-check / auto;
+    grid-row: row-icon / auto;
   }
 
 

@@ -705,10 +705,10 @@
             formTodoDiv = makeElem("div"),
             form = makeElem("form"),
             btnBack = makeElem("i"),
-            submitTodo = makeElem("i"),
+            btnSubmit = makeElem("i"),
             // submitForm = makeElem("input"),
-            iconContBack = createIcon(btnBack),
-            iconContSub = createIcon(submitTodo),
+            // iconContBack = createIcon(btnBack),
+            // iconContSub = createIcon(btnSubmit),
             objInput = {
                 makeInput: function(x) {
                     let input;
@@ -853,7 +853,7 @@
         
         // ids, classes, attributes, textContent
         formTodoDiv.id = "formTodoDiv";
-        submitTodo.id = "submitTodo";
+        btnSubmit.id = "btnSubmit";
         form.id = "formTodo";
         // submitForm.setAttribute("type", "submit");
         
@@ -863,7 +863,7 @@
         }
         
         btnBack.textContent = "arrow_back";
-        submitTodo.textContent = "check";
+        btnSubmit.textContent = "check";
 
         // events
         btnBack.addEventListener("click", function() {
@@ -885,7 +885,7 @@
         //     event.preventDefault();
         //     validateForm({index: obj.index, form: this, todo: obj.todo});
         // });
-        submitTodo.addEventListener("click", function(event) {
+        btnSubmit.addEventListener("click", function(event) {
             event.preventDefault();
             validateForm({index: obj.index, form: getId("formTodo"), todo: obj.todo});
         });
@@ -895,17 +895,22 @@
 		desc.classList.toggle("form-desc");
 		dateDiv.classList.toggle("form-date");
 		timeDiv.classList.toggle("form-time");
-		// btnBack.classList.toggle("icon-back-pos");
+		btnBack.classList.toggle("icon-back");
+		btnSubmit.classList.toggle("icon-sub");
+		btnBack.classList.toggle("material-icons");
+		btnSubmit.classList.toggle("material-icons");
+		btnBack.classList.toggle("icon-mode");
+		btnSubmit.classList.toggle("icon-mode");
         // append
         // let iconContBack = createIcon(btnBack);
-        // let iconContSub = createIcon(submitTodo);
-        iconContBack.classList.toggle("icon-back-pos");
-        iconContSub.classList.toggle("icon-del-submit-pos");
+        // let iconContSub = createIcon(btnSubmit);
+        // iconContBack.classList.toggle("icon-back-pos");
+        // iconContSub.classList.toggle("icon-del-submit-pos");
         // submitForm.appendChild(iconContSub);
         form.insertBefore(desc, form.firstChild);
         form.insertBefore(title, form.firstChild);
-        form.appendChild(iconContSub);
-        form.appendChild(iconContBack);
+        form.appendChild(btnSubmit);
+        form.appendChild(btnBack);
         formTodoDiv.appendChild(form);
         // formTodoDiv.appendChild(btnBack);
         modContent.appendChild(formTodoDiv);

@@ -344,7 +344,8 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   grid-template-columns: [col1] 10% [col2] /* 80% */ 10% [col-back] 30% 10% [col-check] 30% [col3] 10% [col4];
   grid-template-rows: [row1] 10% [row2] 10% [row3] 10% [row4] 40% [row5] 5% [row-icon] 25% [row6];
   justify-content: center;
-  align-content: stretch;
+  justify-items: start;
+  align-items: auto;
   height:100%;
 }
 
@@ -375,6 +376,7 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
     word-break: break-word;
     grid-column: col2 / col3;
     grid-row: row4 / row5;
+    width: 100%;
     
   }
   
@@ -386,6 +388,7 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   .icon-sub {
     grid-column: col-check / auto;
     grid-row: row-icon / auto;
+    align-self: start;
   }
 
 

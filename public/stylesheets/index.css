@@ -447,7 +447,7 @@ button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   and (min-width: 768px) {
     .index-container, #showTodoDiv, #formTodoDiv, #showFoundTodoDiv {
       max-width: 600px;
-      margin: 0 auto;
+      margin: 4.2rem auto 0 auto;
     }
     #modContent {
       overflow: auto;

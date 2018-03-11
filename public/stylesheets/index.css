@@ -12,28 +12,30 @@ body {
   box-sizing:border-box;
   appearance: none;
   user-select:none;
-  color: #1a1a1a;
+  color: #0A2039;
+  border-color: #0A2039 !important;
 
 
 }
-
-.font-one {
-  
-}
-
 
 
 .nav {
   width: 100%;
-  background-color: #e6e6e6;
+  background-color: #2773CB;
   height: 4.2rem;
   padding: 0;
-
+  position: fixed;
+  top: 0;
+  z-index:5;
 }
 
-.nav-height {
-  height: auto;
+.nav strong, .nav i, .nav a {
+  color: #FAFAFA;
 }
+
+/*.nav-height {*/
+/*  height: auto;*/
+/*}*/
 
 .nav-title {
   display: inline-block;
@@ -48,7 +50,7 @@ body {
 .hamburger {
   width: 2rem;
   height: 0.3rem;
-  background-color: black;
+  background-color: #FAFAFA;
   margin: 0.4rem 0;
   border-radius: 8rem;
 }
@@ -63,10 +65,11 @@ body {
   outline: none;
 }
 .nav-menu {
-  position: absolute;
+  /*position: absolute; */
   background: inherit;
-  width:100%;
-  z-index: 1;
+  /* width: 100%; */
+  /* z-index: 2; */
+  /* display: block; */
 }
 .nav-menu a {
   display: block;
@@ -115,6 +118,8 @@ body {
 .index-container {
   padding: 0 1rem;
   position: relative;
+  background-color: #F5F5F5;
+  margin-top: 4.2rem;
 }
 
 
@@ -136,10 +141,6 @@ a {
   overflow: scroll;
 }
 
-#tbl {
-  width: 100%;
-  max-width: 100rem;
-}
 
 .col {
   width: 3rem;
@@ -154,21 +155,68 @@ a {
     height:4rem;
 }
 
-#tblHeader {
-  width: 20rem;
-  margin: 0 auto;
-  text-align: center;
-  display: inline-block;
-  /*padding-top: 1rem;*/
-  font-size: 1.6rem;
-}
-
-
 
 #container {
   text-align:center;
-  margin-top:5px;
+  display: grid;
+  grid-template-columns: [col1] 10% [col2] 80% [col3] 10% [col4];
+  grid-template-rows: [row1] 10% [row2] 90% [row3];
+  /* justify-items: start; */
+  /* justify-content: center; */
+  /* height: 100%; */
+  align-items: center;
+  padding-top: 5px;
+  
 }
+
+  
+  #tblHeader {
+    /*width: 20rem;*/
+    /*margin: 0 auto;*/
+    /*text-align: center;*/
+    /*display: inline-block;*/
+    /*padding-top: 1rem;*/
+    /*font-size: 1.6rem;*/
+  }
+  
+  /*.prev-next-icon,*/ .period-icon {
+    font-size:3rem;
+    vertical-align: bottom;
+    margin: 0.5rem;
+  }
+  
+  #prevBtn {
+    /*float:left;*/
+    /*clear:left;*/
+    vertical-align: bottom;
+    grid-column: col1 / col2;
+    grid-row: row1 / row2;
+  }
+  
+  #nextBtn {
+    /* float: right; */
+    /* clear: right; */
+    vertical-align: bottom;
+    grid-column: col3 / col4;
+    grid-row: row1 / row2;
+  }
+  #title {
+    /* margin: 0.5rem auto; */
+    display: inline-block;
+    grid-column: col2 / col3;
+    grid-row: row1 / row2;
+    /* vertical-align: bottom; */
+    /* justify-items: end; */
+  }
+  
+  
+  #tbl {
+    width: 100%;
+    max-width: 100rem;
+    grid-column: col1 / col4;
+    grid-row: row2 / row3;
+  }
+
 
 .icon-tiny {
   font-size: 1rem;
@@ -184,30 +232,6 @@ td {
   vertical-align: text-bottom !important;
 }
 
-#yearTitle {
-  text-align: center;
-}
-
-
-.prev-next-icon, .period-icon {
-  font-size:3rem;
-  vertical-align: bottom;
-  margin: 0.5rem;
-}
-
-#prevBtn {
-  float:left;
-  clear:left;
-}
-
-#nextBtn {
-  float:right;
-  clear:right;
-}
-#title {
-  margin: 0.5rem auto;
-  display:inline-block;
-}
 
 
 .col-hours {
@@ -234,9 +258,16 @@ td {
   color: red;
 }
 
+#yearTitle {
+  text-align: center;
+  font-weight: bold;
+  padding-top: 5px;
+  font-size: 2rem;
+}
+
+
 .month-list {
   width: 30%;
-  height: 5rem;
   line-height: 5rem;
   display: inline-block;
   text-align: center;
@@ -254,7 +285,7 @@ td {
 }
 
 
-button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
+button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   cursor: pointer;
 }
 
@@ -338,6 +369,8 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
 
 /*edit and new todo form*/
 
+/*https://css-tricks.com/grid-areas-element-occupies-arent-necessarily-size/*/
+
 #formTodo {
   display: grid;
   max-width:600px;
@@ -383,6 +416,7 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
   .icon-back {
     grid-column: col-back / auto;
     grid-row: row-icon / auto;
+    align-self: start;
   }
   
   .icon-sub {
@@ -391,10 +425,21 @@ button:hover, .monthList:hover, .yearList:hover, .material-icons:hover {
     align-self: start;
   }
 
+#formDate, #formMonth, #formYear {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  appearance: none;
+  padding: 0 5px;
+  border-bottom: 1px solid black;
+  font-family: 'Roboto', cursive;
+}
 
 .select-none {
   pointer-events: none;
-  filter: blur(3px);
+  /*filter: blur(3px);*/
+  filter: opacity(0.2);
+  z-index: -1;
 }
 
 /*media queries*/

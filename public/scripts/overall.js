@@ -7,10 +7,10 @@
    navHamburger.addEventListener("click", function() {
       if(navMenu.classList.contains("no-display")) {
          navMenu.classList.remove("no-display");
-         nav.classList.add("nav-height");
+         // nav.classList.add("nav-height");
       } else {
          navMenu.classList.add("no-display");
-         nav.classList.remove("nav-height");
+         // nav.classList.remove("nav-height");
       }
        
    });

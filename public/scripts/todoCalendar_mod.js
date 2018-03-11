@@ -18,11 +18,14 @@
     let hamburger = document.getElementsByClassName("nav-hamburger")[0];
     
     hamburger.addEventListener("click", function() {
-        let navMenu = document.getElementsByClassName("nav-menu")[0];
+        // let navMenu = document.getElementsByClassName("nav-menu")[0];
         // select body and all but not nav and all its children
         let allDiv = document.querySelectorAll("body > *:not(.nav)");
         for(let i = 0; i <= allDiv.length - 1; i++) {
             allDiv[i].classList.toggle("select-none");
+        //   document.addEventListener("click", function() {
+        //         allDiv[i].classList.toggle("select-none");
+        //     });
         }
     });
     
@@ -173,11 +176,9 @@
     
     function makeYearHeader() {
         const yearTitle = makeElem("div"),
-            calendar = getId("calendar"),
-            h2 = makeElem("h2");
+            calendar = getId("calendar");
         yearTitle.id = "yearTitle";
-        h2.textContent = fullDate.year;
-        yearTitle.appendChild(h2);
+        yearTitle.textContent = fullDate.year;
         calendar.appendChild(yearTitle);
     }
     

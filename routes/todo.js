@@ -54,6 +54,7 @@ router.get("/user/:userid", middleware.isLoggedIn, function(req,res) {
                 console.log(err);
             } else {
                 res.send(allTodos);
+                console.log("sent!");
             }
     });
 });
@@ -183,7 +184,8 @@ router.post("/delete/:id", middleware.isLoggedIn, function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            res.send("deleted!");            
+            res.send("deleted!");
+            console.log("deleted - " + req.params.id);
         }
 
     });

@@ -332,9 +332,7 @@
                 a.classList.toggle("calendar-dates");
                 td.classList.toggle("col");
                 a.addEventListener("click", function() { 
-                    showTodos(this);
-                    removeColour();
-                    putColour(this);
+                    selectDate(this);
                     clearIcons("all");
                     makeAddBtn();
                 });
@@ -353,7 +351,23 @@
         }
     container.appendChild(tbl);
     populateCalendarWithDots();
+    selectDate();
     
+    }
+    
+    function selectDate(elem) {
+        if(elem === undefined || elem === null) {
+            // use array methods on a nodelist
+            // https://stackoverflow.com/questions/3871547/js-iterating-over-result-of-getelementsbyclassname-using-array-foreach
+            let dates = document.getElementsByClassName("calendar-dates");
+            let obj = Array.from(dates).filter(function(d) {
+                return d.dataset.date == fullDate.date;
+            });
+            elem = obj[0];
+        }
+        showTodos(elem);
+        removeColour();
+        putColour(elem);
     }
     
     function populateCalendarWithDots() {
@@ -851,6 +865,9 @@
         submitForm.setAttribute("type", "submit");
         submitForm.id = "submitForm";
         
+        // hide submit button (check button is a label)
+        submitForm.classList.add("no-display");
+        
         if(getId("showFoundTodoDiv")) {
              showFoundTodoDiv = getId("showFoundTodoDiv");
              showFoundTodoDiv.classList.toggle("no-display");
@@ -1010,8 +1027,8 @@
             btnPane.appendChild(form);
         } else if(btn === "check") {
             // submit has to be inside form;
-            // made label that connects to an input submit type inside the form, that way, button can be in button pane as a label
-            // and still work as submit inside a form
+            // made label that connects to an input submit type inside the form. That way, button can be in button pane as a label
+            // and still work as submit inside a form. Then hide the submit button.
             let label = makeElem("label");
             label.id = icon.id;
             icon.id = "";

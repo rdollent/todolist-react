@@ -364,6 +364,7 @@
                 return d.dataset.date == fullDate.date;
             });
             elem = obj[0];
+            console.log(elem);
         }
         showTodos(elem);
         removeColour();
@@ -422,7 +423,7 @@
 
         eventsArr.forEach(function(btnEvent) {
             btnsArr.forEach(function(btn) {
-                btn.addEventListener(btnEvent, clearEntries);
+                // btn.addEventListener(btnEvent, clearEntries);
                 // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
                 btn.addEventListener(btnEvent, holdThis);
                 btn.addEventListener(btnEvent, function() {resetTodosHeight(modContent)});
@@ -437,7 +438,7 @@
     // hold prev and next buttons to scroll through months/dates
     function holdThis() {
         let clickedElem = this;
-        clearEntries();
+        // clearEntries();
         prevNextInterval = setInterval(function() {
             if(clickedElem.id === "nextBtn") {
                 return nextMonth();

@@ -13,7 +13,8 @@
     // todos for xmlhttprequest ajax call
     let todos = undefined;
 
-    let hamburger = document.getElementsByClassName("nav-hamburger")[0];
+    // let hamburger = document.getElementsByClassName("nav-hamburger")[0];
+    const hamburger = document.querySelector(".nav-hamburger");
     
     hamburger.addEventListener("click", function() {
         // let navMenu = document.getElementsByClassName("nav-menu")[0];
@@ -364,7 +365,6 @@
                 return d.dataset.date == fullDate.date;
             });
             elem = obj[0];
-            console.log(elem);
         }
         showTodos(elem);
         removeColour();
@@ -373,7 +373,7 @@
     
     function populateCalendarWithDots() {
         const todosMonth = getTodosMonth(todos),
-            calendarDates = document.getElementsByClassName("calendar-dates"),
+            calendarDates = document.querySelectorAll(".calendar-dates"),
             todoIcon = "<i class='icon-tiny material-icons icon-white'>arrow_drop_down</i>";
         let todosDate = {},
             todosDateAll = [];
@@ -426,7 +426,12 @@
                 // btn.addEventListener(btnEvent, clearEntries);
                 // add event holdThis function for mouseup and mousedown, hold button to scroll through date/month
                 btn.addEventListener(btnEvent, holdThis);
-                btn.addEventListener(btnEvent, function() {resetTodosHeight(modContent)});
+                btn.addEventListener(btnEvent, function() {
+                    
+                    const formTodoDiv = getId("formTodoDiv");
+                    resetTodosHeight(modContent);
+                    setTodosHeight(formTodoDiv);
+                });
             });
         });
         
@@ -495,6 +500,10 @@
             todosToday = [];
         
         clearIcons("default");
+        if(getId("formTodo")) {
+            makeAddBtn();
+        }
+        
         // reset modContent height
         clearEntries();
         resetTodosHeight(modContent);
@@ -540,7 +549,11 @@
             a.appendChild(spanTodo);
             fragTodos.appendChild(a);
         }
-
+        if(todosToday.length === 0) {
+            const noEntries = makeElem("div");
+            noEntries.textContent = "The list is empty! Click the Add button below to add todos!";
+            fragTodos.appendChild(noEntries);
+        }
         entries.appendChild(fragTodos);
         showTodoDiv.appendChild(entries);
         modContent.appendChild(showTodoDiv);
@@ -556,9 +569,12 @@
     }
     
     function setTodosHeight(x) {
-        const container = document.getElementsByClassName("index-container")[0],
-            nav = document.getElementsByClassName("nav")[0],
-            buttonPane = document.getElementsByClassName("button-pane")[0],
+        // const container = document.getElementsByClassName("index-container")[0],
+        const container = document.querySelector(".index-container"),
+            // nav = document.getElementsByClassName("nav")[0],
+            nav = document.querySelector(".nav"),
+            // buttonPane = document.getElementsByClassName("button-pane")[0],
+            buttonPane = document.querySelector(".button-pane"),
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
@@ -630,7 +646,8 @@
     }
     
     function removeColour() {
-        let selectedDate = document.getElementsByClassName("selected-date")[0];
+        // let selectedDate = document.getElementsByClassName("selected-date")[0];
+        const selectedDate = document.querySelector(".selected-date");
         if(selectedDate) {
             selectedDate.classList.toggle("selected-date");
         }
@@ -1014,7 +1031,8 @@
         
         // return iconCont;
         
-        const btnPane = document.getElementsByClassName("button-pane")[0];
+        // const btnPane = document.getElementsByClassName("button-pane")[0];
+        const btnPane = document.querySelector(".button-pane");
         let icon = makeElem("i");
         icon.textContent = btn;
         icon.classList.toggle("material-icons");
@@ -1133,8 +1151,8 @@
         
         // iconRemain = [getId("addBtn"), getId("deleteBtn"), getId("editBtn"), getId("arrow_backBtn"), getId("checkBtn"), getId("formBackBtn")];
         
-            iconRemain = [],
-            btnPane = document.getElementsByClassName("button-pane")[0];
+            iconRemain = [];
+            // btnPane = document.getElementsByClassName("button-pane")[0];
         
         if(state === "default") {
             iconRemain = [getId("addBtn")];
@@ -1223,12 +1241,19 @@
         // }
     }
     
-    function clearBtnPane() {
-        let btnPane = document.getElementsByClassName("button-pane")[0];
-        while(btnPane.lastChild) {
-            btnPane.removeChild(btnPane.lastChild);
-        }
-    }
+    // function clearBtnPane() {
+    //     // note: use getElementsByClassName when using a live collection.
+    //     // https://stackoverflow.com/questions/14377590/queryselector-and-queryselectorall-vs-getelementsbyclassname-and-getelementbyid
+    //     // A variable generated with querySelectorAll will contain the elements that fulfilled the selector at the moment the method was called.
+    //     // A variable generated with getElementsByClassName will contain the elements that fulfilled the selector when it is used (that may be different from the moment the method was called).
+        
+    //     // let btnPane = document.getElementsByClassName("button-pane")[0];
+    //     let btnPane = document.querySelector(".button-pane");
+        
+    //     while(btnPane.lastChild) {
+    //         btnPane.removeChild(btnPane.lastChild);
+    //     }
+    // }
 
     
 runOnPageLoad();

@@ -17,7 +17,10 @@ body {
   appearance: none;
   user-select:none;
   /*color: #0A2039;*/
-  color: #40400B;
+  /*color: #40400B;*/
+  /*color: #031926;*/
+  /*color: #5B5B5B;*/
+  color: #0B3954;
   /*border-color: #0A2039 !important;*/
 }
 
@@ -38,7 +41,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   width: 100%;
   /*background-color: #2773CB;*/
   /*background-color: #33bbff;*/
-  background-color: #004C70;
+  /*background-color: #004C70;*/
+  background-color: #0B3954;
   height: 4.2rem;
   padding: 0;
   position: fixed;
@@ -52,7 +56,9 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   }
   .nav strong, .nav i, .nav a {
     /*color: #FAFAFA;*/
-    color: #F4D00C;
+    /*color: #F4D00C;*/
+    color: #F2F2F2;
+    /*text-shadow: 1px 1px #031926;*/
   }
   
   /*.nav-height {*/
@@ -68,7 +74,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   .hamburger {
     width: 2rem;
     height: 0.3rem;
-    background-color: #F4D00C;
+    background-color: #F2F2F2;
+    /*box-shadow: 1px 1px #031926;*/
     margin: 0.4rem 0;
     border-radius: 8rem;
   }
@@ -156,8 +163,9 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 .index-container {
   padding: 0 1rem;
   position: relative;
-  background-color: #fbf5d0; /*#FFFFE1; /*#F5F5F5;*/
+  background-color: #BFD7EA; /*#C6FFD6; /*#fbf5d0; /*#FFFFE1; /*#F5F5F5;*/
   margin-top: 4.2rem;
+  box-shadow: 0 1px 5px #808080;
 }
   #container {
     text-align:center;
@@ -212,10 +220,11 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       .selected-date {
         /*background-color: #e6e6e6;*/
         /*background-color: #ff9999;*/
-        background-color: #ffa500;
-        box-shadow: 2px 2px #888888;
-        border-right: 1px solid  #fff;
-        border-bottom: 1px solid #fff;
+        /*background-color: #ffa500;*/
+        background-color: #70D6FF;
+        box-shadow: 2px 2px 2px #A9A9A9;
+        /*border-right: 1px solid  #fff;*/
+        /*border-bottom: 1px solid #fff;*/
       }
       td {
         vertical-align: text-bottom !important;
@@ -223,6 +232,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     #modContent {
       /*height: 15vh;*/
       overflow: scroll;
+      padding-top: 10px;
+      background-color: #FFFFFF;
     }
       .col-hours {
         width: 10rem;
@@ -403,7 +414,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   width: 100%;
   /*background-color: #0A2039;*/
   /*background-color: #ffb833;*/
-  background-color: #ffdb4d;
+  background-color: #FF7577;
 }
 
 

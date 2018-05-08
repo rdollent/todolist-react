@@ -332,8 +332,8 @@
                 a = makeElem("a");
                 a.classList.toggle("calendar-dates");
                 td.classList.toggle("col");
-                a.addEventListener("click", function() { 
-                    selectDate(this);
+                td.addEventListener("click", function() { 
+                    selectDate(this.querySelector("a"));
                     clearIcons("all");
                     makeAddBtn();
                 });

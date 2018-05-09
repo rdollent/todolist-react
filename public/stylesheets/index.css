@@ -4,7 +4,9 @@
 
 html {
   font-size: 62.5%;
-  font-family: 'Roboto', cursive;
+  /*font-family: 'Roboto', cursive;*/
+  /*font-family: 'Josefin Slab', serif;*/
+  font-family: 'Arvo', serif;
 }
 
 body {
@@ -234,6 +236,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       overflow: scroll;
       padding-top: 10px;
       background-color: #FFFFFF;
+      font-family: 'Vollkorn SC', serif;
+      /*font-family: 'Arvo', serif;*/
     }
       .col-hours {
         width: 10rem;

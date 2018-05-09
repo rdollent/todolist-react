@@ -1,11 +1,13 @@
 "use strict";
 
 (function() {
-    const fullDate = {},
+    const fullDate = {}, // tracks current date, year, month. most important variable. all or most functions depend on this.
+        // month object. obj key correspond to month value in JS i.e. month 0 = january.
         monthList = { 
-            0: "January", 1: "February", 2: "March", 3: "April",  4: "May", 5: "June",
-            6: "July", 7: "August", 8: "September", 9: "October", 10: "November", 11: "December"
+            0: "JANUARY", 1: "FEBRUARY", 2: "MARCH", 3: "APRIL",  4: "MAY", 5: "JUNE",
+            6: "JULY", 7: "AUGUST", 8: "SEPTEMBER", 9: "OCTOBER", 10: "NOVEMBER", 11: "DECEMBER"
         },
+        // day object. day key correspond to day value in JS i.e. 0 = sunday.
         dayList = {0: "S", 1: "M", 2: "T", 3: "W", 4: "T", 5: "F", 6: "S"};
         
     // use this as counter for holding prev/next buttons.
@@ -13,22 +15,21 @@
     // todos for xmlhttprequest ajax call
     let todos = undefined;
 
-    // let hamburger = document.getElementsByClassName("nav-hamburger")[0];
     const hamburger = document.querySelector(".nav-hamburger");
     
     hamburger.addEventListener("click", function() {
-        // let navMenu = document.getElementsByClassName("nav-menu")[0];
+        // make background blurry/bright/light and immune to pointer events
         // select body and all but not nav and all its children
-        let allDiv = document.querySelectorAll("body > *:not(.nav)");
-        for(let i = 0; i <= allDiv.length - 1; i++) {
-            allDiv[i].classList.toggle("select-none");
-        //   document.addEventListener("click", function() {
-        //         allDiv[i].classList.toggle("select-none");
-        //     });
-        }
+        const allDiv = document.querySelectorAll("body > *:not(.nav)");
+        // you can use forEach on a Nodelist
+        allDiv.forEach(function(elem) {
+            elem.classList.toggle("select-none");
+        });
     });
     
+    // function to run when page loads
     function runOnPageLoad() {
+        // attach letGo function to these events
         const letGoArr = ["touchend", "mouseup"];
         makeRequest({index: "reqTodo"});
         // added mouseup event listener on whole document when scrolling through dates
@@ -43,24 +44,107 @@
                 }
             });
         });
-        // document.addEventListener("mouseup", function() {
-        //     if(prevNextInterval !== null) {
-        //         letGo
-        //     }
-        // });
-        // document.addEventListener("touchend", letGo);
-        // clearIcons("default");
-        
     }
     
-        
+    // shorthand to getelementbyid for easier typing. input the id name and get the element with the given id as input.    
     function getId(input) {
         return document.getElementById(input);
     }
     
+    // shorthhand to createelement for easier typing. input the kind of element i.e. div, span and get the created element.
     function makeElem(input) {
         return document.createElement(input);
     }
+    
+    // // function that makes xmlhttprequests. called when loading the page, after editing or deleting an existing todo,
+    // // or after submitting a new todo
+    // function makeRequest(obj) {
+    //     // obj argument which contains properties like
+    //     // index - tells which kind of todo request is asked (get, update, new)
+    //     // todo._id - each stored todo has a unique id in mongodb (assigned automatically once created)
+    //     const myReq = new XMLHttpRequest(),
+    //         formTodo = getId("formTodo");
+    //     let url, fd, todoObj = {}, sendItem, id, ind = obj.index;;
+        
+    //     // if(obj.todo !== undefined) {
+    //     //     id = obj.todo._id;
+    //     //     console.log(id);
+    //     // }
+    //     //GET list of todos
+    //     if(ind === "getTodo") { 
+    //         url = "/todo/user/" + user;
+    //         myReq.open("GET", url);
+    //     }
+
+    //     // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
+    //     // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
+    //     //update edited todo or create new one
+    //     if(ind === "updTodo" || ind === "newTodo") { 
+    //         if(ind === "updTodo") {
+    //             url = "/todo/" + obj.todo._id;
+    //             todoObj["_id"] = obj.todo._id;
+    //         }
+    //         else if(ind === "newTodo") {
+    //             url = "/todo/";
+    //         }
+    //         // FormData does not work on IE!!!!
+    //         // fd = new FormData(obj.form);
+    //         // console.log(fd.entries());
+    //         // // https://stackoverflow.com/questions/25040479/formdata-created-from-an-existing-form-seems-empty-when-i-log-it
+    //         // for(let [key,val] of fd.entries()) {
+    //         //     todoObj[key] = val;
+    //         // }
+            
+    //         // take all form data and put it into an object
+    //         fd = formTodo.querySelectorAll("input, textarea, select");
+    //         // for(let i = 0; i < fd.length; i++) {
+    //         //     todoObj[fd[i].name] = fd[i].value;
+    //         // }
+    //         fd.forEach(function(e) {
+    //             todoObj[e.name] = e.value;
+    //         });
+            
+            
+    //         // false for synchronous behaviour. async will process succeeding functions as ajax call is underway.
+    //         //https://stackoverflow.com/questions/19286301/webkitformboundary-when-parsing-post-using-nodejs
+    //         //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
+    //         myReq.open("POST", url);
+    //         sendItem = JSON.stringify(todoObj);
+    //         myReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            
+    //     }
+        
+    //     // delete a todo
+    //     else if(ind === "delTodo") {
+    //         url = "/todo/delete/" + id;
+    //         myReq.open("POST", url);
+    //     }
+    //     myReq.onreadystatechange = function() {
+    //         if(myReq.readyState === 4 && myReq.status === 200) {
+    //             if(ind === "getTodo") {
+    //                 todos = JSON.parse(myReq.responseText);
+    //                 getCurrentCalendar();
+    //                 // if(getId("addBtn") === null) {
+    //                 // let add = makeIcon("add");
+    //                 // add.addEventListener("click", function() {
+    //                 //     makeOrEditTodo({index: "newTodo"});
+    //                 //     // this.classList.toggle("no-display");
+    //                 //     clearIcons("edit");
+    //                 // });
+    //                 // } else {
+    //                     // getId("addBtn").classList.toggle("no-display");
+    //                 //}
+    //                 clearIcons("default");
+    //                 makeAddBtn();
+    //             } else if(ind === "updTodo" || ind === "newTodo" || ind === "delTodo") {
+    //                 makeRequest({index: "getTodo"});
+    //                 clearEntries();
+    //             }
+                
+    //         }
+    //     };
+    //     myReq.send(sendItem);
+    // }
     
     function makeRequest(obj) {
         const myReq = new XMLHttpRequest(),
@@ -147,6 +231,7 @@
     function getCurrentCalendar() {
         if(fullDate.year === undefined) {
             fullDate.year = new Date().getFullYear();
+            alert("full year");
         }
         
         if(fullDate.month === undefined) {

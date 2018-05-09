@@ -4,8 +4,8 @@
     const fullDate = {}, // tracks current date, year, month. most important variable. all or most functions depend on this.
         // month object. obj key correspond to month value in JS i.e. month 0 = january.
         monthList = { 
-            0: "JANUARY", 1: "FEBRUARY", 2: "MARCH", 3: "APRIL",  4: "MAY", 5: "JUNE",
-            6: "JULY", 7: "AUGUST", 8: "SEPTEMBER", 9: "OCTOBER", 10: "NOVEMBER", 11: "DECEMBER"
+            0: "January", 1: "February", 2: "March", 3: "April",  4: "May", 5: "June",
+            6: "July", 7: "August", 8: "September", 9: "October", 10: "November", 11: "December"
         },
         // day object. day key correspond to day value in JS i.e. 0 = sunday.
         dayList = {0: "S", 1: "M", 2: "T", 3: "W", 4: "T", 5: "F", 6: "S"};

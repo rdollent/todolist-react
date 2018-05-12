@@ -79,7 +79,7 @@
         // let url = "https://to-do-list-rdollent.c9users.io/todo/" + user;
         // user is passed on through ejs/todo.js route; check <script> in index.ejs and get route in todo.js
         //update edited todo or create new one
-        if(ind === "updTodo" || ind === "newTodo") { 
+        else if(ind === "updTodo" || ind === "newTodo") { 
             if(ind === "updTodo") {
                 url = "/todo/" + obj.todo._id;
                 todoObj["_id"] = obj.todo._id;
@@ -563,7 +563,6 @@
 
         if(todosToday.length > 0) {
             setTodosHeight();
-            modContent.classList.toggle("overflow");
         }
         
     }
@@ -582,12 +581,11 @@
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
-            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight) + parseInt(btnPaneHeight) + 10), //10px is margin-top of index-container
+            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight) + parseInt(btnPaneHeight)), //10px is margin-top of index-container
             modContent = getId("modContent"),
             elem = getId(x);
             
         modContent.style.setProperty("height", todosDateHeight + "px");
-        modContent.classList.toggle("overflow");
         if(x) {
             elem.style.setProperty("height", modContent.scrollHeight + "px");
         }
@@ -719,13 +717,11 @@
     
     function makeOrEditTodo(obj) {
         if(getId("showTodoDiv")) {
-            const showTodoDiv = getId("showTodoDiv"),
-                modContent = getId("modContent");
+            let showTodoDiv = getId("showTodoDiv");
             showTodoDiv.classList.toggle("no-display");
-            modContent.classList.toggle("overflow");
         }
         if(getId("formTodoDiv")) {
-            const formTodoDiv = getId("formTodoDiv");
+            let formTodoDiv = getId("formTodoDiv");
             formTodoDiv.parentNode.removeChild(formTodoDiv);
         }
         
@@ -907,7 +903,7 @@
         //update todo xmlhttprequest
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-            validateForm({index: obj.index, form: this, todo: obj.todo});
+            validateForm({index: obj.index, todo: obj.todo});
         });
         
         // classes
@@ -1002,7 +998,7 @@
             pass = false;
         }
         if(pass === true) {
-            makeRequest({index: obj.index, form: obj.form, todo: obj.todo});
+            makeRequest({index: obj.index, todo: obj.todo});
         }
     }
     
@@ -1236,7 +1232,7 @@
         // needs form.addeventlistener on submit.
         btnSubmit.addEventListener("click", function(event) {
             // event.preventDefault();
-            validateForm({index: obj.index, form: getId("formTodo"), todo: obj.todo});
+            validateForm({index: obj.index, todo: obj.todo});
             // this.classList.toggle("no-display");
             // getId("formBackBtn").classList.toggle("no-display");
             // getId("checkBtn").classList.toggle("no-display");

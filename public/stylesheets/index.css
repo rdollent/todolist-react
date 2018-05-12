@@ -23,11 +23,16 @@ body {
   /*color: #031926;*/
   /*color: #5B5B5B;*/
   color: #0B3954;
+  /*color: #FFF;*/
   /*border-color: #0A2039 !important;*/
 }
 
 .no-display {
   display: none;
+}
+
+.overflow {
+  overflow: scroll;
 }
 
 a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
@@ -165,9 +170,12 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 .index-container {
   padding: 0 1rem;
   position: relative;
-  background-color: #BFD7EA; /*#C6FFD6; /*#fbf5d0; /*#FFFFE1; /*#F5F5F5;*/
+  background-color: #FF6D70;/*#BFD7EA; /*#C6FFD6; /*#fbf5d0; /*#FFFFE1; /*#F5F5F5;*/
   margin-top: 4.2rem;
   box-shadow: 0 1px 5px #808080;
+}
+.index-container * {
+  color: #FFF;
 }
   #container {
     text-align:center;
@@ -223,17 +231,21 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
         /*background-color: #e6e6e6;*/
         /*background-color: #ff9999;*/
         /*background-color: #ffa500;*/
-        background-color: #70D6FF;
-        box-shadow: 1px 1px 1px #A9A9A9;
+        /*background-color: #70D6FF;*/
+        background-color: #2A3D45;
+        /*box-shadow: 1px 1px 1px #A9A9A9;*/
         /*border-right: 1px solid  #fff;*/
         /*border-bottom: 1px solid #fff;*/
+        border-radius: 10px;
       }
       td {
-        vertical-align: text-bottom !important;
+        /*vertical-align: text-bottom !important;*/
+        /*padding-top:5px;*/
+        vertical-align: middle;
       }
     #modContent {
       /*height: 15vh;*/
-      overflow: scroll;
+      /*overflow: scroll;*/
       padding-top: 10px;
       background-color: #FFFFFF;
       font-family: 'Vollkorn SC', serif;
@@ -414,13 +426,46 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   display: grid;
   grid-template-columns: [col1] 33% [col2] 33% [col3] 33% [col4];
   grid-template-rows: [row1] 100% [row2];
-  justify-content: center;
+  /*justify-content: center;*/
   width: 100%;
   /*background-color: #0A2039;*/
   /*background-color: #ffb833;*/
-  background-color: #FF7577;
+  /*background-color: #FF7577;*/
+  background-color: #AEC4D5;
 }
 
+  .add-pos, #checkBtn, .edit-pos {
+    grid-column-start: col2;
+    grid-column-end: col3;
+    grid-row-start: row1;
+    grid-row-end: row2;
+    /*justify-self: stretch;*/
+    /*align-self: stretch;*/
+    place-self: center;
+    /*vertical-align has no effect on grid items!*/
+    
+  }
+  .add-pos {
+    
+  }
+  
+  #checkBtn {
+    
+  }
+  .arrow_back-pos {
+    grid-column-start: col1;
+    grid-column-end: col2;
+    grid-row-start: row1;
+    grid-row-end: row2;
+    place-self: center;  
+  }
+  #deleteBtn {
+    grid-column-start: col3;
+    grid-column-end: col4;
+    grid-row-start: row1;
+    grid-row-end: row2;
+    place-self: center;  
+  }
 
 /*============================================================================================================*/
 /*============================================================================================================*/

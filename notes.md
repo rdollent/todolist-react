@@ -112,3 +112,19 @@
     
 git resetting last commit notes:
 https://gist.github.com/gunjanpatel/18f9e4d1eb609597c50c2118e416e6a6
+
+==============================================================================
+function constructor
+function Person(firstname, lastname) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+}
+
+Person.prototype.greet = function() {
+    console.log(this.firstname + " " + this.lastname);
+    
+}
+
+var john = new Person("John", "Doe");
+john.greet();
+=============================================================================

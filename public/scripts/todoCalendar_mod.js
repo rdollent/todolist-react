@@ -1043,6 +1043,7 @@
         let icon = makeElem("i");
         icon.textContent = btn;
         icon.classList.toggle("material-icons");
+        icon.classList.toggle("btn-pane-icons");
         icon.classList.toggle(btn + "-pos");
         icon.id = btn + "Btn";
         if(btn === "delete") {

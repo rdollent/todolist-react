@@ -403,15 +403,17 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 
 /*icons*/
 
-.icon-tiny {
-  font-size: 1rem;
-  display:block;
-  color: #3D9970;
+.icon-dots {
+  font-size: 0.5rem;
+  display:inline-block;
+  /*color: #3D9970;*/
+  color: #fff;
 }
 
-.icon-white {
+.visible {
   visibility:hidden;
 }
+
 
 /*============================================================================================================*/
 /*============================================================================================================*/
@@ -440,44 +442,48 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     padding-top: 4px;
     text-align: center;
     height: inherit;
-  }
-  .add-pos, #checkBtn, .edit-pos {
-    grid-column-start: col2;
-    grid-column-end: col3;
+    color: #fff;
     grid-row-start: row1;
     grid-row-end: row2;
+  }
+  #checkBtn, .edit-pos {
+    grid-column-start: col2;
+    grid-column-end: col3;
     /*justify-self: stretch;*/
     /*align-self: stretch;*/
     /*vertical-align has no effect on grid items!*/
     
   }
   .add-pos {
+    grid-column-start: col1;
+    grid-column-end: col4;
+    background-color: #4392F1;
+    
   }
   
   #checkBtn {
     
   }
   .edit-pos {
-    background-color: #462521;
-    color: #fff;
+    background-color: #1b8a46;
+    
   }
   .arrow_back-pos {
     grid-column-start: col1;
     grid-column-end: col2;
-    grid-row-start: row1;
-    grid-row-end: row2;
-    color: #330C2F;
+
+    /*color: #330C2F;*/
+    background-color: #202344;
+
   }
   #deleteBtn {
     grid-column-start: col3;
     grid-column-end: col4;
-    grid-row-start: row1;
-    grid-row-end: row2;
     height:inherit;
   }
   .delete-pos {
     background-color: #CA2E55;
-    color: #fff;
+    /*background-color: #ca2e2e;*/
 
   }
 

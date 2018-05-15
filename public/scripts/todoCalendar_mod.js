@@ -377,7 +377,8 @@
     function populateCalendarWithDots() {
         const todosMonth = getTodosMonth(todos),
             calendarDates = document.querySelectorAll(".calendar-dates"),
-            todoIcon = "<i class='icon-tiny material-icons icon-white'>arrow_drop_down</i>";
+            todoIcon = "<div class='icon-tiny visible'><i class='material-icons icon-dots'>brightness_1</i></div>";
+            // todoIcon = "<i class='icon-tiny material-icons icon-white icon-dots'>arrow_drop_down</i>";
         let todosDate = {},
             todosDateAll = [];
             
@@ -397,7 +398,7 @@
                 calendarDates[i].insertAdjacentHTML("afterend", todoIcon);
             }
             if(todosDate.has(parseInt(calendarDates[i].textContent))) {
-                calendarDates[i].nextElementSibling.classList.toggle("icon-white");
+                calendarDates[i].nextElementSibling.classList.toggle("visible");
             }
         }
     }

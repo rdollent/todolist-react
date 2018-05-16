@@ -434,7 +434,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   /*background-color: #ffb833;*/
   /*background-color: #FF7577;*/
   /*background-color: #AEC4D5;*/
-  background-color: #FFE0B5;
+  background-color: #000;
 }
   .btn-pane-icons {
     font-size: 3rem;
@@ -462,6 +462,9 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   }
   
   #checkBtn {
+    /*background-color: #44ad4a;*/
+    background-color: #488eb5;
+    
     
   }
   .edit-pos {

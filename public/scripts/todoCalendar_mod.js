@@ -387,6 +387,7 @@
             // store dates only from todosMonth
             todosDateAll.push(todosMonth[i].date);
         }
+        console.log(todosDateAll);
         // get only unique dates. es6 method.
         todosDate = new Set(todosDateAll);
         // go through dates, look at where there is a todo
@@ -564,7 +565,7 @@
 
         if(todosToday.length > 0) {
             setTodosHeight();
-            modContent.classList.toggle("overflow");
+            // modContent.classList.add("overflow");
         }
         
     }
@@ -588,7 +589,7 @@
             elem = getId(x);
             
         modContent.style.setProperty("height", todosDateHeight + "px");
-        modContent.classList.toggle("overflow");
+        modContent.classList.add("overflow");
         if(x) {
             elem.style.setProperty("height", modContent.scrollHeight + "px");
         }
@@ -723,7 +724,7 @@
             const showTodoDiv = getId("showTodoDiv"),
                 modContent = getId("modContent");
             showTodoDiv.classList.toggle("no-display");
-            modContent.classList.toggle("overflow");
+            modContent.classList.remove("overflow");
         }
         if(getId("formTodoDiv")) {
             const formTodoDiv = getId("formTodoDiv");

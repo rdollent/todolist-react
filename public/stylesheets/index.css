@@ -39,6 +39,11 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   cursor: pointer;
 }
 
+.no-select {
+  user-select: none;
+  cursor: none;
+}
+
 /*============================================================================================================*/
 /*============================================================================================================*/
 
@@ -408,6 +413,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   display:inline-block;
   /*color: #3D9970;*/
   color: #fff;
+  margin: 0 1px;
 }
 
 .visible {

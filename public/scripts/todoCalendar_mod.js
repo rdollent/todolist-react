@@ -311,22 +311,22 @@
         const tbl = makeTbl(),
             container = getId("container"),
             tblHeader = getId("tblHeader"),
-            calendar = getId("calendar");
+            maxDate = fullDate.maxDates;
 
         if(getId("tbl")) {
             container.removeChild(getId("tbl"));
         }
         
         // if tblHeader exists, change month and year
-        if(tblHeader) {
+        // if(tblHeader) {
             tblHeader.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.year;
-        }
+        // }
 
         fullDate.firstDay = new Date(fullDate.year, fullDate.month, 1).getDay();
 
         // populate table with dates
         let dates = 1;
-        while(dates  <= fullDate.maxDates) {
+        while(dates  <= maxDate) {
             let tr = makeElem("tr");
             tr.classList.toggle("row");
             let days = 0; //represents days of the week
@@ -341,7 +341,8 @@
                     makeAddBtn();
                 });
                 if(dates === 1 && days !== fullDate.firstDay) {
-                    dates--; // cancels out dates++ at bottom
+                    dates--; // cancels out dates++ at 
+                    // td.classList.add("no-select");
                 } else if(dates > 0 && dates <= fullDate.maxDates) {
                     a.textContent = dates;
                     a.dataset.date = dates;
@@ -376,32 +377,64 @@
     
     function populateCalendarWithDots() {
         const todosMonth = getTodosMonth(todos),
-            calendarDates = document.querySelectorAll(".calendar-dates"),
-            todoIcon = "<div class='icon-tiny visible'><i class='material-icons icon-dots'>brightness_1</i></div>";
-            // todoIcon = "<i class='icon-tiny material-icons icon-white icon-dots'>arrow_drop_down</i>";
-        let todosDate = {},
-            todosDateAll = [];
+            calendarDates = Array.from(document.querySelectorAll(".calendar-dates")),
+            todoIcon = makeElem("div"),
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+            // https://stackoverflow.com/questions/11115998/is-there-a-way-to-add-remove-several-classes-in-one-single-instruction-with-clas
+            todoIconStr = "<i class='material-icons icon-dots visible'>brightness_1</i>",
+            // place indicator if date has a todo
+            // map produces a new array, where obj is each elem in todosMonth array, and returns obj.date for each obj.
+            todosDateAll = todosMonth.map(obj => obj.date),
             
-        // place indicator if date has a todo
-        for(let i = 0, s = todosMonth.length; i < s; i++) {
-            // store dates only from todosMonth
-            todosDateAll.push(todosMonth[i].date);
-        }
-        console.log(todosDateAll);
-        // get only unique dates. es6 method.
-        todosDate = new Set(todosDateAll);
+            // get only unique dates. es6 method.
+            todosDate = new Set(todosDateAll);
+
+        todoIcon.classList.add("icon-tiny");
+        // use curly braces in arrow functions to prevent returning a value.
+        // note: Arrow functions do not have a 'return' keyword
+        [1, 2, 3].forEach(() => { todoIcon.insertAdjacentHTML("beforeend", todoIconStr) });
+        // todoIcon = "<i class='icon-tiny material-icons icon-white icon-dots'>arrow_drop_down</i>";
+
         // go through dates, look at where there is a todo
         // do not use innerHTML as it will remove any event listeners
         // use insertAdjacentHTML https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
-        for(let i = 0, s = calendarDates.length; i < s; i++) {
+        calendarDates.forEach( date => {
             // dates in calendar are string, dates in todosDate are numbers
-            if(calendarDates[i].textContent) {
-                calendarDates[i].insertAdjacentHTML("afterend", todoIcon);
+            const dateInt = parseInt(date.textContent);
+            
+            // if(date.textContent) {
+                // if child already exists in DOM, appendChild removes node from its initial position
+                // and moves it to the current position. Use cloneNode to append the same element over and over
+                // to different parents.
+            date.parentNode.appendChild(todoIcon.cloneNode(true));
+                
+            // }
+            // if(todosDate.has(parseInt(date.textContent))) {
+            // }
+            // if date exists in todosDateAll (dates that have todos)
+            if(todosDateAll.indexOf(dateInt) > -1) {
+                // # of times the current date appears in todosDateAll is how many todos there are in a date
+                const todoNum = todosDateAll.filter( b => b === dateInt).length,
+                // capture all dots
+                currDate = date.parentNode.querySelectorAll(".icon-dots");
+
+                if(todoNum < 4) {
+                    // only show 1 dot if there are less than 4 todos
+                    currDate[0].classList.toggle("visible");
+                } else if(todoNum >= 4 && todoNum <= 7) {
+                    // 2 dots between 4 and 7 todos
+                    currDate[0].classList.toggle("visible");
+                    currDate[1].classList.toggle("visible");
+                } else if(todoNum >= 8) {
+                    // 3 doys for more than 8 todos on a date
+                    currDate[0].classList.toggle("visible");
+                    currDate[1].classList.toggle("visible");
+                    currDate[2].classList.toggle("visible");
+                }
+                // use array filter to count how many todos in any given date!
+                // date.nextElementSibling.classList.toggle("visible");
             }
-            if(todosDate.has(parseInt(calendarDates[i].textContent))) {
-                calendarDates[i].nextElementSibling.classList.toggle("visible");
-            }
-        }
+        });
     }
 
     function makeBtns() {
@@ -438,6 +471,7 @@
                     setTodosHeight(formTodoDiv);
                 });
             });
+            
         });
         
         container.insertBefore(prevImg, container.children.namedItem("title"));

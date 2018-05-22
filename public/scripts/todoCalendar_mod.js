@@ -335,17 +335,18 @@
                 a = makeElem("a");
                 a.classList.toggle("calendar-dates");
                 td.classList.toggle("col");
-                td.addEventListener("click", function() { 
-                    selectDate(this.querySelector("a"));
-                    clearIcons("all");
-                    makeAddBtn();
-                });
+                
                 if(dates === 1 && days !== fullDate.firstDay) {
                     dates--; // cancels out dates++ at 
                     // td.classList.add("no-select");
                 } else if(dates > 0 && dates <= fullDate.maxDates) {
                     a.textContent = dates;
                     a.dataset.date = dates;
+                    td.addEventListener("click", function() { 
+                    selectDate(this.querySelector("a"));
+                    clearIcons("all");
+                    makeAddBtn();
+                });
                 }
                 dates++;
                 days++;
@@ -599,7 +600,7 @@
 
         if(todosToday.length > 0) {
             setTodosHeight();
-            // modContent.classList.add("overflow");
+            modContent.classList.add("overflow");
         }
         
     }
@@ -618,12 +619,12 @@
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
-            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight) + parseInt(btnPaneHeight) + 10), //10px is margin-top of index-container
+            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight) + parseInt(btnPaneHeight)+ 10), //10px is margin-top of index-container
             modContent = getId("modContent"),
             elem = getId(x);
             
         modContent.style.setProperty("height", todosDateHeight + "px");
-        modContent.classList.add("overflow");
+        // modContent.classList.add("overflow");
         if(x) {
             elem.style.setProperty("height", modContent.scrollHeight + "px");
         }
@@ -744,7 +745,7 @@
         // id
         showFoundTodoDiv.id = "showFoundTodoDiv";
         // class
-        
+        modContent.classList.remove("overflow");
         
         showFoundTodoDiv.appendChild(frag);
         modContent.appendChild(showFoundTodoDiv);

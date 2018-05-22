@@ -253,7 +253,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       /*overflow: scroll;*/
       padding-top: 10px;
       background-color: #FFFFFF;
-      font-family: 'Vollkorn SC', serif;
+      font-family: 'Roboto', cursive;
       /*font-family: 'Arvo', serif;*/
     }
       .col-hours {
@@ -279,10 +279,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 /*show todo*/
 
 #showFoundTodoDiv {
-  overflow: scroll;
   margin: 0 auto;
   width: 30rem;
-  padding-top: 1rem;
 }
   .todo-show-content {
     width: 30rem;
@@ -316,8 +314,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 #formTodo {
   display: grid;
   max-width:600px;
-  grid-template-columns: [col1] 10% [col2] /* 80% */ 10% [col-back] 30% 10% [col-check] 30% [col3] 10% [col4];
-  grid-template-rows: [row1] 10% [row2] 10% [row3] 10% [row4] 40% [row5] 5% [row-icon] 25% [row6];
+  grid-template-columns: [col1] 10% [col2] /* 80% */ 80% [col3] 10% [col4];
+  grid-template-rows: [row1] 3rem [row2] 3rem [row3] 2.5rem [row4] 9rem [row5];
   justify-content: center;
   justify-items: start;
   align-items: auto;
@@ -345,7 +343,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       appearance: none;
       padding: 0 5px;
       border-bottom: 1px solid black;
-      font-family: 'Roboto', cursive;
+      /*font-family: 'Roboto', cursive;*/
     }
   .form-time {
     grid-column: col2 / col3;

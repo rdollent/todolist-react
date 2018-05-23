@@ -53,7 +53,8 @@
     
     // shorthhand to createelement for easier typing. input the kind of element i.e. div, span and get the created element.
     function makeElem(input) {
-        return document.createElement(input);
+        const elem = document.createElement(input);
+        return elem;
     }
     
     // function that makes xmlhttprequests. called when loading the page, after editing or deleting an existing todo,
@@ -624,7 +625,7 @@
             elem = getId(x);
             
         modContent.style.setProperty("height", todosDateHeight + "px");
-        // modContent.classList.add("overflow");
+        modContent.classList.add("overflow");
         if(x) {
             elem.style.setProperty("height", modContent.scrollHeight + "px");
         }
@@ -759,7 +760,7 @@
             const showTodoDiv = getId("showTodoDiv"),
                 modContent = getId("modContent");
             showTodoDiv.classList.toggle("no-display");
-            modContent.classList.remove("overflow");
+            // modContent.classList.remove("overflow");
         }
         if(getId("formTodoDiv")) {
             const formTodoDiv = getId("formTodoDiv");
@@ -770,6 +771,8 @@
         // declare all variables. cant declare inside if since let and const are block-scoped
         const
         // for edit and create
+            task = obj.index,
+            todo = obj.todo,
             modContent = getId("modContent"),
              // make elements
             formTodoDiv = makeElem("div"),
@@ -792,9 +795,9 @@
                     input.required = "required";
                     
                     input.name = x;
-                    if(obj.index === "updTodo") {
-                        input.value = obj.todo[x];
-                    } else if(obj.index === "newTodo") {
+                    if(task === "updTodo") {
+                        input.value = todo[x];
+                    } else if(task === "newTodo") {
                         input.placeholder = x;
                     }
                     return input;
@@ -804,12 +807,86 @@
             title = objInput.makeInput("title"),
             desc = objInput.makeInput("description"),
 			dateDiv = makeElem("div"),
-			timeDiv = makeElem("div");
+			timeDiv = makeElem("div"),
+			titleDiv = makeElem("div"),
+			iconDate = makeElem("i"),
+			iconTime = makeElem("i"),
+			iconTitle = makeElem("i"),
+			iconDesc = makeElem("i");
+			
+		iconDate.classList.add("material-icons");
+		iconTime.classList.add("material-icons");
+		iconTime.classList.add("icon-time");
+		iconTitle.classList.add("material-icons");
+		iconTitle.classList.add("icon-title");
+		iconDesc.classList.add("material-icons");
+		
+		iconDate.textContent = "date_range";
+		iconTime.textContent = "access_time";
+		iconTitle.textContent = "title";
+		iconDesc.textContent = "description";
+		dateDiv.appendChild(iconDate);
+		timeDiv.appendChild(iconTime);
+		titleDiv.appendChild(iconTitle);
+
         // variables for options
+        
+        // const cases = {
+        //     date: () => {
+        //         start = 1;
+        //         end = fullDate.maxDates;
+        //         selectName = "date";
+        //         selectId = "formDate";
+        //     },
+        //     month: () => {
+        //         start = 0;
+        //         end = 11;
+        //         selectName = "month";
+        //         selectId = "formMonth";
+        //     },
+        //     year: () => {
+        //         start = 2000;
+        //         end = 2099;
+        //         selectName = "year";
+        //         selectId = "formYear";
+        //     },
+        //     frmHr: () => {
+        //         start = 0;
+        //         end = 23;
+        //         selectName = "frmHr";
+        //         selectId = "formFrmHr";
+        //     },
+        //     frmMin: () => {
+        //         start = 0;
+        //         end = 59;
+        //         selectName = "frmMin";
+        //         selectId = "formFrmMin";    
+        //     },
+        //     toHr: () => {
+        //         start = 0;
+        //         end = 23;
+        //         selectName = "toHr";
+        //         selectId = "formToHr"; 
+        //     },
+        //     toMin: () => {
+        //         start = 0;
+        //         end = 59;
+        //         selectName = "toMin";
+        //         selectId = "formToMin";
+        //     },
+        //     generate: (input) => {
+        //         //wrong
+        //         this[input]();
+        //     }
+            
+        // };
+        
+        
+        ///////////////////////////////////////////////////////////////////////////
         let todoArr = [0,1,2,3,4,5,6], start = 0, end = 0, selectName = "", selectId = "", showFoundTodoDiv;
         
-        if(obj.index === "updTodo") {
-            todoArr = [obj.todo.date, obj.todo.month, obj.todo.year, obj.todo.frmHr, obj.todo.frmMin, obj.todo.toHr, obj.todo.toMin];
+        if(task === "updTodo") {
+            todoArr = [todo.date, todo.month, todo.year, todo.frmHr, todo.frmMin, todo.toHr, todo.toMin];
         }
 
         for(let i = 0, s = todoArr.length; i < s; i++) {
@@ -860,6 +937,7 @@
             }
             // assign names and ids
             select.setAttribute("name", selectName);
+            select.classList.add("form-select");
             select.id = selectId;
             
             for(let j = start; j <= end; j++) {
@@ -880,14 +958,14 @@
                 // set default value
                 // for month, check if month names match
                 if(selectId === "formMonth") {
-                    if(obj.index === "updTodo" && optns.textContent === monthList[todoArr[1]]) {
+                    if(task === "updTodo" && optns.textContent === monthList[todoArr[1]]) {
                         optns.selected = true;
-                    } else if(obj.index === "newTodo" && optns.textContent === monthList[fullDate.month]) {
+                    } else if(task === "newTodo" && optns.textContent === monthList[fullDate.month]) {
                         optns.selected = true;
                     }
-                } else if(obj.index === "updTodo" && parseInt(optns.textContent) === todoArr[i]){
+                } else if(task === "updTodo" && parseInt(optns.textContent) === todoArr[i]){
                     optns.selected = true;
-                } else if(obj.index === "newTodo") {
+                } else if(task === "newTodo") {
                     if(selectId === "formYear" && optns.textContent === String(fullDate.year)) {
                         optns.selected = true;
                     } else if(selectId === "formDate" && optns.textContent === String(fullDate.date)) {
@@ -920,12 +998,26 @@
             
         }
         
+        ///////////////////////////////////////////////////////////////////////////////////////
+        
         // ids, classes, attributes, textContent
         formTodoDiv.id = "formTodoDiv";
         // btnSubmit.id = "btnSubmit";
         form.id = "formTodo";
         submitForm.setAttribute("type", "submit");
         submitForm.id = "submitForm";
+        
+        // // create span for "From" and "To";
+        // const spanFrom = makeElem("span");
+        // const spanTo = makeElem("span");
+        // const formTodo = getId("formTodo");
+        // spanFrom.textContent = "From:";
+        // spanTo.textContent = "To:";
+
+        // timeDiv.insertBefore(spanFrom, timeDiv.firstChild.nextSibling);
+        // timeDiv.insertBefore(spanTo, timeDiv.lastChild.previousSibling);
+        
+        // formTodo.insertBefore(iconTitle, formTodo.firstChild);
         
         // hide submit button (check button is a label)
         submitForm.classList.add("no-display");
@@ -944,14 +1036,15 @@
         //update todo xmlhttprequest
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-            validateForm({index: obj.index, form: this, todo: obj.todo});
+            validateForm({index: task, form: this, todo: todo, event: event});
         });
         
         // classes
-        title.classList.toggle("form-title");
-		desc.classList.toggle("form-desc");
-		dateDiv.classList.toggle("form-date");
-		timeDiv.classList.toggle("form-time");
+        title.classList.add("form-select");
+        titleDiv.classList.add("form-title");
+		desc.classList.add("form-desc");
+		dateDiv.classList.add("form-date");
+		timeDiv.classList.add("form-time");
         // btnBack.classList.toggle("icon-back");
 		// btnSubmit.classList.toggle("icon-sub");
 		// btnBack.classList.toggle("material-icons");
@@ -964,14 +1057,26 @@
         // iconContBack.classList.toggle("icon-back-pos");
         // iconContSub.classList.toggle("icon-del-submit-pos");
         // submitForm.appendChild(iconContSub);
+        titleDiv.appendChild(title);
         form.insertBefore(desc, form.firstChild);
-        form.insertBefore(title, form.firstChild);
+        form.insertBefore(titleDiv, form.firstChild);
         // form.appendChild(btnSubmit);
         // form.appendChild(btnBack);
         form.appendChild(submitForm);
         formTodoDiv.appendChild(form);
         // formTodoDiv.appendChild(btnBack);
         modContent.appendChild(formTodoDiv);
+        
+        // create span for "From" and "To";
+        const spanFrom = makeElem("span");
+        const spanTo = makeElem("span");
+        const formTime = document.querySelector(".form-time");
+        spanFrom.textContent = "From:";
+        spanTo.textContent = "To:";
+
+        formTime.insertBefore(spanFrom, getId("formFrmHr"));
+        formTime.insertBefore(spanTo, getId("formToHr"));
+        
         
         resetTodosHeight(modContent);
         setTodosHeight("formTodoDiv");
@@ -1030,11 +1135,11 @@
             minGreat = parseInt(frmMin.value) > parseInt(toMin.value);
         let pass = true;
         if(hrGreat) {
-            event.preventDefault();
+            obj.event.preventDefault();
             toHr.classList.toggle("warning");
             pass = false;
         } else if(hrEqual && minGreat) {
-            event.preventDefault();
+            obj.event.preventDefault();
             toMin.classList.toggle("warning");
             pass = false;
         }
@@ -1149,7 +1254,7 @@
                 // btn.classList.toggle("icon-delete");
                 // btn.dataset.mode = "delete";
                 // btn.textContent = "delete_forever";
-                icon.addEventListener("click", function() {
+                icon.addEventListener("click", function(event) {
                     clearIcons("all");
                     event.preventDefault();
                     makeRequest({index: "delTodo", todo: todo}); //xmlhttprequest
@@ -1274,7 +1379,7 @@
         // needs form.addeventlistener on submit.
         btnSubmit.addEventListener("click", function(event) {
             // event.preventDefault();
-            validateForm({index: obj.index, form: getId("formTodo"), todo: obj.todo});
+            validateForm({index: obj.index, form: getId("formTodo"), todo: obj.todo, event: event});
             // this.classList.toggle("no-display");
             // getId("formBackBtn").classList.toggle("no-display");
             // getId("checkBtn").classList.toggle("no-display");

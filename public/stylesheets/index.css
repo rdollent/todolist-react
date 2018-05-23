@@ -44,6 +44,10 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   cursor: none;
 }
 
+.material-icons {
+  vertical-align: bottom;
+}
+
 /*============================================================================================================*/
 /*============================================================================================================*/
 
@@ -314,8 +318,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 #formTodo {
   display: grid;
   max-width:600px;
-  grid-template-columns: [col1] 10% [col2] /* 80% */ 80% [col3] 10% [col4];
-  grid-template-rows: [row1] 3rem [row2] 3rem [row3] 2.5rem [row4] 9rem [row5];
+  grid-template-columns: [col1] 10% [col2]  80% [col3] 10% [col4];
+  grid-template-rows: [row1] 6rem [row2] 6rem [row3] 5rem [row4] 12rem [row5];
   justify-content: center;
   justify-items: start;
   align-items: auto;
@@ -324,31 +328,49 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   .form-title {
     grid-column: col2 / col3;
     grid-row: row3 / row4;
-    
   }
+    .form-title input {
+      font-weight: bold;
+    }
   .form-desc {
     word-break: break-word;
     grid-column: col2 / col3;
     grid-row: row4 / row5;
     width: 100%;
+    border: 1px solid #cecece;
+    outline: none;
+    border-radius: 0.5rem;
+    padding: 5px;
   }
   .form-date {
     grid-column: col2 / col3;
     grid-row: row1 / row2;
   }
     #formDate, #formMonth, #formYear {
+      margin: 0 1rem;
+    }
+    .form-select {
       border: none;
       background-color: transparent;
       outline: none;
       appearance: none;
-      padding: 0 5px;
-      border-bottom: 1px solid black;
+      border-bottom: 1px solid #cecece;
+      padding: 0 0.25rem 0.25rem 0.25rem;
       /*font-family: 'Roboto', cursive;*/
     }
+  .icon-time, .icon-title {
+    margin-right: 1rem;
+  }
   .form-time {
     grid-column: col2 / col3;
     grid-row: row2 / row3;
   }
+    #formFrmHr, #formToHr {
+      margin-left: 0.5rem;
+    }
+    #formFrmMin {
+      margin-right: 2rem;
+    }
   .warning {
     color: red;
   }

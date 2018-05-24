@@ -234,7 +234,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
         /*font-style: normal;*/
       }
       .row {
-          height:4rem;
+          height:3.75rem;
       }
       .selected-date {
         /*background-color: #e6e6e6;*/
@@ -268,7 +268,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       .col-todos {
         width:15rem;
         display:inline-block;
-        margin-left: 5px;
+        margin-left: 1.5rem;
       }
       .single-entry {
         display: block;
@@ -293,7 +293,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   }
   .todo-show-time {
     display: table;
-    border-bottom: 1px solid #E1E1E1;
+    border-bottom: 1px solid #cecece;
   }
     .todo-show-time span {
       display:table-cell;
@@ -321,7 +321,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   grid-template-columns: [col1] 10% [col2]  80% [col3] 10% [col4];
   grid-template-rows: [row1] 6rem [row2] 6rem [row3] 5rem [row4] 12rem [row5];
   justify-content: center;
-  justify-items: start;
+  justify-items: stretch;
   align-items: auto;
   height:100%;
 }
@@ -369,7 +369,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       margin-left: 0.5rem;
     }
     #formFrmMin {
-      margin-right: 2rem;
+      margin-right: 4rem;
     }
   .warning {
     color: red;
@@ -450,7 +450,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   position: fixed;
   bottom: 0;
   z-index: 5;
-  height: 4rem;
+  height: 3.5rem;
   display: grid;
   grid-template-columns: [col1] 33.33% [col2] 33.33% [col3] 33.33% [col4];
   grid-template-rows: [row1] 100% [row2];
@@ -465,7 +465,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   .btn-pane-icons {
     font-size: 3rem;
     width: 100%;
-    padding-top: 4px;
+    padding-top: 3px;
     text-align: center;
     height: inherit;
     color: #fff;
@@ -489,12 +489,13 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   
   #checkBtn {
     /*background-color: #44ad4a;*/
-    background-color: #488eb5;
+    background-color: #62ce64;
     
     
   }
   .edit-pos {
-    background-color: #1b8a46;
+    /*background-color: #1b8a46;*/
+    background-color: #61bb62;
     
   }
   .arrow_back-pos {
@@ -502,7 +503,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     grid-column-end: col2;
 
     /*color: #330C2F;*/
-    background-color: #202344;
+    /*background-color: #202344;*/
+    background-color: #618ebb;
 
   }
   #deleteBtn {
@@ -511,8 +513,9 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     height:inherit;
   }
   .delete-pos {
-    background-color: #CA2E55;
     /*background-color: #ca2e2e;*/
+    /*background-color: #CA2E55;*/
+    background-color: #bb6161;
 
   }
 

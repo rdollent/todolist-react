@@ -10,7 +10,7 @@ var passport = require("passport");
 
 // Routes
 router.get("/", function(req, res) {
-    res.render("home");
+    res.redirect("/login");
 });
 
 // router.get("/about", function(req,res) {

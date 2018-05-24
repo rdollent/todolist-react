@@ -621,13 +621,13 @@
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
             todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight) + parseInt(btnPaneHeight)+ 10), //10px is margin-top of index-container
-            modContent = getId("modContent"),
-            elem = getId(x);
+            modContent = getId("modContent");
+            // elem = getId(x);
             
         modContent.style.setProperty("height", todosDateHeight + "px");
         modContent.classList.add("overflow");
         if(x) {
-            elem.style.setProperty("height", modContent.scrollHeight + "px");
+            x.style.setProperty("height", modContent.scrollHeight + "px");
         }
         
     }
@@ -786,8 +786,9 @@
                     let input;
                     if(x === "title") {
                         input = makeElem("input");
-                        input.type = ("text");
+                        input.type = ("tel");
                         input.setAttribute("maxlength", 15);
+                        input.setAttribute("size", 15);
                     } else if(x === "description") {
                         input = makeElem("textarea");
                         input.setAttribute("maxlength", 140);
@@ -1079,7 +1080,7 @@
         
         
         resetTodosHeight(modContent);
-        setTodosHeight("formTodoDiv");
+        setTodosHeight(formTodoDiv);
     }
     
     // function to capture all values in edit mode and check against them
@@ -1130,6 +1131,7 @@
             frmMin = getId("formFrmMin"),
             toHr = getId("formToHr"),
             toMin = getId("formToMin"),
+            title = document.querySelector(".form-select").value.length,
             hrGreat = parseInt(frmHr.value) > parseInt(toHr.value),
             hrEqual = parseInt(frmHr.value) === parseInt(toHr.value),
             minGreat = parseInt(frmMin.value) > parseInt(toMin.value);
@@ -1143,7 +1145,12 @@
             toMin.classList.toggle("warning");
             pass = false;
         }
+        if(title < 1) {
+            // obj.event.preventDefault();
+            pass = false;
+        }
         if(pass === true) {
+            clearIcons("all");
             makeRequest({index: obj.index, form: obj.form, todo: obj.todo});
         }
     }
@@ -1383,7 +1390,7 @@
             // this.classList.toggle("no-display");
             // getId("formBackBtn").classList.toggle("no-display");
             // getId("checkBtn").classList.toggle("no-display");
-            clearIcons("all");
+            // clearIcons("all");
         });
         // } else {
         //     getId("formBackBtn").classList.toggle("no-display");

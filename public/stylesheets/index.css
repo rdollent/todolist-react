@@ -255,9 +255,9 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     #modContent {
       /*height: 15vh;*/
       /*overflow: scroll;*/
-      padding-top: 10px;
+      padding-top: 2rem;
       background-color: #FFFFFF;
-      font-family: 'Roboto', cursive;
+      font-family: 'Roboto', sans-serif;
       /*font-family: 'Arvo', serif;*/
     }
       .col-hours {
@@ -276,6 +276,16 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
         padding-bottom: 1rem;
         border-bottom: 0.25px solid #E1E1E1;
       }
+      .no-entries {
+        font-size: 2rem;
+        width: 25rem;
+        margin: 3rem auto;
+        text-align:center;
+        border-top: 1px solid #afafaf;
+        border-bottom: 1px solid #afafaf;
+        padding: 2rem 0 2rem 0;
+        color: #808080;
+      }
 
 /*============================================================================================================*/
 /*============================================================================================================*/
@@ -285,6 +295,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 #showFoundTodoDiv {
   margin: 0 auto;
   width: 30rem;
+  padding-top: 1rem;
 }
   .todo-show-content {
     width: 30rem;
@@ -293,7 +304,6 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   }
   .todo-show-time {
     display: table;
-    border-bottom: 1px solid #cecece;
   }
     .todo-show-time span {
       display:table-cell;
@@ -301,12 +311,15 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       padding-left: 1rem;
     }
   .content-title {
-    margin: 0.5rem auto;
+    margin: 1.5rem auto 1rem auto;
     font-size:2rem;
     font-weight: bold;
   }
   .content-desc {
     text-align: justify;
+    /*border-left: 1px solid #afafaf;*/
+    border-left: 1px solid #afafaf;
+    padding-left: 1rem;
   }
   
 /*============================================================================================================*/
@@ -337,7 +350,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     grid-column: col2 / col3;
     grid-row: row4 / row5;
     width: 100%;
-    border: 1px solid #cecece;
+    border: 1px solid #afafaf;
     outline: none;
     border-radius: 0.5rem;
     padding: 5px;
@@ -354,7 +367,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       background-color: transparent;
       outline: none;
       appearance: none;
-      border-bottom: 1px solid #cecece;
+      border-bottom: 1px solid #afafaf;
       padding: 0 0.25rem 0.25rem 0.25rem;
       /*font-family: 'Roboto', cursive;*/
     }

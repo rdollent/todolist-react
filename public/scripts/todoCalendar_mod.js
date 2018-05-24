@@ -592,7 +592,8 @@
         }
         if(todosToday.length === 0) {
             const noEntries = makeElem("div");
-            noEntries.textContent = "The list is empty! Click the Add button below to add todos!";
+            noEntries.classList.add("no-entries");
+            noEntries.textContent = "No entries. Click the button below to add todos!";
             fragTodos.appendChild(noEntries);
         }
         entries.appendChild(fragTodos);

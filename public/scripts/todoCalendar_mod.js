@@ -214,7 +214,8 @@
         const yearList = getId("yearList"),
             monthList = getId("monthList"),
             periodSelect = getId("periodSelect"),
-            yearTitle = getId("yearTitle");
+            yearTitle = getId("yearTitle"),
+            indexContainer = document.querySelector(".index-container");
             // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
 
         fullDate.year = parseInt(this.textContent);
@@ -231,6 +232,7 @@
             // periodSelect.textContent = "view_module";
             periodSelect.textContent = "arrow_back";
         }
+        indexContainer.classList.toggle("max-height");
         
     }
     
@@ -239,6 +241,7 @@
         //     yearTitle = getId("yearTitle"),
         //     addBtn = getId("addBtn");
             // selectedMonth = event.target.options[event.target.options.selectedIndex].dataset.month;
+            const indexContainer = document.querySelector(".index-container");
         getId("monthList").classList.toggle("no-display");
         getId("yearTitle").classList.toggle("no-display");
         // getId("addBtn").classList.toggle("no-display");
@@ -252,6 +255,7 @@
         makeDayAndDate();
         makePeriodSelectBtns();
         makeAddBtn();
+        indexContainer.classList.toggle("max-height");
     }
     
     function makeCalendar() {
@@ -366,8 +370,8 @@
         if(elem === undefined || elem === null) {
             // use array methods on a nodelist
             // https://stackoverflow.com/questions/3871547/js-iterating-over-result-of-getelementsbyclassname-using-array-foreach
-            let dates = document.getElementsByClassName("calendar-dates");
-            let obj = Array.from(dates).filter(function(d) {
+            const dates = document.getElementsByClassName("calendar-dates"),
+                 obj = Array.from(dates).filter(function(d) {
                 return d.dataset.date == fullDate.date;
             });
             elem = obj[0];
@@ -483,7 +487,7 @@
     
     // hold prev and next buttons to scroll through months/dates
     function holdThis() {
-        let clickedElem = this;
+        const clickedElem = this;
         // clearEntries();
         prevNextInterval = setInterval(function() {
             if(clickedElem.id === "nextBtn") {
@@ -654,7 +658,8 @@
         const monthList = getId("monthList"),
             yearList = getId("yearList"),
             calendar = getId("calendar"),
-            yearTitle = getId("yearTitle");
+            yearTitle = getId("yearTitle"),
+            indexContainer = document.querySelector(".index-container");
 
         if(this.dataset.period === "year") {
             monthList.classList.toggle("no-display");
@@ -666,6 +671,7 @@
             }
             // this.classList.toggle("no-display");
             this.textContent = "date_range";
+            indexContainer.classList.toggle("max-height");
             
         }
         else if(this.dataset.period === "month") {
@@ -685,6 +691,8 @@
             // this.textContent = "view_module";
             // getId("addBtn").classList.toggle("no-display");
             clearIcons("all");
+            // make index-container full height
+            indexContainer.classList.toggle("max-height");
             
         }
     }
@@ -727,9 +735,9 @@
 
         
         showArr.forEach(function(t) {
-            let x = makeElem("div");
+            const x = makeElem("div");
             if(t === "time") {
-                let icon = makeElem("i");
+                const icon = makeElem("i");
                 span.textContent = todo.frmHr + ":" + todo.frmMin + " - " + todo.toHr + ":" + todo.toMin;
                 icon.classList.toggle("material-icons");
                 icon.textContent = "access_time";
@@ -1139,11 +1147,13 @@
         let pass = true;
         if(hrGreat) {
             obj.event.preventDefault();
-            toHr.classList.toggle("warning");
+            toHr.classList.add("warning");
+            frmHr.classList.add("warning");
             pass = false;
         } else if(hrEqual && minGreat) {
             obj.event.preventDefault();
-            toMin.classList.toggle("warning");
+            toMin.classList.add("warning");
+            frmMin.classList.add("warning");
             pass = false;
         }
         if(title < 1) {
@@ -1163,7 +1173,7 @@
             toMin = getId("formToMin");
         [frmHr, frmMin, toHr, toMin].forEach(function(option) {
             if(option.classList.contains("warning")) {
-                option.classList.toggle("warning");
+                option.classList.remove("warning");
             }
             
         });

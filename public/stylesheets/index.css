@@ -3,14 +3,16 @@
 /*global styles*/
 
 html {
+  height: 100%;
   font-size: 62.5%;
-  /*font-family: 'Roboto', cursive;*/
+  font-family: 'Roboto', sans-serif;
   /*font-family: 'Josefin Slab', serif;*/
-  font-family: 'Arvo', serif;
+  /*font-family: 'Arvo', serif;*/
 }
 
 body {
   font-size: 1.6rem;
+  height: 100%;
 }
 
 * {
@@ -28,11 +30,11 @@ body {
 }
 
 .no-display {
-  display: none;
+  display: none !important;
 }
 
 .overflow {
-  overflow: scroll;
+  overflow: scroll !important;
 }
 
 a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
@@ -40,12 +42,16 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 }
 
 .no-select {
-  user-select: none;
-  cursor: none;
+  user-select: none !important;
+  cursor: none !important;
 }
 
 .material-icons {
   vertical-align: bottom;
+}
+
+.max-height {
+  height: 100% !important;
 }
 
 /*============================================================================================================*/
@@ -58,7 +64,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   /*background-color: #2773CB;*/
   /*background-color: #33bbff;*/
   /*background-color: #004C70;*/
-  background-color: #0B3954;
+  /*background-color: #0B3954;*/
+  background-color: #4B7679;
   height: 4.2rem;
   padding: 0;
   position: fixed;
@@ -182,6 +189,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   background-color: #FF6D70;/*#BFD7EA; /*#C6FFD6; /*#fbf5d0; /*#FFFFE1; /*#F5F5F5;*/
   margin-top: 4.2rem;
   box-shadow: 0 1px 5px #808080;
+  font-family: 'Arvo', serif;
 }
 .index-container * {
   color: #FFF;
@@ -257,7 +265,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       /*overflow: scroll;*/
       padding-top: 2rem;
       background-color: #FFFFFF;
-      font-family: 'Roboto', sans-serif;
+      /*font-family: 'Roboto', sans-serif;*/
       /*font-family: 'Arvo', serif;*/
     }
       .col-hours {
@@ -386,6 +394,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     }
   .warning {
     color: red;
+    font-weight: bold;
   }
   
 
@@ -412,28 +421,44 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 
 /*year and month lists*/
 
-#yearTitle {
-  text-align: center;
-  font-weight: bold;
-  padding-top: 5px;
-  font-size: 2rem;
-}
-.month-list {
-  width: 30%;
-  line-height: 5rem;
-  display: inline-block;
-  text-align: center;
-  margin: 0.5rem;
-}
-
 #yearList {
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 3rem;
+  text-align: center;
+  padding-bottom: 4rem;
+  height: 100%;
 }
-.year-list {
-  display: inline-block;
-  margin: 1.75rem 1.75rem;
-  border-bottom: 0.1rem solid grey;
+  .year-list {
+    border-bottom: 1px solid #F2F2F2;
+    padding: 5px;
+  }
+
+#monthList {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+  text-align: center;
+  padding-bottom: 4rem;
+  height: 100%;
 }
+
+  #yearTitle {
+    text-align: center;
+    font-weight: bold;
+    padding-top: 5px;
+    font-size: 2rem;
+  }
+  .month-list {
+    /*width: 30%;*/
+    /*line-height: 5rem;*/
+    /*display: inline-block;*/
+    text-align: center;
+    /*margin: 0.5rem;*/
+  }
+
 
 /*============================================================================================================*/
 /*============================================================================================================*/
@@ -473,7 +498,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   /*background-color: #ffb833;*/
   /*background-color: #FF7577;*/
   /*background-color: #AEC4D5;*/
-  background-color: #000;
+  /*background-color: #000;*/
+  background-color: #4B7679;
 }
   .btn-pane-icons {
     font-size: 3rem;

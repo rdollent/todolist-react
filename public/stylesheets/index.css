@@ -12,7 +12,6 @@ html {
 
 body {
   font-size: 1.6rem;
-  height: 100%;
 }
 
 * {
@@ -439,23 +438,25 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 2rem;
+  grid-gap: 3rem;
   text-align: center;
-  padding-bottom: 4rem;
-  height: 100%;
+  grid-auto-rows: 8rem;
+  align-items: center;
+  max-height:100%;
+
 }
 
   #yearTitle {
     text-align: center;
     font-weight: bold;
-    padding-top: 5px;
+    padding: 3rem;
     font-size: 2rem;
   }
   .month-list {
     /*width: 30%;*/
     /*line-height: 5rem;*/
     /*display: inline-block;*/
-    text-align: center;
+    /*text-align: center;*/
     /*margin: 0.5rem;*/
   }
 

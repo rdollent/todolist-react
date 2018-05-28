@@ -145,6 +145,8 @@
             }
         };
         myReq.send(sendItem);
+        
+        setBodyHeight();
     }
 
 
@@ -234,6 +236,8 @@
         }
         indexContainer.classList.toggle("max-height");
         
+        
+        console.log(fullDate);
     }
     
     function monthClicked() {
@@ -242,6 +246,7 @@
         //     addBtn = getId("addBtn");
             // selectedMonth = event.target.options[event.target.options.selectedIndex].dataset.month;
             const indexContainer = document.querySelector(".index-container");
+        indexContainer.classList.toggle("max-height");
         getId("monthList").classList.toggle("no-display");
         getId("yearTitle").classList.toggle("no-display");
         // getId("addBtn").classList.toggle("no-display");
@@ -255,7 +260,10 @@
         makeDayAndDate();
         makePeriodSelectBtns();
         makeAddBtn();
-        indexContainer.classList.toggle("max-height");
+        
+        
+        console.log(fullDate);
+        
     }
     
     function makeCalendar() {
@@ -611,8 +619,8 @@
         
     }
     
-    function resetTodosHeight(modContent) {
-        modContent.style.setProperty("height", "auto");
+    function resetTodosHeight(el) {
+        el.style.setProperty("height", "auto");
     }
     
     function setTodosHeight(x) {
@@ -659,9 +667,11 @@
             yearList = getId("yearList"),
             calendar = getId("calendar"),
             yearTitle = getId("yearTitle"),
-            indexContainer = document.querySelector(".index-container");
-
-        if(this.dataset.period === "year") {
+            indexContainer = document.querySelector(".index-container"),
+            modContent = getId("modContent"),
+            state = this.dataset.period;
+        
+        if(state === "year") {
             monthList.classList.toggle("no-display");
             yearTitle.classList.toggle("no-display");
             if(yearList) {
@@ -672,13 +682,13 @@
             // this.classList.toggle("no-display");
             this.textContent = "date_range";
             indexContainer.classList.toggle("max-height");
-            
         }
-        else if(this.dataset.period === "month") {
+        else if(state === "month") {
             // note: if I try to put container in variable, it won't work.
             // see https://stackoverflow.com/questions/42956884/failed-to-execute-removechild-on-node
             calendar.removeChild(getId("container"));
             clearEntries();
+            resetTodosHeight(modContent);
             if(monthList && yearTitle) {
                 monthList.classList.toggle("no-display");
                 yearTitle.classList.toggle("no-display");
@@ -695,6 +705,20 @@
             indexContainer.classList.toggle("max-height");
             
         }
+        console.log(fullDate);
+        selectCurrent(state);
+    }
+    
+    function selectCurrent(state) {
+        const years = Array.from(document.querySelectorAll(".year-list")),
+            months = Array.from(document.querySelectorAll(".month-list")),
+            y = years.filter( (y) => parseInt(y.textContent) === fullDate.year ),
+            m = months.filter( (m) => m.textContent === monthList[fullDate.month]);
+        
+        state === "month" ? m[0].classList.add("selected-date")
+        : y[0].classList.add("selected-date");
+        // y.classList.add("selected-date");
+        // m.classList.add("selected-date");
     }
     
     function removeColour() {
@@ -1407,6 +1431,18 @@
         //     getId("formBackBtn").classList.toggle("no-display");
         //     getId("checkBtn").classList.toggle("no-display");
         // }
+    }
+    
+    function setBodyHeight() {
+        const nav = document.querySelector(".nav"),
+            buttonPane = document.querySelector(".button-pane"),
+            navHeight = window.getComputedStyle(nav).height, //string
+            btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
+            bodyHeight = window.innerHeight - (parseInt(navHeight) + parseInt(btnPaneHeight));
+            
+        document.body.style.setProperty("height", bodyHeight + "px");
+
+        
     }
     
     // function clearBtnPane() {

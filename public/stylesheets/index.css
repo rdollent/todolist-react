@@ -430,8 +430,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   height: 100%;
 }
   .year-list {
-    border-bottom: 1px solid #F2F2F2;
-    padding: 5px;
+    /*border-bottom: 1px solid #F2F2F2;*/
+    padding: 1rem;
   }
 
 #monthList {
@@ -453,11 +453,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     font-size: 2rem;
   }
   .month-list {
-    /*width: 30%;*/
-    /*line-height: 5rem;*/
-    /*display: inline-block;*/
-    /*text-align: center;*/
-    /*margin: 0.5rem;*/
+    padding: 1rem;
   }
 
 

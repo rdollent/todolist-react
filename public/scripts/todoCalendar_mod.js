@@ -197,6 +197,8 @@
             }
             div.setAttribute("data-" + input, i);
             div.addEventListener("click", clicked);
+            div.addEventListener("mousedown", clicked);
+            div.addEventListener("touchstart", clicked);
 
             frag.appendChild(div);
         }
@@ -217,7 +219,8 @@
             monthList = getId("monthList"),
             periodSelect = getId("periodSelect"),
             yearTitle = getId("yearTitle"),
-            indexContainer = document.querySelector(".index-container");
+            indexContainer = document.querySelector(".index-container"),
+            years = Array.from(document.querySelectorAll(".year-list"));
             // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
 
         fullDate.year = parseInt(this.textContent);
@@ -237,7 +240,7 @@
         indexContainer.classList.toggle("max-height");
         
         
-        console.log(fullDate);
+
     }
     
     function monthClicked() {
@@ -262,7 +265,7 @@
         makeAddBtn();
         
         
-        console.log(fullDate);
+
         
     }
     
@@ -380,10 +383,12 @@
             // https://stackoverflow.com/questions/3871547/js-iterating-over-result-of-getelementsbyclassname-using-array-foreach
             const dates = document.getElementsByClassName("calendar-dates"),
                  obj = Array.from(dates).filter(function(d) {
-                return d.dataset.date == fullDate.date;
-            });
+                     return parseInt(d.dataset.date) === fullDate.date || parseInt(d.dataset.date) === fullDate.maxDates;
+
+                    });
             elem = obj[0];
         }
+
         showTodos(elem);
         removeColour();
         putColour(elem);
@@ -705,20 +710,21 @@
             indexContainer.classList.toggle("max-height");
             
         }
-        console.log(fullDate);
+
         selectCurrent(state);
     }
     
     function selectCurrent(state) {
         const years = Array.from(document.querySelectorAll(".year-list")),
             months = Array.from(document.querySelectorAll(".month-list")),
-            y = years.filter( (y) => parseInt(y.textContent) === fullDate.year ),
-            m = months.filter( (m) => m.textContent === monthList[fullDate.month]);
+            y = years.filter((y) => parseInt(y.textContent) === fullDate.year ),
+            m = months.filter((m) => m.textContent === monthList[fullDate.month]);
         
-        state === "month" ? m[0].classList.add("selected-date")
-        : y[0].classList.add("selected-date");
-        // y.classList.add("selected-date");
-        // m.classList.add("selected-date");
+        if(state === "month") {
+            m[0].classList.add("selected-date");
+        } else if(state === "year") {
+            y[0].classList.add("selected-date");
+        }
     }
     
     function removeColour() {
@@ -989,7 +995,7 @@
                         optns.textContent = String(j);
                     }
                 }
-                // set default value
+                // set default values
                 // for month, check if month names match
                 if(selectId === "formMonth") {
                     if(task === "updTodo" && optns.textContent === monthList[todoArr[1]]) {
@@ -1010,7 +1016,6 @@
                         }
                     }
                 }
-
                 select.appendChild(optns);
             }
 

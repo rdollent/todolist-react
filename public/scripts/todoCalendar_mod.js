@@ -197,8 +197,14 @@
             }
             div.setAttribute("data-" + input, i);
             div.addEventListener("click", clicked);
-            div.addEventListener("mousedown", clicked);
-            div.addEventListener("touchstart", clicked);
+            div.addEventListener("mousedown", function() {
+                removeColour();
+                putColour(this);
+            });
+            div.addEventListener("touchstart", function() {
+                removeColour();
+                putColour(this);
+            });
 
             frag.appendChild(div);
         }
@@ -223,7 +229,7 @@
             years = Array.from(document.querySelectorAll(".year-list"));
             // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
 
-        fullDate.year = parseInt(this.textContent);
+        fullDate.year = parseInt(this.textContent, 10);
         yearList.classList.toggle("no-display");
         if(monthList && yearTitle) {
             monthList.classList.toggle("no-display");
@@ -238,9 +244,9 @@
             periodSelect.textContent = "arrow_back";
         }
         indexContainer.classList.toggle("max-height");
-        
-        
 
+        selectCurrent("month");
+        
     }
     
     function monthClicked() {
@@ -255,7 +261,7 @@
         // getId("addBtn").classList.toggle("no-display");
         clearIcons("default");
         // makeAddBtn();
-        fullDate.month = parseInt(this.dataset.month);
+        fullDate.month = parseInt(this.dataset.month, 10);
         fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
         getId("periodSelect").dataset.period = "month";
         getId("periodSelect").textContent = "arrow_back";
@@ -263,10 +269,6 @@
         makeDayAndDate();
         makePeriodSelectBtns();
         makeAddBtn();
-        
-        
-
-        
     }
     
     function makeCalendar() {
@@ -383,7 +385,7 @@
             // https://stackoverflow.com/questions/3871547/js-iterating-over-result-of-getelementsbyclassname-using-array-foreach
             const dates = document.getElementsByClassName("calendar-dates"),
                  obj = Array.from(dates).filter(function(d) {
-                     return parseInt(d.dataset.date) === fullDate.date || parseInt(d.dataset.date) === fullDate.maxDates;
+                     return parseInt(d.dataset.date, 10) === fullDate.date || parseInt(d.dataset.date, 10) === fullDate.maxDates;
 
                     });
             elem = obj[0];
@@ -403,10 +405,10 @@
             todoIconStr = "<i class='material-icons icon-dots visible'>brightness_1</i>",
             // place indicator if date has a todo
             // map produces a new array, where obj is each elem in todosMonth array, and returns obj.date for each obj.
-            todosDateAll = todosMonth.map(obj => obj.date),
+            todosDateAll = todosMonth.map(obj => obj.date);
             
             // get only unique dates. es6 method.
-            todosDate = new Set(todosDateAll);
+            // todosDate = new Set(todosDateAll);
 
         todoIcon.classList.add("icon-tiny");
         // use curly braces in arrow functions to prevent returning a value.
@@ -419,7 +421,7 @@
         // use insertAdjacentHTML https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
         calendarDates.forEach( date => {
             // dates in calendar are string, dates in todosDate are numbers
-            const dateInt = parseInt(date.textContent);
+            const dateInt = parseInt(date.textContent, 10);
             
             // if(date.textContent) {
                 // if child already exists in DOM, appendChild removes node from its initial position
@@ -570,7 +572,7 @@
         // clicking date on calendar, get date for fullDate.date,
         // otherwise, fullDate.date is taken using prevDate and nextDate functions.
         if(clickedElem) {
-            fullDate.date = parseInt(clickedElem.dataset.date);
+            fullDate.date = parseInt(clickedElem.dataset.date, 10);
         }
 
         todosTodayTemp = todosMonth.filter(function(todo) {
@@ -638,7 +640,7 @@
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
-            todosDateHeight = window.innerHeight - (parseInt(containerHeight) + parseInt(navHeight) + parseInt(btnPaneHeight)+ 10), //10px is margin-top of index-container
+            todosDateHeight = window.innerHeight - (parseInt(containerHeight, 10) + parseInt(navHeight, 10) + parseInt(btnPaneHeight, 10)+ 10), //10px is margin-top of index-container
             modContent = getId("modContent");
             // elem = getId(x);
             
@@ -651,9 +653,9 @@
     }
     // use to sort todosToday array (of objects)
     function compareTimes(a,b) {
-        if(parseInt(a.frmHr + a.frmMin) < parseInt(b.frmHr + b.frmMin)) {
+        if(parseInt(a.frmHr + a.frmMin, 10) < parseInt(b.frmHr + b.frmMin, 10)) {
             return - 1;
-        } else if(parseInt(a.frmHr + a.frmMin) > parseInt(b.frmHr + b.frmMin)) {
+        } else if(parseInt(a.frmHr + a.frmMin, 10) > parseInt(b.frmHr + b.frmMin, 10)) {
             return 1;
         }
         // if a.frmHr and b.frmHr are equal
@@ -717,7 +719,7 @@
     function selectCurrent(state) {
         const years = Array.from(document.querySelectorAll(".year-list")),
             months = Array.from(document.querySelectorAll(".month-list")),
-            y = years.filter((y) => parseInt(y.textContent) === fullDate.year ),
+            y = years.filter((y) => parseInt(y.textContent, 10) === fullDate.year ),
             m = months.filter((m) => m.textContent === monthList[fullDate.month]);
         
         if(state === "month") {
@@ -729,15 +731,21 @@
     
     function removeColour() {
         // let selectedDate = document.getElementsByClassName("selected-date")[0];
-        const selectedDate = document.querySelector(".selected-date");
+        const selectedDate = document.querySelectorAll(".selected-date");
+
         if(selectedDate) {
-            selectedDate.classList.toggle("selected-date");
+            selectedDate.forEach( (date) => { date.classList.toggle("selected-date") });
         }
         
     }  
     
     function putColour(elem) {
-        elem.parentNode.classList.toggle("selected-date");
+        if(elem.classList.contains("calendar-dates")) {
+            elem.parentNode.classList.toggle("selected-date");
+        } else if (elem.classList.contains("month-list") || elem.classList.contains("year-list")) {
+            elem.classList.toggle("selected-date");
+        }
+        
     }
 
     function showFoundTodo(todo) {
@@ -751,7 +759,7 @@
             showArr = ["time", "title", "description"],
             // btnArr = ["delete", "edit", "arrow_back"],
             frag = document.createDocumentFragment(),
-            addBtn = getId("addBtn"),
+            // addBtn = getId("addBtn"),
             span = makeElem("span");
         
         
@@ -796,8 +804,8 @@
     
     function makeOrEditTodo(obj) {
         if(getId("showTodoDiv")) {
-            const showTodoDiv = getId("showTodoDiv"),
-                modContent = getId("modContent");
+            const showTodoDiv = getId("showTodoDiv");
+                // modContent = getId("modContent");
             showTodoDiv.classList.toggle("no-display");
             // modContent.classList.remove("overflow");
         }
@@ -1003,7 +1011,7 @@
                     } else if(task === "newTodo" && optns.textContent === monthList[fullDate.month]) {
                         optns.selected = true;
                     }
-                } else if(task === "updTodo" && parseInt(optns.textContent) === todoArr[i]){
+                } else if(task === "updTodo" && parseInt(optns.textContent, 10) === todoArr[i]){
                     optns.selected = true;
                 } else if(task === "newTodo") {
                     if(selectId === "formYear" && optns.textContent === String(fullDate.year)) {
@@ -1170,9 +1178,9 @@
             toHr = getId("formToHr"),
             toMin = getId("formToMin"),
             title = document.querySelector(".form-select").value.length,
-            hrGreat = parseInt(frmHr.value) > parseInt(toHr.value),
-            hrEqual = parseInt(frmHr.value) === parseInt(toHr.value),
-            minGreat = parseInt(frmMin.value) > parseInt(toMin.value);
+            hrGreat = parseInt(frmHr.value, 10) > parseInt(toHr.value, 10),
+            hrEqual = parseInt(frmHr.value, 10) === parseInt(toHr.value, 10),
+            minGreat = parseInt(frmMin.value, 10) > parseInt(toMin.value, 10);
         let pass = true;
         if(hrGreat) {
             obj.event.preventDefault();
@@ -1269,7 +1277,7 @@
     
     function makeTodoBtns(todo) {
         const btnArr = ["delete", "edit", "arrow_back"],
-            addBtn = getId("addBtn"),
+            // addBtn = getId("addBtn"),
             modContent = getId("modContent");
             
         // if(getId("editBtn") === null && getId("deleteBtn") === null && getId("arrow_backBtn") === null) {
@@ -1443,7 +1451,7 @@
             buttonPane = document.querySelector(".button-pane"),
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
-            bodyHeight = window.innerHeight - (parseInt(navHeight) + parseInt(btnPaneHeight));
+            bodyHeight = window.innerHeight - (parseInt(navHeight, 10) + parseInt(btnPaneHeight, 10));
             
         document.body.style.setProperty("height", bodyHeight + "px");
 

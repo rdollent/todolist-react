@@ -1011,7 +1011,8 @@
                     } else if(task === "newTodo" && optns.textContent === monthList[fullDate.month]) {
                         optns.selected = true;
                     }
-                } else if(task === "updTodo" && parseInt(optns.textContent, 10) === todoArr[i]){
+                } else if(task === "updTodo" && optns.textContent === String(todoArr[i])){
+                    console.log(optns.textContent, typeof optns.textContent, todoArr[i],typeof todoArr[i]);
                     optns.selected = true;
                 } else if(task === "newTodo") {
                     if(selectId === "formYear" && optns.textContent === String(fullDate.year)) {

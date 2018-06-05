@@ -842,6 +842,7 @@
                     input.required = "required";
                     
                     input.name = x;
+                    // assign id as formTitle or formDescription
                     input.id = "form" + x.charAt(0).toUpperCase() + x.slice(1);
                     if(task === "updTodo") {
                         input.value = todo[x];
@@ -1453,7 +1454,16 @@
     }
     
     function resetForm(obj) {
-        
+        const orig = obj.todo;
+        getId("formTitle").value = orig.title;
+        getId("formDescription").value = orig.description;
+        getId("formFrmHr").value = orig.frmHr;
+        getId("formFrmMin").value = orig.frmMin;
+        getId("formToHr").value = orig.toHr;
+        getId("formToMin").value = orig.toMin;
+        getId("formDate").value = orig.date;
+        getId("formMonth").value = monthList[orig.month];
+        getId("formYear").value = orig.year;
     }
     
     function setBodyHeight() {

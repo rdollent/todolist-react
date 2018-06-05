@@ -575,11 +575,10 @@
             fullDate.date = parseInt(clickedElem.dataset.date, 10);
         }
 
-        todosTodayTemp = todosMonth.filter(function(todo) {
-            return todo.date === fullDate.date;
-        });
+        todosTodayTemp = todosMonth.filter((todo) => todo.date === fullDate.date);
         
         todosToday = todosTodayTemp.sort(compareTimes);
+
         
         showTodoDiv.id = "showTodoDiv";
         entries.id = "entries";
@@ -833,7 +832,7 @@
                     let input;
                     if(x === "title") {
                         input = makeElem("input");
-                        input.type = ("tel");
+                        input.type = ("text");
                         input.setAttribute("maxlength", 15);
                         input.setAttribute("size", 15);
                     } else if(x === "description") {
@@ -843,6 +842,7 @@
                     input.required = "required";
                     
                     input.name = x;
+                    input.id = "form" + x.charAt(0).toUpperCase() + x.slice(1);
                     if(task === "updTodo") {
                         input.value = todo[x];
                     } else if(task === "newTodo") {
@@ -1012,7 +1012,6 @@
                         optns.selected = true;
                     }
                 } else if(task === "updTodo" && optns.textContent === String(todoArr[i])){
-                    console.log(optns.textContent, typeof optns.textContent, todoArr[i],typeof todoArr[i]);
                     optns.selected = true;
                 } else if(task === "newTodo") {
                     if(selectId === "formYear" && optns.textContent === String(fullDate.year)) {
@@ -1261,6 +1260,7 @@
             label.appendChild(icon);
             btnPane.appendChild(label);
         } else {
+            // use clonenode to avoid replacing icon?
             btnPane.appendChild(icon);    
         }
         
@@ -1353,7 +1353,7 @@
     function clearIcons(state) {
         
         // store in btnArr those icons that should only be visible in the given mode
-        let btnArr = [getId("addBtn"), getId("deleteBtn"), getId("editBtn"), getId("arrow_backBtn"), getId("checkBtn"), getId("formBackBtn")],
+        let btnArr = [getId("addBtn"), getId("deleteBtn"), getId("editBtn"), getId("arrow_backBtn"), getId("checkBtn"), getId("formBackBtn"), getId("undoBtn")],
         
         // iconRemain = [getId("addBtn"), getId("deleteBtn"), getId("editBtn"), getId("arrow_backBtn"), getId("checkBtn"), getId("formBackBtn")];
         
@@ -1364,7 +1364,7 @@
             iconRemain = [getId("addBtn")];
 
         } else if(state === "form") {
-            iconRemain = [getId("checkBtn"), getId("formBackBtn")];
+            iconRemain = [getId("checkBtn"), getId("formBackBtn"), getId("undoBtn")];
             
         } else if(state === "showTodo") {
             iconRemain = [getId("deleteBtn"), getId("editBtn"), getId("arrow_backBtn")];
@@ -1406,6 +1406,7 @@
         // if(getId("formBackBtn") === null && getId("checkBtn") === null) {
         const btnBack = makeIcon("arrow_back"),
             btnSubmit = makeIcon("check"),
+            btnUndo = makeIcon("undo"),
             modContent = getId("modContent"),
             showFoundTodoDiv = getId("showFoundTodoDiv");
         btnBack.id = "formBackBtn";
@@ -1445,6 +1446,14 @@
         //     getId("formBackBtn").classList.toggle("no-display");
         //     getId("checkBtn").classList.toggle("no-display");
         // }
+        
+        btnUndo.addEventListener("click", function() {
+            resetForm(obj);
+        });
+    }
+    
+    function resetForm(obj) {
+        
     }
     
     function setBodyHeight() {

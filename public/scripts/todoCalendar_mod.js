@@ -1454,16 +1454,27 @@
     }
     
     function resetForm(obj) {
-        const orig = obj.todo;
-        getId("formTitle").value = orig.title;
-        getId("formDescription").value = orig.description;
-        getId("formFrmHr").value = orig.frmHr;
-        getId("formFrmMin").value = orig.frmMin;
-        getId("formToHr").value = orig.toHr;
-        getId("formToMin").value = orig.toMin;
-        getId("formDate").value = orig.date;
-        getId("formMonth").value = monthList[orig.month];
-        getId("formYear").value = orig.year;
+        const orig = obj.todo,
+            ind = obj.index;
+        if(ind === "updTodo") {
+            getId("formTitle").value = orig.title;
+            getId("formDescription").value = orig.description;
+            getId("formFrmHr").value = orig.frmHr;
+            getId("formFrmMin").value = orig.frmMin;
+            getId("formToHr").value = orig.toHr;
+            getId("formToMin").value = orig.toMin;
+            getId("formDate").value = orig.date;
+            getId("formMonth").value = monthList[orig.month];
+            getId("formYear").value = orig.year;
+        } else if(ind === "newTodo") {
+            getId("formTitle").value = getId("formDescription").value = "";
+            getId("formFrmHr").value = getId("formFrmMin").value = getId("formToHr").value = getId("formToMin").value = "00";
+            getId("formDate").value = fullDate.date;
+            getId("formMonth").value = monthList[fullDate.month];
+            getId("formYear").value = fullDate.year;
+        }
+        
+        
     }
     
     function setBodyHeight() {

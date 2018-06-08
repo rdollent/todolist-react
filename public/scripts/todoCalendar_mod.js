@@ -27,6 +27,22 @@
         });
     });
     
+    const calendar = document.querySelector("#calendar");
+    
+    calendar.addEventListener("touchstart", function(event) {
+        event.preventDefault();
+        console.log(event.changedTouches);
+    });
+    
+    calendar.addEventListener("touchend", function(event) {
+        event.preventDefault();
+        console.log(event.changedTouches);
+    });
+    
+    function detectSwipe() {
+        
+    }
+    
     // function to run when page loads
     function runOnPageLoad() {
         // attach letGo function to these events
@@ -639,7 +655,7 @@
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
-            todosDateHeight = window.innerHeight - (parseInt(containerHeight, 10) + parseInt(navHeight, 10) + parseInt(btnPaneHeight, 10)+ 10), //10px is margin-top of index-container
+            todosDateHeight = window.innerHeight - (parseInt(containerHeight, 10) + parseInt(navHeight, 10) + parseInt(btnPaneHeight, 10) + 10), //20px is margin-top of index-container
             modContent = getId("modContent");
             // elem = getId(x);
             

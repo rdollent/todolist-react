@@ -14,44 +14,43 @@
     let prevNextInterval = null;
     // todos for xmlhttprequest ajax call
     let todos = undefined;
-
-    const hamburger = document.querySelector(".nav-hamburger");
     
-    hamburger.addEventListener("click", function() {
-        // make background blurry/bright/light and immune to pointer events
-        // select body and all but not nav and all its children
-        const allDiv = document.querySelectorAll("body > *:not(.nav)");
-        // you can use forEach on a Nodelist
-        allDiv.forEach(function(elem) {
-            elem.classList.toggle("select-none");
-        });
-    });
-    
-    const calendar = document.querySelector("#calendar");
-    
-    calendar.addEventListener("touchstart", function(event) {
-        event.preventDefault();
-        console.log(event.changedTouches);
-    });
-    
-    calendar.addEventListener("touchend", function(event) {
-        event.preventDefault();
-        console.log(event.changedTouches);
-    });
-    
-    function detectSwipe() {
-        
-    }
-    
-    // function to run when page loads
-    function runOnPageLoad() {
-        // attach letGo function to these events
-        const letGoArr = ["touchend", "mouseup"];
-        makeRequest({index: "getTodo"});
+    function addEvents() {
+        const hamburger = document.querySelector(".nav-hamburger");
         // added mouseup event listener on whole document when scrolling through dates
         // and months, hovering mouse outside prev and next buttons while holding mousedown
         // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
         // to detect mouseup.
+        // attach letGo function to these events
+        const letGoArr = ["touchend", "mouseup"];
+        const calendar = document.querySelector("#calendar");
+        let coordStart, coordEnd;
+    
+        hamburger.addEventListener("click", function() {
+            // make background blurry/bright/light and immune to pointer events
+            // select body and all but not nav and all its children
+            const allDiv = document.querySelectorAll("body > *:not(.nav)");
+            // you can use forEach on a Nodelist
+            allDiv.forEach(function(elem) {
+                elem.classList.toggle("select-none");
+            });
+        });
+    
+        
+        
+        calendar.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            coordStart = event.changedTouches;
+            console.log("inside touchstart ", coordStart);
+        });
+        
+        calendar.addEventListener("touchend", function(event) {
+            event.preventDefault();
+            coordEnd = event.changedTouches;
+            console.log("inside touchend ", coordEnd);
+            detectSwipe(coordStart, coordEnd);
+        });
+        
         
         letGoArr.forEach(function(e) {
             document.addEventListener(e, function() {
@@ -60,6 +59,19 @@
                 }
             });
         });
+    }
+
+    
+    
+    function detectSwipe(start, end) {
+        console.log("inside detectSwipe ", start, end);
+    }
+    
+    // function to run when page loads
+    function runOnPageLoad() {
+        addEvents();
+        makeRequest({index: "getTodo"});
+       
     }
     
     // shorthand to getelementbyid for easier typing. input the id name and get the element with the given id as input.    

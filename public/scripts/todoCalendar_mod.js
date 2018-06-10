@@ -78,7 +78,7 @@
         // hypotenuse is c^2 = b^2 + a^2
         const hypotenuse = Math.sqrt(Math.pow(base,2) + Math.pow(height,2));
         
-        
+        // https://www.mathsisfun.com/algebra/trig-finding-angle-right-triangle.html
         // http://www.mathwarehouse.com/trigonometry/inverse-sine-cosine-tangent/inverse-sin-1.php
         // use sine and cosine to find angles! may need to convert radians to degrees, since JS uses radians
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sin
@@ -91,7 +91,7 @@
         
         // alert(Math.abs(startX - endX) + " " + calendar.clientWidth);
         // register swipe at at least 25% of screen
-        const distancePct = (Math.abs(startX - endX) / calendar.clientWidth);
+        const distancePct = (Math.abs(base) / calendar.clientWidth);
         
         // right-to-left swipe
         const greater = startX > endX;

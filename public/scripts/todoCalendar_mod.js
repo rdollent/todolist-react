@@ -23,8 +23,6 @@
         // to detect mouseup.
         // attach letGo function to these events
         const letGoArr = ["touchend", "mouseup"];
-        const calendar = document.querySelector("#calendar");
-        let coordStart, coordEnd;
     
         hamburger.addEventListener("click", function() {
             // make background blurry/bright/light and immune to pointer events
@@ -34,21 +32,6 @@
             allDiv.forEach(function(elem) {
                 elem.classList.toggle("select-none");
             });
-        });
-    
-        
-        
-        calendar.addEventListener("touchstart", function(event) {
-            event.preventDefault();
-            coordStart = event.changedTouches;
-            console.log("inside touchstart ", coordStart);
-        });
-        
-        calendar.addEventListener("touchend", function(event) {
-            event.preventDefault();
-            coordEnd = event.changedTouches;
-            console.log("inside touchend ", coordEnd);
-            detectSwipe(coordStart, coordEnd);
         });
         
         
@@ -64,13 +47,77 @@
     
     
     function detectSwipe(start, end) {
-        console.log("inside detectSwipe ", start, end);
+        const calendar = getId("calendar");
+        const startX = start.x;
+        const startY = start.y;
+        const endX = end.x;
+        const endY = end.y;
+            
+        // create a triangle.
+        // we need 3 points. first point is start(x,y)
+        // 2nd point is at end(x,y). connect start(x,y) and end(x,y) to form a line segment
+        // to create a 3rd point, we need the y-coordinate of start
+        // to maintain height from our start point,
+        // and we need the same x-coordinate of our end
+        // to mimic where our end x is along the x-axis if we moved in a strictly straight line
+        // relative to the x-axis
+        // base(x,y).----. start(x,y)
+        //          |   /
+        //          |  /
+        //          | /
+        //          |/
+        //          .end(x,y)
+        // we need the angle between start(x,y) and end(x,y) to be <= 45 degrees to be considered a swipe
+        // we also need a minimum number of distance between start(x,y) and base(x,y) to be considered a full swipe
+        
+        const baseY = startY;
+        const baseX = endX;
+        
+        const base = Math.abs(startX - baseX);
+        const height = Math.abs(baseY - endY);
+        // hypotenuse is c^2 = b^2 + a^2
+        const hypotenuse = Math.sqrt(Math.pow(base,2) + Math.pow(height,2));
+        
+        
+        // http://www.mathwarehouse.com/trigonometry/inverse-sine-cosine-tangent/inverse-sin-1.php
+        // use sine and cosine to find angles! may need to convert radians to degrees, since JS uses radians
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sin
+        // convert radians to degrees
+        // degrees = radians * (180/pi)
+        // right angle/90 degrees always at base(x,y)
+        // sin(startAngle) =  height/hypotenuse
+        // startAngle = arcsin(height/hypotenuse)
+        const startAngle = Math.asin(height/hypotenuse)*(180/Math.PI);
+        
+        // alert(Math.abs(startX - endX) + " " + calendar.clientWidth);
+        // register swipe at at least 25% of screen
+        const distancePct = (Math.abs(startX - endX) / calendar.clientWidth);
+        
+        // right-to-left swipe
+        const greater = startX > endX;
+        // left-to-right swipe
+        const less = startX < endX;
+        
+        // angle of swipe must be less than or equal to 40 degrees
+        const angle40 = startAngle <= 40;
+        
+        // distance travelled of swipe must be greater than or equal to 20% of the screen
+        const distance25 = distancePct >= 0.20;
+        
+        
+        if(angle40 && distance25) {
+            if(greater) {
+                nextMonth();
+            } else if(less) {
+                prevMonth();
+            }
+        }
     }
     
     // function to run when page loads
     function runOnPageLoad() {
-        addEvents();
         makeRequest({index: "getTodo"});
+        addEvents();
        
     }
     
@@ -303,6 +350,7 @@
         const calendar = getId("calendar"),
             container = makeElem("div"),
             titleHeader = makeTitleHeader();
+        let coordStart, coordEnd;
         container.id = "container";
         while(calendar.lastChild) {
             calendar.removeChild(calendar.lastChild);
@@ -310,6 +358,22 @@
         calendar.appendChild(container);
         container.appendChild(titleHeader);
         makeBtns();
+        
+        
+        // https://stackoverflow.com/questions/6073505/what-is-the-difference-between-screenx-y-clientx-y-and-pagex-y
+        container.addEventListener("touchstart", function(event) {
+            // event.preventDefault();
+            // no preventdefault as it will stop any eventlisteners
+            coordStart = { x: event.changedTouches[0].clientX , y: event.changedTouches[0].clientY };
+        });
+        
+        container.addEventListener("touchend", function(event) {
+            event.preventDefault();
+            //add preventdefault to stop selecting dates when touchend fires
+            coordEnd = { x: event.changedTouches[0].clientX , y: event.changedTouches[0].clientY };
+            detectSwipe(coordStart, coordEnd);
+        });
+        
     }
     function makeTitleHeader() {
         const span = makeElem("span"),
@@ -404,6 +468,7 @@
     container.appendChild(tbl);
     populateCalendarWithDots();
     selectDate();
+    
     
     }
     

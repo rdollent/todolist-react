@@ -368,7 +368,7 @@
         });
         
         container.addEventListener("touchend", function(event) {
-            event.preventDefault();
+            // event.preventDefault();
             //add preventdefault to stop selecting dates when touchend fires
             coordEnd = { x: event.changedTouches[0].clientX , y: event.changedTouches[0].clientY };
             detectSwipe(coordStart, coordEnd);

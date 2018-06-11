@@ -1405,9 +1405,13 @@
                 // btn.dataset.mode = "delete";
                 // btn.textContent = "delete_forever";
                 icon.addEventListener("click", function(event) {
-                    clearIcons("all");
                     event.preventDefault();
-                    makeRequest({index: "delTodo", todo: todo}); //xmlhttprequest
+                    // create warning before deleting todo
+                    if(window.confirm("Delete todo?")) {
+                        clearIcons("all");
+                        makeRequest({index: "delTodo", todo: todo}); //xmlhttprequest
+                    }
+                    
                 });
                 // form.appendChild(iconCont);
                 // frag.appendChild(form);

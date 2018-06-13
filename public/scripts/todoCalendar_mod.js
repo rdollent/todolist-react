@@ -29,6 +29,7 @@
             // select body and all but not nav and all its children
             const allDiv = document.querySelectorAll("body > *:not(.nav)");
             // you can use forEach on a Nodelist
+            console.log("hi");
             allDiv.forEach(function(elem) {
                 elem.classList.toggle("select-none");
             });
@@ -102,10 +103,10 @@
         const angle40 = startAngle <= 40;
         
         // distance travelled of swipe must be greater than or equal to 20% of the screen
-        const distance25 = distancePct >= 0.20;
+        const distance20 = distancePct >= 0.20;
         
         
-        if(angle40 && distance25) {
+        if(angle40 && distance20) {
             if(greater) {
                 nextMonth();
             } else if(less) {
@@ -723,11 +724,8 @@
     }
     
     function setTodosHeight(x) {
-        // const container = document.getElementsByClassName("index-container")[0],
         const container = document.querySelector(".index-container"),
-            // nav = document.getElementsByClassName("nav")[0],
             nav = document.querySelector(".nav"),
-            // buttonPane = document.getElementsByClassName("button-pane")[0],
             buttonPane = document.querySelector(".button-pane"),
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string

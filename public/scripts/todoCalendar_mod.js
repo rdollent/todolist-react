@@ -16,24 +16,24 @@
     let todos = undefined;
     
     function addEvents() {
-        const hamburger = document.querySelector(".nav-hamburger");
+        // const hamburger = document.querySelector(".nav-hamburger");
         // added mouseup event listener on whole document when scrolling through dates
         // and months, hovering mouse outside prev and next buttons while holding mousedown
         // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
         // to detect mouseup.
         // attach letGo function to these events
         const letGoArr = ["touchend", "mouseup"];
-    
-        hamburger.addEventListener("click", function() {
-            // make background blurry/bright/light and immune to pointer events
-            // select body and all but not nav and all its children
-            const allDiv = document.querySelectorAll("body > *:not(.nav)");
-            // you can use forEach on a Nodelist
-            console.log("hi");
-            allDiv.forEach(function(elem) {
-                elem.classList.toggle("select-none");
-            });
-        });
+        
+        // hamburger.addEventListener("click", function() {
+        //     // make background blurry/bright/light and immune to pointer events
+        //     // select body and all but not nav and all its children
+        //     const allDiv = document.querySelectorAll("body > *:not(.nav)");
+        //     // you can use forEach on a Nodelist
+        //     console.log("hi");
+        //     allDiv.forEach(function(elem) {
+        //         elem.classList.toggle("select-none");
+        //     });
+        // });
         
         
         letGoArr.forEach(function(e) {

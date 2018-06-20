@@ -1,36 +1,39 @@
-    </head>
-    <body>
 
-<nav class="navbar navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="/">
-        <h1>To-Do App</h1>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-expendaded="false" aria-controls="menu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="menu">
-        <div class="navbar-nav">
-            <% if(currentUser) { %>
-                <a class="nav-item active nav-link" href="/todo">View All To-dos</a>
-                <a class="nav-item nav-link">Signed in as <%= currentUser.username %></a>
-                <a class="nav-item nav-link" href="/logout">Logout</a>
-            <% } else { %>
-                <a class="nav-item nav-link" href="/register">Register</a>
-                <a class="nav-item nav-link" href="/login">Log In</a>
-            <% } %>
+</head>
+<body>
+
+
+
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <a class="navbar-brand" href="/">
+            <h1>To-Do App</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-expendaded="false" aria-controls="menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+            <div class="navbar-nav">
+                <% if(currentUser) { %>
+                    <a class="nav-item active nav-link" href="/todo">View All To-dos</a>
+                    <a class="nav-item nav-link">Signed in as <%= currentUser.username %></a>
+                    <a class="nav-item nav-link" href="/logout">Logout</a>
+                <% } else { %>
+                    <a class="nav-item nav-link" href="/register">Register</a>
+                    <a class="nav-item nav-link" href="/login">Log In</a>
+                <% } %>
+            </div>
         </div>
+    </nav>
+    
+    <div class="container">
+        <% if(error && error.length > 0) { %> <!-- error.length because error array can be empty -->
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success && success.length > 0) { %>
+            <div class="alert alert-success" role="alert">
+                <%= success %>
+            </div>
+        <% } %>       
     </div>
-</nav>
-
-<div class="container">
-    <% if(error && error.length > 0) { %> <!-- error.length because error array can be empty -->
-        <div class="alert alert-danger" role="alert">
-            <%= error %>
-        </div>
-    <% } %>
-    <% if(success && success.length > 0) { %>
-        <div class="alert alert-success" role="alert">
-            <%= success %>
-        </div>
-    <% } %>       
-</div>

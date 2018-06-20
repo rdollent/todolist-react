@@ -1,34 +1,36 @@
-    </head>
-    <body>
-
-<nav class="nav">
-    <i id="periodSelect" class="material-icons">date_range</i>
-    <a href="/" class="nav-title font-one">
-        <span><strong>To-Do List</strong></span>
-    </a>
-    <button class="nav-hamburger">
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
-    </button>
-    <div class="nav-menu"> <!--nav-menu-mobile-->
-        <% if(currentUser) { %>
-            <a href="/todo" class="nav-viewAll nav-menu-a">Home</a>
-            <a class="nav-signedIn nav-menu-a">Signed in as <%= currentUser.username %></a>
-            <a href="/logout" class="nav-logout nav-menu-a">Logout</a>
-        <% } else { %>
-            <a href="/register" class="nav-register nav-menu-a">Register</a>
-            <a href="/login" class="nav-logIn nav-menu-a">Log In</a>
-        <% } %>
-
-    </div>
-</nav>
-
-<div>
-    <% if(error && error.length > 0) { %> <!-- error.length because error array can be empty -->
-        <div role="alert" class="flash flash-error">
-            <%= error %>
-        </div>
-    <% } %>
+</head>
+<body>
+        
+<div class="main">
     
-</div>
+    <nav class="nav">
+        <i id="periodSelect" class="material-icons">date_range</i>
+        <a href="/" class="nav-title font-one">
+            <span><strong>To-Do List</strong></span>
+        </a>
+        <button class="nav-hamburger">
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+        </button>
+        <div class="nav-menu"> <!--nav-menu-mobile-->
+            <% if(currentUser) { %>
+                <a href="/todo" class="nav-viewAll nav-menu-a">Home</a>
+                <a class="nav-signedIn nav-menu-a">Signed in as <%= currentUser.username %></a>
+                <a href="/logout" class="nav-logout nav-menu-a">Logout</a>
+            <% } else { %>
+                <a href="/register" class="nav-register nav-menu-a">Register</a>
+                <a href="/login" class="nav-logIn nav-menu-a">Log In</a>
+            <% } %>
+    
+        </div>
+    </nav>
+    
+    <div>
+        <% if(error && error.length > 0) { %> <!-- error.length because error array can be empty -->
+            <div role="alert" class="flash flash-error">
+                <%= error %>
+            </div>
+        <% } %>
+        
+    </div>

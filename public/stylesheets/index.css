@@ -25,7 +25,8 @@ body {
 }
 
 .overflow {
-  overflow: scroll !important;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
@@ -217,7 +218,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       td {
         vertical-align: middle;
       }
-    #modContent {
+    .modContent {
       padding-top: 2rem;
       background-color: #FFFFFF;
     }
@@ -494,7 +495,17 @@ and (min-width: 720px) {
   }
   
   * {
-    color: #FFF;
+    color: #E8E8E8;
+  }
+  
+  .main {
+    display: grid;
+    max-width:2560px;
+    grid-template-columns: [col1] 10% [col2] 40% [col3] 40% [col4] 10% [col5];
+    grid-template-rows: [row1] 6rem [row2] 6rem [row3] 60rem [row4] 6rem [row5];
+    justify-content: center;
+    justify-items: stretch;
+    align-items: auto;
   }
 
 /*========================================================*/
@@ -509,6 +520,8 @@ and (min-width: 720px) {
   background: transparent;
   position: relative;
   margin: 2rem 0 0 5rem;
+  grid-column: col2 / col4;
+  grid-row: row2 / row3;
 }
   .nav-hamburger {
     display: none;
@@ -518,6 +531,10 @@ and (min-width: 720px) {
   }
   .nav-menu-a {
     display: inline-block;
+  }
+  
+  .nav strong, .nav i, .nav a {
+    color: #E8E8E8;
   }
 
 /*============================================================================*/
@@ -568,9 +585,11 @@ and (min-width: 720px) {
   margin-top: 4.2rem;
   margin-left: 2rem;
   box-shadow: 0 0 0;
+  grid-column: col2 / col3;
+  grid-row: row3 / row4;
 }
 .index-container * {
-  color: #FFF;
+  color: #E8E8E8;
 }
   #container {
     text-align:center;
@@ -579,76 +598,67 @@ and (min-width: 720px) {
     grid-template-rows: [row1] 10% [row2] 90% [row3];
     align-items: stretch;
     padding: 0;
+    width: 100%;
+    max-width: 450px;
   }
-    #prevBtn {
-      vertical-align: bottom;
-      grid-column: col1 / col2;
-      grid-row: row1 / row2;
-    }
-    #nextBtn {
-      vertical-align: bottom;
-      grid-column: col3 / col4;
-      grid-row: row1 / row2;
-    }
-    #title {
-      display: inline-block;
-      grid-column: col2 / col3;
-      grid-row: row1 / row2;
+    #prevBtn, #nextBtn, #title {
+      font-size: 2.8rem;
     }
     #tbl {
       margin-top: 2rem;
       width: 100%;
-      max-width: 100rem;
-      grid-column: col1 / col4;
-      grid-row: row2 / row3;
+      border-spacing: 0;
     }
       .col {
-        width: 3rem;
-        max-width: 3rem;
-        padding: 0.25rem;
-        font-size: 1.25rem;
-        /*font-style: normal;*/
+        padding: 0;
+        font-size: 1.2rem;
       }
       .row {
-          height:3.75rem;
+          height:4.5rem;
       }
       .selected-date {
-        background-color: #2A3D45;
-        border-radius: 10px;
+        border: 1px solid #9A9AAB;
+        background: none;
+        border-radius:0;
+
       }
       td {
         vertical-align: middle;
+        /*border: 1px solid #575773;*/
       }
-    #modContent {
-      padding-top: 2rem;
-      background-color: #FFFFFF;
-    }
-      .col-hours {
-        width: 10rem;
-        display:inline-block;
-        margin-left:3rem;
-      }
-      .col-todos {
-        width:15rem;
-        display:inline-block;
-        margin-left: 1.5rem;
-      }
-      .single-entry {
-        display: block;
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-        border-bottom: 0.25px solid #E1E1E1;
-      }
-      .no-entries {
-        font-size: 2rem;
-        width: 25rem;
-        margin: 3rem auto;
-        text-align:center;
-        border-top: 1px solid #afafaf;
-        border-bottom: 1px solid #afafaf;
-        padding: 2rem 0 2rem 0;
-        color: #808080;
-      }
+.modContent {
+  padding-top: 2rem;
+  background: none;
+  grid-column: col3 / col4;
+  grid-row: row3 / row4;
+  
+}
+  .col-hours {
+    width: 10rem;
+    display:inline-block;
+    margin-left:3rem;
+  }
+  .col-todos {
+    width:15rem;
+    display:inline-block;
+    margin-left: 1.5rem;
+  }
+  .single-entry {
+    display: block;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.25px solid #E1E1E1;
+  }
+  .no-entries {
+    font-size: 2rem;
+    width: 25rem;
+    margin: 3rem auto;
+    text-align:center;
+    border-top: 1px solid #afafaf;
+    border-bottom: 1px solid #afafaf;
+    padding: 2rem 0 2rem 0;
+    color: #808080;
+  }
 
 /*============================================================================================================*/
 /*============================================================================================================*/

@@ -1,17 +1,16 @@
-"use strict";
-
 (function() {
-    const fullDate = {}, // tracks current date, year, month. most important variable. all or most functions depend on this.
+    "use strict";
+    
+    const FULL_DATE = {}, // tracks current date, year, month. most important variable. all or most functions depend on this.
         // month object. obj key correspond to month value in JS i.e. month 0 = january.
-        monthList = { 
+        MONTH_LIST = Object.freeze({ 
             0: "January", 1: "February", 2: "March", 3: "April",  4: "May", 5: "June",
-            6: "July", 7: "August", 8: "September", 9: "October", 10: "November", 11: "December"
-        },
+            6: "July", 7: "August", 8: "September", 9: "October", 10: "November", 11: "December"}),
         // day object. day key correspond to day value in JS i.e. 0 = sunday.
-        dayList = {0: "S", 1: "M", 2: "T", 3: "W", 4: "T", 5: "F", 6: "S"};
+        DAY_LIST = Object.freeze({0: "S", 1: "M", 2: "T", 3: "W", 4: "T", 5: "F", 6: "S"});
         
     // use this as counter for holding prev/next buttons.
-    let prevNextInterval = null;
+    let scrollInterval = null;
     // todos for xmlhttprequest ajax call
     let todos = undefined;
     
@@ -22,7 +21,7 @@
         // and doing mouseup will not stop scrolling through dates/months. need mouseup on whole document
         // to detect mouseup.
         // attach letGo function to these events
-        const letGoArr = ["touchend", "mouseup"];
+        const LET_GO_ARR = Object.freeze(["touchend", "mouseup"]);
         
         // hamburger.addEventListener("click", function() {
         //     // make background blurry/bright/light and immune to pointer events
@@ -35,10 +34,9 @@
         //     });
         // });
         
-        
-        letGoArr.forEach(function(e) {
+        LET_GO_ARR.forEach(function(e) {
             document.addEventListener(e, function() {
-                if(prevNextInterval !== null) {
+                if(scrollInterval !== null) {
                     letGo();
                 }
             });
@@ -227,18 +225,18 @@
 
 
     function getCurrentCalendar() {
-        if(fullDate.year === undefined) {
-            fullDate.year = new Date().getFullYear();
+        if(FULL_DATE.year === undefined) {
+            FULL_DATE.year = new Date().getFullYear();
         }
         
-        if(fullDate.month === undefined) {
-            fullDate.month = new Date().getMonth();
+        if(FULL_DATE.month === undefined) {
+            FULL_DATE.month = new Date().getMonth();
         }
         
-        if(fullDate.date === undefined) {
-            fullDate.date = new Date().getDate();
+        if(FULL_DATE.date === undefined) {
+            FULL_DATE.date = new Date().getDate();
         }
-        fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+        FULL_DATE.maxDates = new Date(FULL_DATE.year, FULL_DATE.month + 1, 0).getDate();
         makeCalendar();
         makeDayAndDate();
         makePeriodSelectBtns();
@@ -255,19 +253,19 @@
         if(input === "year") {
             start = 2000, end = 2099, value = function() { return i }, clicked = yearClicked;
         } else if(input === "month") {
-            start = 0, end = 11, value = function() { return monthList[i] }, clicked = monthClicked;
+            start = 0, end = 11, value = function() { return MONTH_LIST[i] }, clicked = monthClicked;
         }
         for(i = start; i <= end; i++) {
             let div = makeElem("div");
             div.textContent = value();
             if(input === "month") {
                 div.classList.toggle("month-list");
-                if(div.textContent === monthList[fullDate.month]) {
+                if(div.textContent === MONTH_LIST[FULL_DATE.month]) {
                     div.selected = true;
                 }
             } else if(input === "year") {
                 div.classList.toggle("year-list");
-                if(div.textContent === String(fullDate.year)) {
+                if(div.textContent === String(FULL_DATE.year)) {
                     div.selected = true;
                 }
             }
@@ -292,7 +290,7 @@
         const yearTitle = makeElem("div"),
             calendar = getId("calendar");
         yearTitle.id = "yearTitle";
-        yearTitle.textContent = fullDate.year;
+        yearTitle.textContent = FULL_DATE.year;
         calendar.appendChild(yearTitle);
     }
     
@@ -305,13 +303,13 @@
             years = Array.from(document.querySelectorAll(".year-list"));
             // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
 
-        fullDate.year = parseInt(this.textContent, 10);
+        FULL_DATE.year = parseInt(this.textContent, 10);
         yearList.classList.toggle("no-display");
         if(monthList && yearTitle) {
             monthList.classList.toggle("no-display");
             yearTitle.classList.toggle("no-display");
             // change the displayed year in the Year Header
-            yearTitle.firstChild.textContent = fullDate.year;
+            yearTitle.firstChild.textContent = FULL_DATE.year;
         }
         if(periodSelect) {
             // periodSelect.classList.toggle("no-display");
@@ -337,8 +335,8 @@
         // getId("addBtn").classList.toggle("no-display");
         clearIcons("default");
         // makeAddBtn();
-        fullDate.month = parseInt(this.dataset.month, 10);
-        fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+        FULL_DATE.month = parseInt(this.dataset.month, 10);
+        FULL_DATE.maxDates = new Date(FULL_DATE.year, FULL_DATE.month + 1, 0).getDate();
         getId("periodSelect").dataset.period = "month";
         getId("periodSelect").textContent = "arrow_back";
         makeCalendar();
@@ -381,7 +379,7 @@
             titleHeader = makeElem("div");
         span.id = "tblHeader";
         titleHeader.id = "title";
-        span.textContent = monthList[fullDate.month] + " " + fullDate.year;
+        span.textContent = MONTH_LIST[FULL_DATE.month] + " " + FULL_DATE.year;
         titleHeader.appendChild(span);
         return titleHeader;
     }
@@ -393,8 +391,8 @@
         for(let i = 0; i <= 6; i++) {
             const th = makeElem("th");
             th.classList.toggle("col");
-            // dayList is global variable
-            th.textContent = dayList[i];
+            // DAY_LIST is global variable
+            th.textContent = DAY_LIST[i];
             trDays.appendChild(th);
         }
         return trDays;
@@ -414,7 +412,7 @@
     // get todos variable pass on from ejs
     function getTodosMonth(todosArr) {
         return todosArr.filter(function(todo) {
-            return (todo.year === fullDate.year && todo.month === fullDate.month);
+            return (todo.year === FULL_DATE.year && todo.month === FULL_DATE.month);
         });
     }
 
@@ -422,7 +420,7 @@
         const tbl = makeTbl(),
             container = getId("container"),
             tblHeader = getId("tblHeader"),
-            maxDate = fullDate.maxDates;
+            maxDate = FULL_DATE.maxDates;
 
         if(getId("tbl")) {
             container.removeChild(getId("tbl"));
@@ -430,10 +428,10 @@
         
         // if tblHeader exists, change month and year
         // if(tblHeader) {
-            tblHeader.firstChild.textContent = monthList[fullDate.month] + " " + fullDate.year;
+            tblHeader.firstChild.textContent = MONTH_LIST[FULL_DATE.month] + " " + FULL_DATE.year;
         // }
 
-        fullDate.firstDay = new Date(fullDate.year, fullDate.month, 1).getDay();
+        FULL_DATE.firstDay = new Date(FULL_DATE.year, FULL_DATE.month, 1).getDay();
 
         // populate table with dates
         let dates = 1;
@@ -447,10 +445,10 @@
                 a.classList.toggle("calendar-dates");
                 td.classList.toggle("col");
                 
-                if(dates === 1 && days !== fullDate.firstDay) {
+                if(dates === 1 && days !== FULL_DATE.firstDay) {
                     dates--; // cancels out dates++ at 
                     // td.classList.add("no-select");
-                } else if(dates > 0 && dates <= fullDate.maxDates) {
+                } else if(dates > 0 && dates <= FULL_DATE.maxDates) {
                     a.textContent = dates;
                     a.dataset.date = dates;
                     td.addEventListener("click", function() { 
@@ -479,7 +477,7 @@
             // https://stackoverflow.com/questions/3871547/js-iterating-over-result-of-getelementsbyclassname-using-array-foreach
             const dates = document.getElementsByClassName("calendar-dates"),
                  obj = Array.from(dates).filter(function(d) {
-                     return parseInt(d.dataset.date, 10) === fullDate.date || parseInt(d.dataset.date, 10) === fullDate.maxDates;
+                     return parseInt(d.dataset.date, 10) === FULL_DATE.date || parseInt(d.dataset.date, 10) === FULL_DATE.maxDates;
 
                     });
             elem = obj[0];
@@ -557,7 +555,7 @@
             nextImg = makeElem("i"),
             btnsArr = [prevImg, nextImg],
             eventsArr = ["mousedown", "touchstart"],
-            modContent = getId("modContent"),
+            modContent = document.querySelector(".modContent"),
             container = getId("container");
 
         btnsArr.forEach(function(btn) {
@@ -598,7 +596,7 @@
     function holdThis() {
         const clickedElem = this;
         // clearEntries();
-        prevNextInterval = setInterval(function() {
+        scrollInterval = setInterval(function() {
             if(clickedElem.id === "nextBtn") {
                 return nextMonth();
             } else if(clickedElem.id === "prevBtn") {
@@ -608,37 +606,37 @@
     }
     
     function letGo() {
-        clearInterval(prevNextInterval);
-        prevNextInterval = null;
+        clearInterval(scrollInterval);
+        scrollInterval = null;
     }
     
     function prevMonth() {
-        if(fullDate.month === 0) {
-            fullDate.year = fullDate.year - 1;
-            fullDate.month = 11;
-            fullDate.maxDates = new Date(fullDate.year, 0, 0).getDate();
+        if(FULL_DATE.month === 0) {
+            FULL_DATE.year = FULL_DATE.year - 1;
+            FULL_DATE.month = 11;
+            FULL_DATE.maxDates = new Date(FULL_DATE.year, 0, 0).getDate();
         } else {
-            fullDate.month = fullDate.month - 1;
-            fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+            FULL_DATE.month = FULL_DATE.month - 1;
+            FULL_DATE.maxDates = new Date(FULL_DATE.year, FULL_DATE.month + 1, 0).getDate();
         }
         makeDayAndDate();
     }
     
     function nextMonth() {
-        if(fullDate.month === 11) {
-            fullDate.year = fullDate.year + 1;
-            fullDate.month = 0;
-            fullDate.maxDates = new Date(fullDate.year, 1, 0).getDate();
+        if(FULL_DATE.month === 11) {
+            FULL_DATE.year = FULL_DATE.year + 1;
+            FULL_DATE.month = 0;
+            FULL_DATE.maxDates = new Date(FULL_DATE.year, 1, 0).getDate();
         } else {
-            fullDate.month = fullDate.month + 1;
-            fullDate.maxDates = new Date(fullDate.year, fullDate.month + 1, 0).getDate();
+            FULL_DATE.month = FULL_DATE.month + 1;
+            FULL_DATE.maxDates = new Date(FULL_DATE.year, FULL_DATE.month + 1, 0).getDate();
         }
         makeDayAndDate();
     }
 
     // clear todo entries on date Level
     function clearEntries() {
-        const modContent = getId("modContent");
+        const modContent = document.querySelector(".modContent");
         while(modContent.lastChild) {
             modContent.removeChild(modContent.lastChild);
         }
@@ -647,7 +645,7 @@
     function showTodos(clickedElem) {
         const fragTodos = document.createDocumentFragment(), //append generated elems here first
             todosMonth = getTodosMonth(todos),
-            modContent = getId("modContent"),
+            modContent = document.querySelector(".modContent"),
             entries = makeElem("div"),
             showTodoDiv = makeElem("div");
         let todosTodayTemp = [],
@@ -663,13 +661,13 @@
         resetTodosHeight(modContent);
         // console.log(clickedElem);
         // console.log(this.textContent);
-        // clicking date on calendar, get date for fullDate.date,
-        // otherwise, fullDate.date is taken using prevDate and nextDate functions.
+        // clicking date on calendar, get date for FULL_DATE.date,
+        // otherwise, FULL_DATE.date is taken using prevDate and nextDate functions.
         if(clickedElem) {
-            fullDate.date = parseInt(clickedElem.dataset.date, 10);
+            FULL_DATE.date = parseInt(clickedElem.dataset.date, 10);
         }
 
-        todosTodayTemp = todosMonth.filter((todo) => todo.date === fullDate.date);
+        todosTodayTemp = todosMonth.filter((todo) => todo.date === FULL_DATE.date);
         
         todosToday = todosTodayTemp.sort(compareTimes);
 
@@ -724,22 +722,23 @@
     }
     
     function setTodosHeight(x) {
-        const container = document.querySelector(".index-container"),
+        
+        if(window.innerWidth < 768) {
+          const container = document.querySelector(".index-container"),
             nav = document.querySelector(".nav"),
             buttonPane = document.querySelector(".button-pane"),
             containerHeight = window.getComputedStyle(container).height, //string
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
             todosDateHeight = window.innerHeight - (parseInt(containerHeight, 10) + parseInt(navHeight, 10) + parseInt(btnPaneHeight, 10) + 10), //20px is margin-top of index-container
-            modContent = getId("modContent");
+            modContent = document.querySelector(".modContent");
             // elem = getId(x);
-            
-        modContent.style.setProperty("height", todosDateHeight + "px");
-        modContent.classList.add("overflow");
-        if(x) {
-            x.style.setProperty("height", modContent.scrollHeight + "px");
+            modContent.style.setProperty("height", todosDateHeight + "px");
+            // modContent.classList.add("overflow");
+            if(x) {
+                x.style.setProperty("height", modContent.scrollHeight + "px");
+            }  
         }
-        
     }
     // use to sort todosToday array (of objects)
     function compareTimes(a,b) {
@@ -765,7 +764,7 @@
             calendar = getId("calendar"),
             yearTitle = getId("yearTitle"),
             indexContainer = document.querySelector(".index-container"),
-            modContent = getId("modContent"),
+            modContent = document.querySelector(".modContent"),
             state = this.dataset.period;
         
         if(state === "year") {
@@ -789,7 +788,7 @@
             if(monthList && yearTitle) {
                 monthList.classList.toggle("no-display");
                 yearTitle.classList.toggle("no-display");
-                yearTitle.firstChild.textContent = fullDate.year;
+                yearTitle.firstChild.textContent = FULL_DATE.year;
             } else {
                 makeYearHeader();
                 makeList("month");
@@ -809,8 +808,8 @@
     function selectCurrent(state) {
         const years = Array.from(document.querySelectorAll(".year-list")),
             months = Array.from(document.querySelectorAll(".month-list")),
-            y = years.filter((y) => parseInt(y.textContent, 10) === fullDate.year ),
-            m = months.filter((m) => m.textContent === monthList[fullDate.month]);
+            y = years.filter((y) => parseInt(y.textContent, 10) === FULL_DATE.year ),
+            m = months.filter((m) => m.textContent === MONTH_LIST[FULL_DATE.month]);
         
         if(state === "month") {
             m[0].classList.add("selected-date");
@@ -840,7 +839,7 @@
 
     function showFoundTodo(todo) {
         // console.log(todo);
-        const modContent = getId("modContent"),
+        const modContent = document.querySelector(".modContent"),
             // form = makeElem("form"),
             // btnDel = makeElem("i"),
             // btnEdit = makeElem("i"),
@@ -895,7 +894,7 @@
     function makeOrEditTodo(obj) {
         if(getId("showTodoDiv")) {
             const showTodoDiv = getId("showTodoDiv");
-                // modContent = getId("modContent");
+                // modContent = document.querySelector(".modContent");
             showTodoDiv.classList.toggle("no-display");
             // modContent.classList.remove("overflow");
         }
@@ -910,7 +909,7 @@
         // for edit and create
             task = obj.index,
             todo = obj.todo,
-            modContent = getId("modContent"),
+            modContent = document.querySelector(".modContent"),
              // make elements
             formTodoDiv = makeElem("div"),
             form = makeElem("form"),
@@ -974,7 +973,7 @@
         // const cases = {
         //     date: () => {
         //         start = 1;
-        //         end = fullDate.maxDates;
+        //         end = FULL_DATE.maxDates;
         //         selectName = "date";
         //         selectId = "formDate";
         //     },
@@ -1034,7 +1033,7 @@
             switch(i) {
 				case 0: // todo.date
                     start = 1;
-                    end = fullDate.maxDates;
+                    end = FULL_DATE.maxDates;
                     selectName = "date";
                     selectId = "formDate";
                     break;
@@ -1084,7 +1083,7 @@
                 let optns = makeElem("option");
                 // convert month number to name
                 if(selectId === "formMonth") {
-                    optns.textContent = monthList[j];
+                    optns.textContent = MONTH_LIST[j];
                 } else if(selectId === "formYear" || selectId === "formDate") {
                     optns.textContent = j;
                 // hours and minutes, convert j from for loop to "00" format in option boxes
@@ -1098,17 +1097,17 @@
                 // set default values
                 // for month, check if month names match
                 if(selectId === "formMonth") {
-                    if(task === "updTodo" && optns.textContent === monthList[todoArr[1]]) {
+                    if(task === "updTodo" && optns.textContent === MONTH_LIST[todoArr[1]]) {
                         optns.selected = true;
-                    } else if(task === "newTodo" && optns.textContent === monthList[fullDate.month]) {
+                    } else if(task === "newTodo" && optns.textContent === MONTH_LIST[FULL_DATE.month]) {
                         optns.selected = true;
                     }
                 } else if(task === "updTodo" && optns.textContent === String(todoArr[i])){
                     optns.selected = true;
                 } else if(task === "newTodo") {
-                    if(selectId === "formYear" && optns.textContent === String(fullDate.year)) {
+                    if(selectId === "formYear" && optns.textContent === String(FULL_DATE.year)) {
                         optns.selected = true;
-                    } else if(selectId === "formDate" && optns.textContent === String(fullDate.date)) {
+                    } else if(selectId === "formDate" && optns.textContent === String(FULL_DATE.date)) {
                         optns.selected = true;
                     } else if(selectId === "formFrmHr" || selectId === "formFrmMin" || selectId === "formToHr" || selectId === "formToMin") {
                         if(optns.textContent === "00") {
@@ -1184,18 +1183,7 @@
 		desc.classList.add("form-desc");
 		dateDiv.classList.add("form-date");
 		timeDiv.classList.add("form-time");
-        // btnBack.classList.toggle("icon-back");
-		// btnSubmit.classList.toggle("icon-sub");
-		// btnBack.classList.toggle("material-icons");
-		// btnSubmit.classList.toggle("material-icons");
-		// btnBack.classList.toggle("icon-mode");
-		// btnSubmit.classList.toggle("icon-mode");
-        // append
-        // let iconContBack = makeIcon(btnBack);
-        // let iconContSub = makeIcon(btnSubmit);
-        // iconContBack.classList.toggle("icon-back-pos");
-        // iconContSub.classList.toggle("icon-del-submit-pos");
-        // submitForm.appendChild(iconContSub);
+
         titleDiv.appendChild(title);
         form.insertBefore(desc, form.firstChild);
         form.insertBefore(titleDiv, form.firstChild);
@@ -1254,13 +1242,13 @@
     
     function convertMonth(input) {
         if(typeof input === "string") {
-            for(let i = 0, s = Object.keys(monthList).length; i < s; i++) {
-                if(monthList[i] === input) {
+            for(let i = 0, s = Object.keys(MONTH_LIST).length; i < s; i++) {
+                if(MONTH_LIST[i] === input) {
                     return i;
                 }
             }
         } else if(typeof input === "number") {
-            return monthList[input];
+            return MONTH_LIST[input];
         }
     }
     
@@ -1310,23 +1298,6 @@
     
     
     function makeIcon(btn) {
-        // const iconHeight = makeElem("div"),
-        //     iconInner = makeElem("div"),
-        //     iconCont = makeElem("div");
-            
-        // iconHeight.classList.toggle("icon-full-height");
-        // iconInner.classList.toggle("icon-inner");
-        // iconCont.classList.toggle("icon-container");
-            
-        // iconCont.appendChild(iconInner);
-        // iconInner.appendChild(iconHeight);
-        // iconHeight.appendChild(btn);
-        
-        // btn.classList.toggle("material-icons");
-        // btn.classList.toggle("icon-mode");
-        
-        // return iconCont;
-        
         // const btnPane = document.getElementsByClassName("button-pane")[0];
         const btnPane = document.querySelector(".button-pane");
         let icon = makeElem("i");
@@ -1355,39 +1326,20 @@
             // use clonenode to avoid replacing icon?
             btnPane.appendChild(icon);    
         }
-        
-        // icon.addEventListener("click", function() {
-        //     const icons = document.getElementsByClassName("button-pane")[0].children;
-        //     for(let i = 0; i < icons.length; i++) {
-        //         if(!icons[i].classList.contains("no-display")) {
-        //             icons[i].classList.toggle("no-display");
-        //         }
-        //     }
-        // });
-        
+
         return icon;
     }
     
     function makeTodoBtns(todo) {
         const btnArr = ["delete", "edit", "arrow_back"],
             // addBtn = getId("addBtn"),
-            modContent = getId("modContent");
+            modContent = document.querySelector(".modContent");
             
         // if(getId("editBtn") === null && getId("deleteBtn") === null && getId("arrow_backBtn") === null) {
         btnArr.forEach(function(btn) {
             let icon = makeIcon(btn);
-            // icon.addEventListener("click", function() {
-            //     // getId("editBtn").classList.toggle("no-display");
-            //     // getId("deleteBtn").classList.toggle("no-d isplay");
-            //     // getId("arrow_backBtn").classList.toggle("no-display");
-            //     clearIcons("all");
-            // });
-            
+
             if(btn === "edit") {
-                // iconCont.classList.toggle("icon-edit-pos");
-                // btn.classList.toggle("icon-edit");
-                // btn.dataset.mode = btn.textContent = "edit";
-                
                 icon.addEventListener("click", function() {
                     getId("editBtn").classList.toggle("no-display");
                     getId("deleteBtn").classList.toggle("no-display");
@@ -1397,11 +1349,6 @@
                 });
                 // frag.appendChild(icon);
             } else if(btn === "delete") {
-                
-                // iconCont.classList.toggle("icon-del-submit-pos");
-                // btn.classList.toggle("icon-delete");
-                // btn.dataset.mode = "delete";
-                // btn.textContent = "delete_forever";
                 icon.addEventListener("click", function(event) {
                     event.preventDefault();
                     // create warning before deleting todo
@@ -1411,14 +1358,9 @@
                     }
                     
                 });
-                // form.appendChild(iconCont);
-                // frag.appendChild(form);
+
             } else if(btn === "arrow_back") {
-                
-                // iconCont.classList.toggle("icon-back-pos");
-                // btn.classList.toggle("icon-back");
-                // btn.dataset.mode = "back";
-                // btn.textContent = "arrow_back";
+
                 icon.addEventListener("click", function() {
                     clearIcons("all");
                     // addBtn.classList.toggle("no-display");
@@ -1429,12 +1371,7 @@
                 // frag.appendChild(iconCont);
             }
         });
-        // } 
-        // else {
-        //     getId("editBtn").classList.toggle("no-display");
-        //     getId("deleteBtn").classList.toggle("no-display");
-        //     getId("arrow_backBtn").classList.toggle("no-display");
-        // }    
+
     }
     
     
@@ -1503,7 +1440,7 @@
         const btnBack = makeIcon("arrow_back"),
             btnSubmit = makeIcon("check"),
             btnUndo = makeIcon("undo"),
-            modContent = getId("modContent"),
+            modContent = document.querySelector(".modContent"),
             showFoundTodoDiv = getId("showFoundTodoDiv");
         btnBack.id = "formBackBtn";
         btnBack.addEventListener("click", function() {
@@ -1559,14 +1496,14 @@
             getId("formToHr").value = orig.toHr;
             getId("formToMin").value = orig.toMin;
             getId("formDate").value = orig.date;
-            getId("formMonth").value = monthList[orig.month];
+            getId("formMonth").value = MONTH_LIST[orig.month];
             getId("formYear").value = orig.year;
         } else if(ind === "newTodo") {
             getId("formTitle").value = getId("formDescription").value = "";
             getId("formFrmHr").value = getId("formFrmMin").value = getId("formToHr").value = getId("formToMin").value = "00";
-            getId("formDate").value = fullDate.date;
-            getId("formMonth").value = monthList[fullDate.month];
-            getId("formYear").value = fullDate.year;
+            getId("formDate").value = FULL_DATE.date;
+            getId("formMonth").value = MONTH_LIST[FULL_DATE.month];
+            getId("formYear").value = FULL_DATE.year;
         }
         
         

@@ -218,7 +218,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
       td {
         vertical-align: middle;
       }
-    .modContent {
+    .mod-content {
       padding-top: 2rem;
       background-color: #FFFFFF;
     }
@@ -485,11 +485,11 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 /*======= min width 720px start ======*/
 and (min-width: 720px) {
   
-  body {
+  html {
     background:url(../bg/6.jpg);
     background-size: cover;
   }
-  .index-container, #showTodoDiv, #formTodoDiv, #showFoundTodoDiv {
+  .index-container {
     max-width: 600px;
     margin: 4.2rem auto 0 auto;
   }
@@ -501,12 +501,30 @@ and (min-width: 720px) {
   .main {
     display: grid;
     max-width:2560px;
-    grid-template-columns: [col1] 10% [col2] 40% [col3] 40% [col4] 10% [col5];
+    grid-template-columns: [col1] 5% [col2] 40% [col3] 10% [col4] 40% [col5] 5% [col6];
     grid-template-rows: [row1] 6rem [row2] 6rem [row3] 60rem [row4] 6rem [row5];
     justify-content: center;
     justify-items: stretch;
     align-items: auto;
   }
+  
+  .overflow::-webkit-scrollbar {
+    width: 1rem;
+  }
+   
+  .overflow::-webkit-scrollbar-track {
+      /*-webkit-box-shadow: inset 6px 6px 6px #bababa;*/
+      background: none;
+      border: 1px solid #bababa;
+      border-radius: 10px;
+  }
+   
+  .overflow::-webkit-scrollbar-thumb {
+    background-color: rgb(186,186,186); /*fallback*/
+    background-color: rgba(186,186,186,0.5);
+    border-radius: 10px;
+  }
+
 
 /*========================================================*/
 /*========================================================*/
@@ -520,7 +538,7 @@ and (min-width: 720px) {
   background: transparent;
   position: relative;
   margin: 2rem 0 0 5rem;
-  grid-column: col2 / col4;
+  grid-column: col2 / col5;
   grid-row: row2 / row3;
 }
   .nav-hamburger {
@@ -626,10 +644,11 @@ and (min-width: 720px) {
         vertical-align: middle;
         /*border: 1px solid #575773;*/
       }
-.modContent {
+.mod-content {
+  max-width: 500px;
   padding-top: 2rem;
   background: none;
-  grid-column: col3 / col4;
+  grid-column: col4 / col5;
   grid-row: row3 / row4;
   
 }
@@ -647,7 +666,8 @@ and (min-width: 720px) {
     display: block;
     margin-bottom: 1rem;
     padding-bottom: 1rem;
-    border-bottom: 0.25px solid #E1E1E1;
+    border-bottom: 1px solid rgb(186,186,186); /* fallback for no rgba support browsers*/
+    border-bottom: 1px solid rgba(186,186,186,0.3);
   }
   .no-entries {
     font-size: 2rem;

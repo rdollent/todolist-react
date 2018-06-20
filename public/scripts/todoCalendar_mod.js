@@ -555,7 +555,7 @@
             nextImg = makeElem("i"),
             btnsArr = [prevImg, nextImg],
             eventsArr = ["mousedown", "touchstart"],
-            modContent = document.querySelector(".modContent"),
+            modContent = document.querySelector(".mod-content"),
             container = getId("container");
 
         btnsArr.forEach(function(btn) {
@@ -636,7 +636,7 @@
 
     // clear todo entries on date Level
     function clearEntries() {
-        const modContent = document.querySelector(".modContent");
+        const modContent = document.querySelector(".mod-content");
         while(modContent.lastChild) {
             modContent.removeChild(modContent.lastChild);
         }
@@ -645,7 +645,7 @@
     function showTodos(clickedElem) {
         const fragTodos = document.createDocumentFragment(), //append generated elems here first
             todosMonth = getTodosMonth(todos),
-            modContent = document.querySelector(".modContent"),
+            modContent = document.querySelector(".mod-content"),
             entries = makeElem("div"),
             showTodoDiv = makeElem("div");
         let todosTodayTemp = [],
@@ -731,7 +731,7 @@
             navHeight = window.getComputedStyle(nav).height, //string
             btnPaneHeight = window.getComputedStyle(buttonPane).height, //string
             todosDateHeight = window.innerHeight - (parseInt(containerHeight, 10) + parseInt(navHeight, 10) + parseInt(btnPaneHeight, 10) + 10), //20px is margin-top of index-container
-            modContent = document.querySelector(".modContent");
+            modContent = document.querySelector(".mod-content");
             // elem = getId(x);
             modContent.style.setProperty("height", todosDateHeight + "px");
             // modContent.classList.add("overflow");
@@ -764,7 +764,7 @@
             calendar = getId("calendar"),
             yearTitle = getId("yearTitle"),
             indexContainer = document.querySelector(".index-container"),
-            modContent = document.querySelector(".modContent"),
+            modContent = document.querySelector(".mod-content"),
             state = this.dataset.period;
         
         if(state === "year") {
@@ -839,7 +839,7 @@
 
     function showFoundTodo(todo) {
         // console.log(todo);
-        const modContent = document.querySelector(".modContent"),
+        const modContent = document.querySelector(".mod-content"),
             // form = makeElem("form"),
             // btnDel = makeElem("i"),
             // btnEdit = makeElem("i"),
@@ -894,7 +894,7 @@
     function makeOrEditTodo(obj) {
         if(getId("showTodoDiv")) {
             const showTodoDiv = getId("showTodoDiv");
-                // modContent = document.querySelector(".modContent");
+                // modContent = document.querySelector(".mod-content");
             showTodoDiv.classList.toggle("no-display");
             // modContent.classList.remove("overflow");
         }
@@ -909,7 +909,7 @@
         // for edit and create
             task = obj.index,
             todo = obj.todo,
-            modContent = document.querySelector(".modContent"),
+            modContent = document.querySelector(".mod-content"),
              // make elements
             formTodoDiv = makeElem("div"),
             form = makeElem("form"),
@@ -1333,7 +1333,7 @@
     function makeTodoBtns(todo) {
         const btnArr = ["delete", "edit", "arrow_back"],
             // addBtn = getId("addBtn"),
-            modContent = document.querySelector(".modContent");
+            modContent = document.querySelector(".mod-content");
             
         // if(getId("editBtn") === null && getId("deleteBtn") === null && getId("arrow_backBtn") === null) {
         btnArr.forEach(function(btn) {
@@ -1440,7 +1440,7 @@
         const btnBack = makeIcon("arrow_back"),
             btnSubmit = makeIcon("check"),
             btnUndo = makeIcon("undo"),
-            modContent = document.querySelector(".modContent"),
+            modContent = document.querySelector(".mod-content"),
             showFoundTodoDiv = getId("showFoundTodoDiv");
         btnBack.id = "formBackBtn";
         btnBack.addEventListener("click", function() {

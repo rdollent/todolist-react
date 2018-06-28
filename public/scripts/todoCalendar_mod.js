@@ -723,7 +723,7 @@
     
     function setTodosHeight(x) {
         
-        if(window.innerWidth < 768) {
+        if(window.innerWidth < 1280) {
           const container = document.querySelector(".index-container"),
             nav = document.querySelector(".nav"),
             buttonPane = document.querySelector(".button-pane"),

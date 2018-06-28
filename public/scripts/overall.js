@@ -27,7 +27,7 @@
       
    });
    
-   if(window.innerWidth < 768) {
+   if(window.innerWidth < 1280) {
       // navMenu.classList.add("nav-menu-mobile");
       // navMenuAs.forEach((entry) => entry.classList.remove("nav-menu-a-desktop"));
       // navMenuAs.forEach((entry) => entry.classList.add("nav-menu-a"));
@@ -35,7 +35,7 @@
    }
    
    window.addEventListener("resize", () => {
-      if(window.innerWidth < 768) {
+      if(window.innerWidth < 1280) {
          navMenu.classList.add("no-display");
          // navMenu.classList.add("nav-menu-mobile");
          // navMenuAs.forEach((entry) => entry.classList.remove("nav-menu-a-desktop"));

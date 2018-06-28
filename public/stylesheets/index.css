@@ -163,7 +163,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 .index-container {
   padding: 0 1rem;
   position: relative;
-  background-color: #FF6D70;
+  /*background-color: #FF6D70;*/
+  background-color: #99AE8C;
   margin-top: 4.2rem;
   box-shadow: 0 1px 5px #808080;
   font-family: 'Arvo', serif;
@@ -470,6 +471,9 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   .delete-pos {
     background-color: #bb6161;
   }
+  #undoBtn {
+    background-color: #4B7679;
+  }
 
 /*============================================================================================================*/
 /*============================================================================================================*/
@@ -482,12 +486,16 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 /*media queries*/
 @media only screen
 
-/*======= min width 720px start ======*/
-and (min-width: 720px) {
+/*======= min width 1280px start ======*/
+and (min-width: 1280px) {
   
   html {
-    background:url(../bg/6.jpg);
-    background-size: cover;
+    background:url(../bg/11.jpg);
+    /*background-size: cover;*/
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+    background-color: #000;
   }
   .index-container {
     max-width: 600px;
@@ -501,8 +509,8 @@ and (min-width: 720px) {
   .main {
     display: grid;
     max-width:2560px;
-    grid-template-columns: [col1] 5% [col2] 40% [col3] 10% [col4] 40% [col5] 5% [col6];
-    grid-template-rows: [row1] 6rem [row2] 6rem [row3] 60rem [row4] 6rem [row5];
+    grid-template-columns: [col1] 64px [col2] 448px [col3] 64px [col4] 448px [col5] 192px [col6] 64px [col7];
+    grid-template-rows: [row1] 6rem [row2] 6rem [row3] 40rem [row4] 6rem [row5];
     justify-content: center;
     justify-items: stretch;
     align-items: auto;
@@ -597,14 +605,16 @@ and (min-width: 720px) {
 /*calendar page*/
 
 .index-container {
-  padding: 0;
+  padding-top: 2rem;
   background: transparent;
   margin: 0;
-  margin-top: 4.2rem;
-  margin-left: 2rem;
+  margin-top: 0;
+  margin-left: 0;
   box-shadow: 0 0 0;
   grid-column: col2 / col3;
   grid-row: row3 / row4;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.3);
 }
 .index-container * {
   color: #E8E8E8;
@@ -640,32 +650,35 @@ and (min-width: 720px) {
         border-radius:0;
 
       }
-      td {
-        vertical-align: middle;
+      /*td {*/
+      /*  vertical-align: middle;*/
         /*border: 1px solid #575773;*/
-      }
+      /*}*/
 .mod-content {
   max-width: 500px;
-  padding-top: 2rem;
-  background: none;
+  /*padding-top: 2rem;*/
+  /*background-color: #D1E8F5;*/
+  background-color: transparent;
+  background-color:rgb(0,0,0);
+  background-color:rgba(0,0,0,0.7);
   grid-column: col4 / col5;
   grid-row: row3 / row4;
   
 }
-  .col-hours {
-    width: 10rem;
-    display:inline-block;
-    margin-left:3rem;
-  }
-  .col-todos {
-    width:15rem;
-    display:inline-block;
-    margin-left: 1.5rem;
-  }
+  /*.col-hours {*/
+  /*  width: 10rem;*/
+  /*  display:inline-block;*/
+  /*  margin-left:3rem;*/
+  /*}*/
+  /*.col-todos {*/
+  /*  width:15rem;*/
+  /*  display:inline-block;*/
+  /*  margin-left: 1.5rem;*/
+  /*}*/
   .single-entry {
-    display: block;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    /*display: block;*/
+    /*margin-bottom: 1rem;*/
+    /*padding-bottom: 1rem;*/
     border-bottom: 1px solid rgb(186,186,186); /* fallback for no rgba support browsers*/
     border-bottom: 1px solid rgba(186,186,186,0.3);
   }
@@ -682,6 +695,90 @@ and (min-width: 720px) {
 
 /*============================================================================================================*/
 /*============================================================================================================*/
+
+.form-desc {
+  background-color: transparent;
+}
+
+/*============================================================================================================*/
+/*============================================================================================================*/
+
+/*button pane*/
+
+.button-pane {
+  position: relative;
+  bottom: 0;
+  left:0;
+  z-index: 0;
+  height: 3.5rem;
+  display: grid;
+  justify-content: center;
+  max-width: 50rem;
+  background-color: rgba(0,0,0,0.7);
+  grid-column: col4 / col5;
+  grid-row: row4 / row5;
+  justify-self: center;
+  align-self: center;
+  /*border-bottom: 1px solid rgba(186,186,186,0.3);*/
+}
+  .btn-pane-icons {
+    font-size: 3rem;
+    width: 100%;
+    padding-top: 3px;
+    text-align: center;
+    height: inherit;
+    color: #fff;
+    grid-row-start: row1;
+    grid-row-end: row2;
+    font-weight: bolder;
+  }
+  #checkBtn, .edit-pos {
+    grid-column-start: col2;
+    grid-column-end: col3;
+    /*vertical-align has no effect on grid items!*/
+    border-right: 1px solid rgb(186,186,186); /*fallback*/
+    border-left: 1px solid rgb(186,186,186); /*fallback*/
+    border-right: 1px solid rgba(186,186,186,0.3);
+    border-left: 1px solid rgba(186,186,186,0.3);
+  }
+  .add-pos {
+    grid-column-start: col2;
+    grid-column-end: col3;
+    background-color: transparent;
+  }
+  
+  #checkBtn {
+    background-color: transparent;
+  }
+  .edit-pos {
+    background-color: transparent;
+    color: #58CE64;
+  }
+  .arrow_back-pos {
+    grid-column-start: col1;
+    grid-column-end: col2;
+    background-color: transparent;
+    color: #58B1CE;
+  }
+  #deleteBtn, .undo-pos {
+    grid-column-start: col3;
+    grid-column-end: col4;
+    height:inherit;
+  }
+  .delete-pos {
+    background-color: transparent;
+    color: rgba(207,90,138,1);
+  }
+   #undoBtn {
+    background-color: transparent;
+  }
+  
+.material-icons {
+  font-weight: bolder;
+}
+/*============================================================================================================*/
+/*============================================================================================================*/
+
 
 /*============================================================================================================*/
 /*============================================================================================================*/

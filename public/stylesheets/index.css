@@ -327,7 +327,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     }
     .form-select {
       border: none;
-      background-color: transparent;
+      background-color: rgb(0,0,0); /* fallback */
+      background-color: rgba(0,0,0,0.5);
       outline: none;
       appearance: none;
       border-bottom: 1px solid #afafaf;

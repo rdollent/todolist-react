@@ -43,7 +43,7 @@
          // navMenuAs.forEach((entry) => entry.classList.add("nav-menu-a-mobile"));
       } else if(window.innerWidth >= 1280) {
          navMenu.classList.remove("no-display");
-         const allDiv = document.querySelectorAll(".main > *:not(.nav))");
+         const allDiv = document.querySelectorAll(".main > *:not(.nav)");
          // you can use forEach on a Nodelist
          allDiv.forEach(function(elem) {
              elem.classList.remove("select-none");

@@ -300,7 +300,8 @@
             periodSelect = getId("periodSelect"),
             yearTitle = getId("yearTitle"),
             indexContainer = document.querySelector(".index-container"),
-            years = Array.from(document.querySelectorAll(".year-list"));
+            years = Array.from(document.querySelectorAll(".year-list")),
+            modContent = document.querySelector(".mod-content");
             // selectedYear = event.target.options[event.target.options.selectedIndex].textContent;
 
         FULL_DATE.year = parseInt(this.textContent, 10);
@@ -313,7 +314,7 @@
         }
         if(periodSelect) {
             // periodSelect.classList.toggle("no-display");
-            periodSelect.dataset.period = "year";
+            periodSelect.dataset.period = "month";
             // periodSelect.textContent = "view_module";
             periodSelect.textContent = "arrow_back";
         }
@@ -337,7 +338,7 @@
         // makeAddBtn();
         FULL_DATE.month = parseInt(this.dataset.month, 10);
         FULL_DATE.maxDates = new Date(FULL_DATE.year, FULL_DATE.month + 1, 0).getDate();
-        getId("periodSelect").dataset.period = "month";
+        getId("periodSelect").dataset.period = "calendar";
         getId("periodSelect").textContent = "arrow_back";
         makeCalendar();
         makeDayAndDate();
@@ -754,7 +755,7 @@
     function makePeriodSelectBtns() {
         const periodSelect = getId("periodSelect");
         periodSelect.textContent = "arrow_back";
-        periodSelect.dataset.period = "month";
+        periodSelect.dataset.period = "calendar";
         periodSelect.addEventListener("click", switchPeriod);
     }
     
@@ -767,7 +768,7 @@
             modContent = document.querySelector(".mod-content"),
             state = this.dataset.period;
         
-        if(state === "year") {
+        if(state === "month") {
             monthList.classList.toggle("no-display");
             yearTitle.classList.toggle("no-display");
             if(yearList) {
@@ -779,7 +780,7 @@
             this.textContent = "date_range";
             indexContainer.classList.toggle("max-height");
         }
-        else if(state === "month") {
+        else if(state === "calendar") {
             // note: if I try to put container in variable, it won't work.
             // see https://stackoverflow.com/questions/42956884/failed-to-execute-removechild-on-node
             calendar.removeChild(getId("container"));
@@ -793,7 +794,7 @@
                 makeYearHeader();
                 makeList("month");
             }
-            this.dataset.period = "year";
+            this.dataset.period = "month";
             // this.textContent = "view_module";
             // getId("addBtn").classList.toggle("no-display");
             clearIcons("all");
@@ -811,9 +812,9 @@
             y = years.filter((y) => parseInt(y.textContent, 10) === FULL_DATE.year ),
             m = months.filter((m) => m.textContent === MONTH_LIST[FULL_DATE.month]);
         
-        if(state === "month") {
+        if(state === "calendar") {
             m[0].classList.add("selected-date");
-        } else if(state === "year") {
+        } else if(state === "month") {
             y[0].classList.add("selected-date");
         }
     }

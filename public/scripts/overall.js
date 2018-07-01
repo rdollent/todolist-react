@@ -1,7 +1,8 @@
 (function () {
    const navHamburger = document.querySelector(".nav-hamburger"),
         navMenu = document.querySelector(".nav-menu"),
-        navMenuAs = document.querySelectorAll(".nav-menu-a");
+        navMenuAs = document.querySelectorAll(".nav-menu-a"),
+        main = document.querySelector(".main");
    
         
    navHamburger.addEventListener("click", function() {
@@ -15,7 +16,7 @@
       
       // make background blurry/bright/light and immune to pointer events
       // select body and all but not nav and all its children
-      const allDiv = Array.from(document.querySelectorAll("body > *:not(.nav)")),
+      const allDiv = Array.from(document.querySelectorAll(".main > *:not(.nav)")),
          selectNoneOff = allDiv.filter((elem) => elem.classList.contains("select-none")).length === 0;
       
       if(selectNoneOff) {
@@ -40,9 +41,9 @@
          // navMenu.classList.add("nav-menu-mobile");
          // navMenuAs.forEach((entry) => entry.classList.remove("nav-menu-a-desktop"));
          // navMenuAs.forEach((entry) => entry.classList.add("nav-menu-a-mobile"));
-      } else if(window.innerWidth >= 768) {
+      } else if(window.innerWidth >= 1280) {
          navMenu.classList.remove("no-display");
-         const allDiv = document.querySelectorAll("body > *:not(.nav)");
+         const allDiv = document.querySelectorAll(".main > *:not(.nav))");
          // you can use forEach on a Nodelist
          allDiv.forEach(function(elem) {
              elem.classList.remove("select-none");

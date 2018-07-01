@@ -962,6 +962,7 @@
 			iconDesc = makeElem("i");
 			
 		iconDate.classList.add("material-icons");
+		iconDate.classList.add("icon-date");
 		iconTime.classList.add("material-icons");
 		iconTime.classList.add("icon-time");
 		iconTitle.classList.add("material-icons");

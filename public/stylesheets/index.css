@@ -53,7 +53,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
 
 .nav {
   width: 100%;
-  background-color: #4B7679;
+  background-color: #0074d0;
   height: 4.2rem;
   padding: 0;
   position: fixed;
@@ -164,7 +164,8 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   padding: 0 1rem;
   position: relative;
   /*background-color: #FF6D70;*/
-  background-color: #99AE8C;
+  /*background-color: #99AE8C;*/
+  background-color: #029ee4;
   margin-top: 4.2rem;
   box-shadow: 0 1px 5px #808080;
   font-family: 'Arvo', serif;
@@ -441,7 +442,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     grid-row-start: row1;
     grid-row-end: row2;
   }
-  #checkBtn, .edit-pos {
+  .check-pos, .edit-pos {
     grid-column-start: col2;
     grid-column-end: col3;
     /*vertical-align has no effect on grid items!*/
@@ -452,7 +453,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     background-color: #4392F1;
   }
   
-  #checkBtn {
+  .check-pos {
     background-color: #62ce64;
   }
   .edit-pos {
@@ -461,7 +462,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
   .arrow_back-pos {
     grid-column-start: col1;
     grid-column-end: col2;
-    background-color: #618ebb;
+    background-color: #FFC107;
   }
   #deleteBtn, .undo-pos {
     grid-column-start: col3;
@@ -645,7 +646,8 @@ and (min-width: 1280px) {
           height:4.5rem;
       }
       .selected-date {
-        border: 1px solid #9A9AAB;
+        /*border: 1px solid #9A9AAB;*/
+        border: 1px solid #dc8585bd;
         background: none;
         border-radius:0;
 
@@ -690,7 +692,7 @@ and (min-width: 1280px) {
     border-top: 1px solid #afafaf;
     border-bottom: 1px solid #afafaf;
     padding: 2rem 0 2rem 0;
-    color: #808080;
+    color: #afafaf;
   }
 
 /*============================================================================================================*/
@@ -737,7 +739,7 @@ and (min-width: 1280px) {
     grid-row-end: row2;
     font-weight: bolder;
   }
-  #checkBtn, .edit-pos {
+  .check-pos, .edit-pos {
     grid-column-start: col2;
     grid-column-end: col3;
     /*vertical-align has no effect on grid items!*/
@@ -745,25 +747,21 @@ and (min-width: 1280px) {
     border-left: 1px solid rgb(186,186,186); /*fallback*/
     border-right: 1px solid rgba(186,186,186,0.3);
     border-left: 1px solid rgba(186,186,186,0.3);
+    background-color: transparent;
+    color: #58CE64;
   }
   .add-pos {
     grid-column-start: col2;
     grid-column-end: col3;
     background-color: transparent;
+    color: #589ff5;
   }
-  
-  #checkBtn {
-    background-color: transparent;
-  }
-  .edit-pos {
-    background-color: transparent;
-    color: #58CE64;
-  }
+
   .arrow_back-pos {
     grid-column-start: col1;
     grid-column-end: col2;
     background-color: transparent;
-    color: #58B1CE;
+    color: #FFC107;
   }
   #deleteBtn, .undo-pos {
     grid-column-start: col3;
@@ -776,10 +774,15 @@ and (min-width: 1280px) {
   }
    #undoBtn {
     background-color: transparent;
+    color: #4B7679;
   }
   
 .material-icons {
   font-weight: bolder;
+}
+
+.icon-date, .icon-time, .icon-title {
+  color: #afafaf;
 }
 /*============================================================================================================*/
 /*============================================================================================================*/

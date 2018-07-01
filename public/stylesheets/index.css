@@ -327,8 +327,7 @@ a, button:hover, .month-list:hover, .yearList:hover, .material-icons:hover {
     }
     .form-select {
       border: none;
-      background-color: rgb(0,0,0); /* fallback */
-      background-color: rgba(0,0,0,0.5);
+      background-color: transparent;
       outline: none;
       appearance: none;
       border-bottom: 1px solid #afafaf;
@@ -699,6 +698,11 @@ and (min-width: 1280px) {
 
 .form-desc {
   background-color: transparent;
+}
+
+.form-select {
+  background-color: rgb(0,0,0); /* fallback */
+  background-color: rgba(0,0,0,0.5);
 }
 
 /*============================================================================================================*/

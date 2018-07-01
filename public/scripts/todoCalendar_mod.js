@@ -329,8 +329,12 @@
         //     yearTitle = getId("yearTitle"),
         //     addBtn = getId("addBtn");
             // selectedMonth = event.target.options[event.target.options.selectedIndex].dataset.month;
-            const indexContainer = document.querySelector(".index-container");
+            const indexContainer = document.querySelector(".index-container"),
+                modContent = document.querySelector(".mod-content"),
+                buttonPane = document.querySelector(".button-pane");
         indexContainer.classList.toggle("max-height");
+        modContent.classList.toggle("no-display");
+        buttonPane.classList.toggle("no-display");
         getId("monthList").classList.toggle("no-display");
         getId("yearTitle").classList.toggle("no-display");
         // getId("addBtn").classList.toggle("no-display");
@@ -766,6 +770,7 @@
             yearTitle = getId("yearTitle"),
             indexContainer = document.querySelector(".index-container"),
             modContent = document.querySelector(".mod-content"),
+            buttonPane = document.querySelector(".button-pane"),
             state = this.dataset.period;
         
         if(state === "month") {
@@ -800,6 +805,8 @@
             clearIcons("all");
             // make index-container full height
             indexContainer.classList.toggle("max-height");
+            modContent.classList.toggle("no-display");
+            buttonPane.classList.toggle("no-display");
             
         }
 

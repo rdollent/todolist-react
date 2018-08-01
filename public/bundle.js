@@ -78,7 +78,7 @@
 	    Router,
 	    { history: hashHistory },
 	    React.createElement(Route, { path: "/", component: Main })
-	), document.document.getElementById("app"));
+	), document.getElementById("app"));
 
 /***/ }),
 /* 2 */

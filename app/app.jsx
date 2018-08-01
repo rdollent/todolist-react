@@ -21,6 +21,6 @@ ReactDOM.render(
 
         </Route>
     </Router>,
-    document.document.getElementById("app")
+    document.getElementById("app")
 );
 

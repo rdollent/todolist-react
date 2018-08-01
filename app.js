@@ -39,8 +39,8 @@ var LocalStrategy = require("passport-local");
 // heroku config:set DATABASEURL=mongodb://roo:123456@ds129043.mlab.com:29043/rdyelpcamp
 
 // backup in case environment variable does not work
-var url = process.env.DATABASEURL || "mongodb://localhost/to-do-list";
-mongoose.connect(url);
+// var url = process.env.DATABASEURL || "mongodb://localhost/to-do-list";
+// mongoose.connect(url);
 
 // for forms (req.body...)
 // in order to read HTTP POST data , we have to use "body-parser" node module.

@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-
+var path = require("path");
 // need User for register
 // ../ moves two folders up
 var User = require("../models/userModel.js");
@@ -51,11 +51,12 @@ router.post("/register", function(req, res) {
 
 // login form
 router.get("/login", function(req, res) {
-    if(req.user) {
-        res.redirect("/todo");
-    } else {
-        res.render("login");
-    }
+    // if(req.user) {
+    //     res.redirect("/todo");
+    // } else {
+    //     res.render("login");
+    // }
+    res.sendFile(path.join(__dirname+"/../views/index.html"));
 });
 
 // handle login logic

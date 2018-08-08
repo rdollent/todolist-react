@@ -128,3 +128,35 @@ Person.prototype.greet = function() {
 var john = new Person("John", "Doe");
 john.greet();
 =============================================================================
+
+
+
+==== how to run mongod====
+
+https://community.c9.io/t/how-do-i-run-mongod-in-my-workspace/5626/2
+
+Running MongoDB on a Cloud9 workspace
+MongoDB is preinstalled in your workspace. To run MongoDB, run the following below (passing the correct parameters to it). Mongodb data will be stored in the folder data.
+
+$ mkdir data
+$ echo 'mongod --bind_ip=$IP --dbpath=data --nojournal --rest "$@"' > mongod
+$ chmod a+x mongod
+You can start mongodb by running the mongod script on your project root:
+
+$ ./mongod
+
+
+==================
+
+https://stackoverflow.com/questions/41712122/want-to-install-mongodb-on-cloud9-local-server
+
+
+
+====== reinstall nodemon
+
+https://www.npmjs.com/package/nodemon
+
+
+=== express to react
+
+https://blog.cloudboost.io/react-express-the-nodejs-way-of-reacting-and-expressing-7a518e4da3

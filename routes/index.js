@@ -13,6 +13,7 @@ router.get("/", function(req, res) {
     res.redirect("/login");
 });
 
+
 // router.get("/about", function(req,res) {
 //     res.render("about");
 // });
@@ -59,6 +60,13 @@ router.get("/login", function(req, res) {
     res.sendFile(path.join(__dirname+"/../views/index.html"));
 });
 
+
+router.get("/user", function(req,res) {
+    var user = req.user;
+    
+    res.json(user);
+});
+
 // handle login logic
 // "/login", middleware, callback
 // router.post("/login", passport.authenticate("local",
@@ -100,6 +108,12 @@ router.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/");
 });
+
+
+
+router.get("/getUser", function(req,res) {
+    
+})
 
 
 module.exports = router;

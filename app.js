@@ -81,25 +81,27 @@ passport.serializeUser(User.serializeUser()); // serialize and deserialize are m
 passport.deserializeUser(User.deserializeUser()); 
 
 // to include currentUser variable into every route/template
-app.use(function(req, res, next) {
-    res.locals.currentUser = req.user; // accessible by home.ejs
-    res.locals.error = req.flash("error");
-    res.locals.success = req.flash("success");
+// app.use(function(req, res, next) {
     
-    next(); // don't forget to put next()!!! Always comes last
-});
+    
+//     res.locals.currentUser = req.user; // accessible by home.ejs
+//     res.locals.error = req.flash("error");
+//     res.locals.success = req.flash("success");
+    
+//     next(); // don't forget to put next()!!! Always comes last
+// });
 
 // require route js files
-// var indexRoutes = require("./routes/index");
-// var todoRoutes = require("./routes/todo");
+var indexRoutes = require("./routes/index");
+var todoRoutes = require("./routes/todo");
 
 
 // app.use to use route js files
 // reduce duplication in route js files by naming directory in app.use
 
 // Routes
-// app.use("/", indexRoutes);
-// app.use("/todo", todoRoutes);
+app.use("/", indexRoutes);
+app.use("/todo", todoRoutes);
 
 // Remove todos and users
 // var seedDB = require("./seeds.js");
